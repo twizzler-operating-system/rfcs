@@ -104,10 +104,10 @@ The net client submits data of type TxRequest, and gets back completions of type
 enum TxRequest {
 	Listen(ListenInfo),
 	SendData(ConnectionId, PacketData),
-    SendDataTo(ListenInfo, PacketData),
+	SendDataTo(ListenInfo, PacketData),
 	Connect(ListenInfo),
 	Shutdown(ConnectionId),
-    NewHandle(ConnectionId),
+	NewHandle(ConnectionId),
 	Close,
 }
 
@@ -115,7 +115,7 @@ enum TxCompletion {
 	Okay,
 	NewConnection(ConnectionInfo),
 	ListenReady(ConnectionId),
-    NewHandleData(ConnectionId, NewHandleObjects),
+	NewHandleData(ConnectionId, NewHandleObjects),
 	Error(TxError),
 }
 ```
