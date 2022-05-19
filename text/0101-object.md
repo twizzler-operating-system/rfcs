@@ -79,8 +79,8 @@ struct MetaData {
     flags: u32,
     fotentries: u32,
     metaexts: u32,
-    basetag: u64,
-    version: u64,
+    basetag: Tag,
+    version: Version,
 }
 ```
 
@@ -199,6 +199,22 @@ fn get(&self, tx: impl TxHandle) -> &T;
 fn get_notx(&self) -> &T; // also implemented via Borrow?
 ```
 
+This means the above code can be rewritten as:
+```{rust}
+struct Foo {
+    a: TxCell<u32>,
+    b: u32,
+}
+
+let obj: Object<Foo> = ...;
+
+transaction(|tx| {
+    let base = obj.base(tx);
+    *base.a.get_mut(tx) = 42;
+    Ok(())
+});
+```
+
 Thus, it can only be called in a transaction context, and only exposes the inner owned value mutably
 inside a transaction. Outside of a transaction, the TxCell can provide an immutable reference to the
 interior value (this may require kernel thread synchronization, and will be discussed in a future
@@ -227,7 +243,7 @@ Twizzler object. This type exposes the following interfaces:
 ```{rust}
 fn id(&self) -> ObjID;
 fn init_id(id: ObjID, prot: Protections, flags: InitFlags) -> Result<Self, InitError>;
-fn base(&self);
+fn base(&self) -> &T;
 // functions to add, get, and remove metaexts
 // functions to view, add, and remove FOT entries (unsafe?).
 // functions to tie and delete objects?
@@ -241,7 +257,7 @@ use and for standard universal extensions. Two system use values here are:
 
  * null (tag = 0x0): This marks the end of the metaext array (which may be before the end as
    specified by `MetaData::metaexts`).
- * tombstone (tag = 0xffffffff): A previous entry that has been deleted, and should be ignored. It
+ * tombstone (tag = 0xdeadbeef): A previous entry that has been deleted, and should be ignored. It
    may be reused, and it does not mark the end of the array.
 
 #### Size (tag value: 0x1)
