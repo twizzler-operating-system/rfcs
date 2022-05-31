@@ -11,9 +11,11 @@ space. The core features that all objects share are:
  * Metadata extensions. An object may "respond" to various APIs.
 
 This document serves to outline the core object layout and the design and rationale of the
-twizzler-object crate.
-
-NOTE: This document is still in draft form, and as such many APIs are not finished. I would love feedback!
+twizzler-object crate. In short, twizzler-object provides safe functions to get always-immutable
+information about objects, unsafe functions to get references to any object memory, a low-level part
+of the runtime that manages memory slots for objects, and some type definitions for object layout.
+Any safe (transactional) mutability of objects will be done via twizzler-nando, which will be
+described in an upcoming RFC.
 
 ## Object Layout
 
@@ -127,21 +129,16 @@ higher-level management system (if required):
  * The `Object<T>` type.
  * Invariant pointers.
  * Object Safety trait.
- * Transaction handle trait.
- * Transaction-based interior mutability.
-
-A metaphor for this crate is Rust's futures and async programming, which provides a set of traits
-and framework for a runtime to be implemented.
 
 ### Object Safety
 
 The crate provides an auto marker trait: ObjSafe. The ObjSafe trait denotes two things:
 
  * The data structure does not contain a non-invariant pointer.
- * The data structure ensures that mutation is possible only via transactions.
+ * The data structure ensures that mutation is possible only via the twizzler-nando crate.
 
 The first is done by `impl<T> !ObjSafe for *const T` (etc), and the second is done by implementing
-`!ObjSafe` for things like UnsafeCell. Any memory that is located in an object should implement
+`!ObjSafe` for UnsafeCell. Any memory that is located in an object should implement
 ObjSafe (which happens automatically usually). Of course, a data structure may unsafely implement
 ObjSafe.
 
@@ -169,71 +166,6 @@ The tags and version information is used as a runtime check for `Object<T: BaseT
 ensure that an object actually has a `T` at its base. The version information is currently matched
 against, but unused, with the purpose of later implementing an upgrade mechanism.
 
-### TxCell
-
-Rust's ideas of interior mutability map quite well to a transactional update mechanism. We can
-support some code like this:
-
-```{rust}
-struct Foo {
-    a: u32,
-    b: u32,
-}
-
-let obj: Object<Foo> = ...;
-
-transaction(|tx| {
-    let base = obj.base_mut(tx);
-    base.a = 42;
-    Ok(())
-});
-```
-
-But, as written (and say we were implementing the transaction as an undo log), we would need to
-consider the entire Foo as possibly being modified, not just `base.a`. Thus we provide a
-transaction-safe interior mutability type, TxCell, which provides:
-
-```{rust}
-fn get_mut(&self, tx: impl TxHandle) -> &mut T;
-fn get(&self, tx: impl TxHandle) -> &T;
-fn get_notx(&self) -> &T; // also implemented via Borrow?
-```
-
-This means the above code can be rewritten as:
-```{rust}
-struct Foo {
-    a: TxCell<u32>,
-    b: u32,
-}
-
-let obj: Object<Foo> = ...;
-
-transaction(|tx| {
-    let base = obj.base(tx);
-    *base.a.get_mut(tx) = 42;
-    Ok(())
-});
-```
-
-Thus, it can only be called in a transaction context, and only exposes the inner owned value mutably
-inside a transaction. Outside of a transaction, the TxCell can provide an immutable reference to the
-interior value (this may require kernel thread synchronization, and will be discussed in a future
-RFC).
-
-We might also implement async versions of these.
-
-### TxHandle
-
-A TxHandle is an interface to a transaction implementation.
-
-```{rust}
-trait TxHandle {
-    fn tx_cell_get(&self, cell: &TxCell) -> Result<...>;
-    fn tx_cell_get_mut(&self, cell: &TxCell) -> Result<...>;
-    fn base(&self, &obj) -> Result<...>;
-    ...
-}
-```
 
 ### `Object<T>`
 
@@ -244,11 +176,19 @@ Twizzler object. This type exposes the following interfaces:
 fn id(&self) -> ObjID;
 fn init_id(id: ObjID, prot: Protections, flags: InitFlags) -> Result<Self, InitError>;
 fn base(&self) -> &T;
-// functions to add, get, and remove metaexts
-// functions to view, add, and remove FOT entries (unsafe?).
-// functions to tie and delete objects?
-...
 ```
+
+Note that the base function returns an immutable reference to the base, and there is no safe way to
+get a mutable reference. This is because all mutation should be done via the twizzler-nando crate.
+In addition to the above functions, the twizzler-object crate provides unsafe functions to get
+mutable references to (e.g.) the base, and functions to read immutable fields of the meta struct.
+
+### Slots
+
+A key interface provided by twizzler-object is management of slots of memory. This allows programs
+following pointers to reuse already-mapped object slots for new references, reducing kernel
+overhead. The exact interface is unstable, as it is intended to be used internally only to assist
+in the implementation of twizzler-nando.
 
 ### Standard Meta Extensions
 
@@ -272,46 +212,33 @@ An invariant pointer functions similar to a raw pointer in semantics. It does no
 reference counting, and may be null.
 
 ```{rust}
+// size: 64 bits
 #[repr(transparent)]
 struct InvPtr<T> {
-    p: u64,
-    _pd: PhantomData<T>,
-}
-
-impl<T: ObjSafe> InvPtr<T> {
-    /// Resolve this pointer using this object. Checks if the pointer is within the object.
-    fn lea_obj(&self, obj: &Object<_>) -> EffAddr<T>;
-    /// Resolve this pointer.
-    fn lea(&self, obj: &Object<_>) -> EffAddr<T>;
-    /// Move a pointer.
-    fn moveptr(&mut self, tx: &TxHandle, other: &mut Self) -> Result<...>;
-    /// Copy a pointer.
-    fn copyptr(&mut self, tx: &TxHandle, other: &Self) -> Result<...>;
-    /// Store a pointer.
-    fn store(&mut self, tx: &TxHandle, other: &T) -> Result<...>;
+    ...
 }
 
 impl<T> InvPtr<T> {
     fn null() -> Self;
-    fn is_null(&self) -> bool;
+    fn is_null(&self) -> bool; 
+    fn from_parts(fote: usize, off: u64) -> Self;
     fn raw_parts(&self) -> (usize, u64);
 }
 ```
 
-The `EffAddr` struct can be dereferenced and contains a reference to an internal object handle for
-the target object that contains the referenced data. This can be consumed or cloned into an
-`Object<T>` that can be used. The `lea_obj` is an optimization.
+The actual interesting aspects of the invariant pointers will be implemented in the twizzler-nando crate.
 
 ## Alternatives
 
 The design of invariant pointers forms the basis for sharing and the global address space. Other
 invariant designs (fat pointers) have problems.
 
-The choice to use this crate as an interface definition is based around avoiding being prescriptive
-regarding how applications use objects. Instead, this crate only implements the bare minimum for
-building transactions that can localize their effects on top of a notion of safety for storing a
-type in persistent object memory. One could imagine, however, an alternative scenario where we instead build a full transaction
-mechanism into the core of the twizzler object system.
+The twizzler-object crate is small, and provides only a limited view of objects. Any part of an
+object that can mutate cannot be exposed by the twizzler-object crate at all, even via immutable
+reference. The only exception is atomically reading an invariant pointer, but even this requires
+interpretation via the FOT to be useful, and this requires interaction with twizzler-nando to be
+safe. The twizzler-object crate *does* expose *unsafe* functions for getting access to mutable
+object memory for the purposes of implementing twizzler-nando atop twizzler-object.
 
 ## Status
 
@@ -320,18 +247,9 @@ This document is a draft and must be completed. Initial exploratory work has beg
 
 ## Future
 
-Completion of this document requires:
-
- * Completed API specifications for the types outlined above.
- * Agreement on interface types.
- * Implementation notes on temporary object handles and FOT caching.
-
 Future, planned RFCs include:
- * Access control and the Rust-based object model. How does TxCell handle the case where we can only
-   read an object and we are calling `get`?
  * Names in FOT entries, and manual FOT entry specification.
- * Allocation and InvBox
- * The Pool abstraction, example transactions, InvRc.
- * Async extensions to the Tx APIs in this document.
  * Append-type objects and the Size meta extension.
+ * The twizzler-nando crate.
+ * More on versioning.
 
