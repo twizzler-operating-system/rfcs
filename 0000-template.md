@@ -1,7 +1,7 @@
 - Feature Name: (fill me in with a unique ident, `my_awesome_feature`)
 - Start Date: (fill me in with today's date, YYYY-MM-DD)
 - RFC PR: [twizzler-rfcs/rfcs#0000](https://github.com/twizzler-operating-system/rfcs/pull/0000)
-- Twizzler Issue: [twizzler-operating-system/rust#0000](https://github.com/twizzler-operating-system/twizzler/issues/0000)
+- Twizzler Issue: [twizzler-operating-system/twizzler#0000](https://github.com/twizzler-operating-system/twizzler/issues/0000)
 
 # Summary
 [summary]: #summary
