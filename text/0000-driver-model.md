@@ -130,6 +130,8 @@ than that value (this allows the driver to specify backpressure and queue limits
 that is associated with this response, and a boolean indicating if this response is considered an
 error or not.
 
+### Example
+
 Driver software is responsible for implementing the RequestDriver. As an example, say we have a NIC
 that has a transmit queue for packets. We submit to the transmit queue by writing entries starting at the
 head and then writing an MMIO register to indicate that the head has moved. Say the queue is 128
@@ -151,6 +153,12 @@ word and sends an interrupt to indicate a new tail position. The implementation 
    reads all the status words for those entries, constructing an array of `ResponseInfo` types,
    eventually calling `finish` on the requester. This routine may need to wake up the submit
    function after it reads out the status words and records the new queue tail.
+
+Another example we can consider is an NVMe driver, which differs from the NIC driver above by having
+a separate completion queue. This possibility is the reason behind the abstracted request IDs --
+this lets the driver and requester handle out-of-order responses.
+
+### Usage
 
 The requester uses this implementation to expose the interface above that lets higher-level driver
 software interact with the device via this async request-response API. For example, a caller could
@@ -175,87 +183,146 @@ matched to `Responses(Vec<Driver::Response>)`. The order of responses matches th
 The reason that you have to issue two `await`s is that one is for having submitted all requests, and
 the second is for all requests being responded to.
 
-
-
-Explain the proposal as if it was already included in the system and you were teaching it to another Twizzler programmer. That generally means:
-
-- Introducing new named concepts.
-- Explaining the feature largely in terms of examples.
-- Explaining how Twizzler programmers should *think* about the feature, and how it should impact the way they use Twizzler. It should explain the impact as concretely as possible.
-- If applicable, provide sample error messages, deprecation warnings, or migration guidance.
-- If applicable, describe the differences between teaching this to existing Twizzler programmers and new Twizzler programmers.
-
 # Reference-level explanation
 [reference-level-explanation]: #reference-level-explanation
 
-This is the technical portion of the RFC. Explain the design in sufficient detail that:
+These abstractions will be implemented by the twizzler-driver crate, and will be optional features
+to allow for driver software that does not need them.
 
-- Its interaction with other features is clear.
-- It is reasonably clear how the feature would be implemented.
-- Corner cases are dissected by example.
+## Events
 
-The section should return to the examples given in the previous section, and explain more fully how the detailed proposal makes those examples work.
+The device event stream is largely a straight-forward wrapper around the lower level device
+interrupt and mailbox mechanisms, presenting them as an asynchronous stream instead of something
+more akin to a condition variable. The future returned by `InterruptInfo`'s next function uses the
+twizzler-async crate along with the interrupt definitions discussed in RFCxxxx to construct a
+blocking future that returns the next interrupt.
+
+The interrupt allocation routine operates with some bus-specific knowledge to properly allocate an
+interrupt for the device before constructing an `InterruptInfo`. On drop, the `InterruptInfo` calls
+back into the event stream manager to deallocate the interrupt, thus tying the lifetime of the
+interrupt to the `InterruptInfo` struct.
+
+The mailbox message system internally keeps a queue of messages that haven't been handled. This is
+so the event stream can receive the mailbox message and clear up the mailbox for reuse even if no
+thread has called `next_msg`. These queues should have a maximum size, causing old messages to be
+dropped if necessary. The `next_msg` function:
+
+ - Checks the mailboxes of all priorities, enqueuing any messages found there.
+ - Dequeues messages from the highest priority queue that has messages, if the queue is at least as
+   high priority as `min`. Messages here are returned immediately.
+ - If no messages are present, blocks this async task on the arrival of new messages.
+
+Note: since High priority mailbox messages take priority over interrupts, interrupt next() functions
+will also check the High priority mailbox, enqueuing if a message is found.
+
+## Requester
+
+The requester internally keeps track of:
+
+ - Inflight requests.
+ - Available request IDs.
+
+### Request IDs
+
+Request IDs are a simple unique identifier for requests. When calling submit, the caller passes a
+slice of SubmitRequests, which internally contain an ID. The caller, however, is not responsible for
+assigning IDs -- that is handled internally (hence why it's a mutable slice).
+
+The available request IDs are managed by an AsyncIdAllocator, which exposes three functions (note:
+this is all completely invisible to the user):
+
+ - `fn try_next(&self) -> Option<u64>`
+ - `async fn next(&self) -> u64`
+ - `fn release(&self, id: u64)`
+
+Both try_next and next get an available ID, but next asynchronously waits until one is available.
+Two adjacent calls to any next functions are not guaranteed to return adjacent ID numbers.
+
+### Inflight Request Management
+
+The submit function returns an InFlightFuture, and the submit_for_requests function returns an
+InFlightFutureWithResponses. These each output a SubmitSummary and a SubmitSummaryWithResponses when
+awaited. Each of these futures internally hold a reference to an InFlightInner that is shared with
+the requester, and manages the state for the inflight requests.
+
+The InFlightInner contains:
+
+ - A waker for the task that is awaiting the future.
+ - An `Option<SubmitSummary>` for returning to the awaiter when it's ready, and additional state to
+   construct this value.
+    - e.g. a map of request IDs to indexes in the submit slice (may be unused if not tracking
+      responses).
+    - e.g. a vector of responses that gets filled out as responses come in (may be unused).
+ - a count, counting how many requests have been responded to.
+
+The requester internally keeps a map of request IDs to InFlightInner so that it can match a response
+with an inflight that manages it.
+
+Finally, the requester's shutdown function shall ensure that, after internally recording the
+shutdown status so that future calls will fail, it drains all internal InFlightInners and fills out
+their ready values to indicate shutdown, after which it wakes any waiting tasks.
 
 # Drawbacks
 [drawbacks]: #drawbacks
 
-Why should we *not* do this?
+One major drawback to this design is overhead. Using these abstractions requires pulling in the
+twizzler-async runtime _and_ tolerating the (small) overhead of async for interacting with the
+device. This may be hard to tolerate in embedded environments (async executor size may be too large)
+and extreme high performance environments (async overhead)[^1].
+
+A counter argument here would be that these abstractions are optional, but the counter-counter
+argument could be that the convenience they offer may make them non-optional in practice, where most
+drivers use them, requiring their use even in embedded systems. However, in systems that are truly
+space-limited, one is often working within the confines of an exact hardware set, so manual
+implementation of small drivers is likely regardless, and the larger drivers used on server machines
+will not be applicable.
+
+[^1]: This argument is less convincing to me. The interrupt handling routines, for example, only
+    incur the async overhead when they are out of work. Polling or delaying calling the next()
+    functions can nearly completely mitigate this overhead.
 
 # Rationale and alternatives
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-- id system
-- async that return a future in requester submit
-- submit and submit for response
+The main purpose here is to provide a common framework for common aspects of driver development,
+thus accelerating the creation of device driver software. By defining this RequestDriver trait, we
+allow driver software to be split into two parts: the lower half that submits requests on a queue,
+and the higher half, which submits requests via the Requester interface, simplifying driver software
+by handling the complexities of async and out-of-order responses. The use of async here is
+especially important, as it allows driver software to just submit requests and await responses.
 
-- Why is this design the best in the space of possible designs?
-- What other designs have been considered and what is the rationale for not choosing them?
-- What is the impact of not doing this?
+Several rationales:
+
+- The request ID system is designed to allow the driver to internally manage its understanding of
+  IDs and how they relate to the device queue(s). This makes it possible for the requester to
+  internally manage in-flight state independent of the driver, and handle async and out of order
+  responses.
+- There is a separate flush function to allow for enqueuing a number of requests without incurring
+  the overhead of actually notifying the device.
+- The submit and submit_for_responses functions are async and both return another future, meaning
+  one needs two awaits to get the SubmitSummary. This is because we separate the successful
+  _submission_ of requests from the completion. Imagine we want to submit 200 requests to a queue
+  that has 128 entries. We'll have to wait at some point. Thus we allow the caller to await full
+  submission and then later await responses if it likes (or it can drop the future and not get any
+  responses or information).
+- We separate submit and submit_for_response because collating the responses has additional
+  overhead, and a given submit may not care about the actual responses. Thus we provide an option
+  for just submitting and awaiting completion without recording responses.
 
 # Prior art
 [prior-art]: #prior-art
 
-Discuss prior art, both the good and the bad, in relation to this proposal.
-A few examples of what this can include are:
-
-- Does this feature exist in other operating systems and what experience have their community had?
-- For community proposals: Is this done by some other community and what were their experiences with it?
-- For other teams: What lessons can we learn from what other communities have done here?
-- Papers: Are there any published papers or great posts that discuss this? If you have some relevant papers to refer to, this can serve as a more detailed theoretical background.
-
-This section is intended to encourage you as an author to think about
-the lessons from other systems, provide readers of your RFC with a
-fuller picture.  If there is no prior art, that is fine - your ideas
-are interesting to us whether they are brand new or if it is an
-adaptation from other operating systems.
-
-Note that while precedent set by other operating systems is some
-motivation, it does not on its own motivate an RFC.
+- TODO
 
 # Unresolved questions
 [unresolved-questions]: #unresolved-questions
 
-- What parts of the design do you expect to resolve through the RFC process before this gets merged?
-- What parts of the design do you expect to resolve through the implementation of this feature before stabilization?
-- What related issues do you consider out of scope for this RFC that could be addressed in the future independently of the solution that comes out of this RFC?
+- One unresolved question is in the ergonomics of building a driver that uses all these types that
+  reference each other. I plan to dogfood this interface by way of an NVMe driver.
+- The DmaAllocator is a major component of drivers, allowing the driver to talk about physical
+  memory. That will be discussed in a future RFC.
 
 # Future possibilities
 [future-possibilities]: #future-possibilities
 
-Think about what the natural extension and evolution of your proposal
-would be and how it would affect the operating system and project as a
-whole in a holistic way. Try to use this section as a tool to more
-fully consider all possible interactions with the project and system
-in your proposal.  Also consider how this all fits into the roadmap
-for the project and of the relevant sub-team.
-
-This is also a good place to "dump ideas", if they are out of scope for the
-RFC you are writing but otherwise related.
-
-If you have tried and cannot think of any future possibilities,
-you may simply state that you cannot think of anything.
-
-Note that having something written down in the future-possibilities section
-is not a reason to accept the current or a future RFC; such notes should be
-in the section on motivation or rationale in this or subsequent RFCs.
-The section merely provides additional information.
+- TODO
