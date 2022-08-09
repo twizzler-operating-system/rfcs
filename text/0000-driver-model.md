@@ -1,7 +1,7 @@
 - Feature Name: driver_model
 - Start Date: 2022-07-15
-- RFC PR: [twizzler-rfcs/rfcs#0000](https://github.com/twizzler-operating-system/rfcs/pull/0000)
-- Twizzler Issue: [twizzler-operating-system/twizzler#0000](https://github.com/twizzler-operating-system/twizzler/issues/0000)
+- RFC PR: [twizzler-rfcs/rfcs#0005](https://github.com/twizzler-operating-system/rfcs/pull/5)
+- Twizzler Issue: [twizzler-operating-system/twizzler#0083](https://github.com/twizzler-operating-system/twizzler/issues/83)
 
 # Summary
 [summary]: #summary
