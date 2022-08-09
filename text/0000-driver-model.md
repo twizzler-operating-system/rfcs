@@ -6,7 +6,7 @@
 # Summary
 [summary]: #summary
 
-This RFC extends RFCxxxx with a set of higher-level abstractions that drivers can use to program
+This RFC extends RFC0004 with a set of higher-level abstractions that drivers can use to program
 devices. It describes centralized abstractions surrounding event streams, request-response queues, asynchrony,
 and interrupts that will be provided by the twizzler-driver crate.
 
@@ -25,13 +25,13 @@ framework that higher-level aspects of a driver can use.
 [guide-level-explanation]: #guide-level-explanation
 
 The twizzler-driver crate provides a high-level wrapper around a collection of abstractions designed
-to manage a single device (for definition of "device" and the `Device` type, see RFCxxxx), called a
+to manage a single device (for definition of "device" and the `Device` type, see RFC0004), called a
 `DeviceController`. When taking control of a device, driver software can create a `DeviceController`
 (heretoafter referred to as "the controller") from a `Device`. After this point, the controller
 manages the device and exposes several abstractions above the device:
 
  - A `DeviceEventStream`, which provides a way to get a stream of events, including mailbox events
-   and device interrupts (see RFCxxxx).
+   and device interrupts (see RFC0004).
  - A `DmaAllocator` (details for which will appear in a future RFC).
  - A `RequestEngineManager`, which provides a way to submit requests to the device and
    asynchronously await responses.
@@ -72,7 +72,7 @@ loop {
 }
 ```
 
-As in RFCxxxx, it is up to driver software to ensure correct prioritization of mailbox receivers.
+As in RFC0004, it is up to driver software to ensure correct prioritization of mailbox receivers.
 
 ## Request Engine Manager
 
@@ -194,7 +194,7 @@ to allow for driver software that does not need them.
 The device event stream is largely a straight-forward wrapper around the lower level device
 interrupt and mailbox mechanisms, presenting them as an asynchronous stream instead of something
 more akin to a condition variable. The future returned by `InterruptInfo`'s next function uses the
-twizzler-async crate along with the interrupt definitions discussed in RFCxxxx to construct a
+twizzler-async crate along with the interrupt definitions discussed in RFC0004 to construct a
 blocking future that returns the next interrupt.
 
 The interrupt allocation routine operates with some bus-specific knowledge to properly allocate an
