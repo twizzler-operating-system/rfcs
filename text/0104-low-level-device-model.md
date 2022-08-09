@@ -1,7 +1,7 @@
 - Feature Name: low_level_device_model
 - Start Date: 2022-07-14
-- RFC PR: [twizzler-rfcs/rfcs#0000](https://github.com/twizzler-operating-system/rfcs/pull/0000)
-- Twizzler Issue: [twizzler-operating-system/twizzler#0000](https://github.com/twizzler-operating-system/twizzler/issues/0000)
+- RFC PR: [twizzler-rfcs/rfcs#0004](https://github.com/twizzler-operating-system/rfcs/pull/0004)
+- Twizzler Issue: [twizzler-operating-system/twizzler#0082](https://github.com/twizzler-operating-system/twizzler/issues/82)
 
 # Summary
 [summary]: #summary
