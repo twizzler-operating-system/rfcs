@@ -11,6 +11,10 @@ implementation. It provides a generic interface that allows for userspace access
 device memory and features through Twizzler objects, including memory-mapped IO (MMIO) registers,
 interrupt handling, device event messages, and structured device trees.
 
+> This low-level interface is not intended to be used by application programmers, and even driver
+> programmers are expected to use higher-level abstractions for some aspects of their work (coming in
+> a future RFC), though many aspects of the interface presented here will be used directly.
+
 # Motivation
 [motivation]: #motivation
 
@@ -220,7 +224,7 @@ When allocating an interrupt, software is responsible for programming the MSI or
 the device to generate a proper interrupt. To register a device interrupt with the kernel's PCIe
 driver, the kaction-specific command `PcieKactionSpecific::AllocateInterrupt` can be used. The
 64-bit argument is an encoding of which `DeviceInterrupt` in the `DeviceRepr` to use, and additional
-flags about isolation (TODO).
+flags about isolation.
 
 This provides sufficient support for userspace to implement drivers for devices that allows
 programming of:
@@ -279,7 +283,6 @@ dramatically simplifies the kernel.
 - Monolithic kernels instead have drivers in the kernel, either compiled in or loaded as modules.
   These drivers enjoy higher privilege, but must rely on kernel infrastructure for programming.
 - The descriptions of PCIe were based on the latest official PCIe specifications.
-- ...TODO
 
 # Unresolved questions
 [unresolved-questions]: #unresolved-questions
