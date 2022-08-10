@@ -316,4 +316,3 @@ Several rationales:
   reference each other. I plan to dogfood this interface by way of an NVMe driver.
 - The DmaAllocator is a major component of drivers, allowing the driver to talk about physical
   memory. That will be discussed in a future RFC.
-
