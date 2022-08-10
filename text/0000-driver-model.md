@@ -309,11 +309,6 @@ Several rationales:
   overhead, and a given submit may not care about the actual responses. Thus we provide an option
   for just submitting and awaiting completion without recording responses.
 
-# Prior art
-[prior-art]: #prior-art
-
-- TODO
-
 # Unresolved questions
 [unresolved-questions]: #unresolved-questions
 
@@ -322,7 +317,3 @@ Several rationales:
 - The DmaAllocator is a major component of drivers, allowing the driver to talk about physical
   memory. That will be discussed in a future RFC.
 
-# Future possibilities
-[future-possibilities]: #future-possibilities
-
-- TODO
