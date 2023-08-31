@@ -8,6 +8,7 @@
 
 This RFC describes the core functionality of what may be described as the "core Twizzler monitor" program. It proposes a formalized definition
 of:
+0. How we can have a flexible runtime system that enables users to run "bare-metal" against twizzler-abi, against a more complete runtime, and even swap out the runtime system if they like.
 1. How programs (including libraries which may expose "nando"s, either secure or not) are **linked** and formed into objects.
 2. How programs are **loaded**, including how they are isolated from each other.
 3. What a program's **runtime** looks like, including the execution environment, threading, etc, and how the monitor supports programs.
@@ -20,25 +21,27 @@ kernel-supported security contexts and gates, and a language (with runtime) that
 # Motivation
 [motivation]: #motivation
 
-Why are we doing this? What use cases does it support? What is the expected outcome?
+As we are working towards an environment that enables programmers to write software for Twizzler, we need to set ourselves up
+now for an extensible and well-defined runtime system and execution environment. In particular, this work will dramatically
+improve the extensibility of the userspace parts of Twizzler and provide a core foundation upon which we can build higher-level
+and secure software. In fact, a number of items in our respective roadmaps depend heavily on the functionality described by this RFC.
 
-* programmers expect a usable environment
-* consoledate changes to low-level things like twizzler-abi
-* make twizzler-abi abstract over a twizzler runtime, enables flexility
-* unlocks a LOT of later tasks, while giving us all an execution environment that's easier to use and more flex to extend
-* provides the core of support for what nandos, etc need to function
-* demonstrates the usefulness of secure gate apis
-* formalizes a core part of the system
-* gives us a solid building point that starts with security
+Additionally, this work will enable us to more easily use and demonstrate the usefulness of several core parts of the planned Twizzler programming
+model, namely Nandos and Secure Gates. We also plan, as part of this work, to reach a semi-stable version of twizzler-abi, engineering this crate so
+that the runtime can hook into core aspects of what Rust's standard library depend on and swap them out, allowing us more flexibility without having
+to recompile programs for different runtimes.
 
-why a monitor
-* thought excersize about levels of trust
-* loader is a monitor that never gets called -- thus libc is a monitor
-* we need it anyway?
-* at least make the runtime flexible
+Now, you may be asking, "why do we need a monitor". Well, lets consider the _minimum_ required secure environment that some sensitive software is running in.
+In particular, notice that, in a traditional system, we must trust the kernel, the toolchain, the standard library (and all linked-to libraries), and the dynamic linker.
+The issue of a trusted toolchain is out of scope of this RFC. We will focus instead on how we can ensure that the kernel, library, and dynamic linker can work together
+to provide isolation. As a result, the dynamic linker for Twizzler will be Twizzler specific. This isn't particularly weird -- most dynamic linkers have a bunch of OS specific 
+and arch specific code. Note that a traditional dynamic linker is already, kinda, a monitor, loading programs and libraries as required, etc.
+
 
 # Guide-level explanation
 [guide-level-explanation]: #guide-level-explanation
+
+* execution env overview
 
 * flex -- twizzler-abi provides runtime trait that std uses, and runtime monitors (or just loaders) can be swapped in and out. this is also how we swap in and out default naming systems. the default namer for twizzler-abi just looks at kernel init names, a runtime can instead interact with a naming service
 
