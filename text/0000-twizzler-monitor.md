@@ -215,6 +215,19 @@ _or_ isolated functions, and the runtime will handle it.
 
 ### Isolation options
 
+The minimum isolation required by a library can be set by the library at compile time, or by the caller of the library at load time. Once a library is
+loaded, there is no way to change isolation levels without spinning up another compartmentalization of the same library.
+
+There are, broadly, two major isolation directions to consider: does the caller trust the callee, does the callee trust the caller, or does neither party trust the other. The resulting table
+shows the different options:
+
+| Trust relationship          | Model 
+|-----------------------------|------
+| Both trust each other       | Simple dynamic library call
+| Callee doesn't trust caller | Isolated callee (e.g. library to safely update system state)
+| Caller doesn't trust callee | Isolated caller (e.g. program that operates on protected data calls an untrusted library)
+| Neither trust the other     | Full isolation
+
 * we can do different levels of isolation, each with their own tradeoffs (usually overhead)
 
 ## Notes on "thread state"
@@ -267,6 +280,8 @@ Explain the proposal as if it was already included in the system and you were te
 * how we deal with libraries: non-iso: nandos ;; iso: secure gates
 
 * how secure gates work: how we handle each of "irreducable rust runtime" + accel (allocation). stack: via shadow stack, or new stack, or just on-stack, depending.
+
+* extension to secure gates as written in the paper: we'll need to protect thread-state-pointers (stack and base pointer, upcall pointer, and thread pointer) as well.
 
 * how global, cli-callable nandos work (args are either String or ObjID, automatic lookup of name)
 
