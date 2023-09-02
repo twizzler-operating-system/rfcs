@@ -41,6 +41,10 @@ and arch specific code. Note that a traditional dynamic linker is already, kinda
 # Guide-level explanation
 [guide-level-explanation]: #guide-level-explanation
 
+The runtime is a program that acts as a security monitor and dynamic linker. It loads programs and libraries into memory and executes them. Any program
+or library that is loaded by the runtime is then under the control of that runtime. The runtime organizes programs and libraries that are loaded into
+_compartments_, each one providing a configurable level of isolation from the others for the programs and libraries residing within.
+
 ## The execution environment
 
 The basic environment of a Twizzler program can be supported either by twizzler-abi directly or by a runtime which provides
@@ -300,9 +304,46 @@ Or just don't use global, shared variables.
 # Reference-level explanation
 [reference-level-explanation]: #reference-level-explanation
 
-* runtime operation overview
+Phew, okay. Let's start in on how we can make this happen.
 
-* containers
+The runtime is a combination security monitor and dynamic linker, managing the loading and linking of programs and libraries within and across
+isolation domains called _compartments_. It is, explicitly, part of the trusted computing base.
+
+## Security Contexts
+
+Twizzler offers an abstraction of a security context with the following properties:
+1. A context contains capabilities that define the access rights of a thread that has this context as active.
+2. A thread can be _attached_ to multiple contexts, though only one may be active at one time.
+3. A thread switches contexts automatically if a security fault occurs, and the thread is attached to a context in which the instruction would not cause a security fault.
+4. Transfer of control between contexts is limited by an object's _secure gates_, a set of allowed entry points into this object. If a security context switch occurs, and the instruction pointer is not pointing to a valid gate, that context is not considered a valid context to switch to.
+
+The runtime uses this feature via a 1-1 mapping of compartment to security context. All programs and libraries within a given compartment all run within the same security context (if possible), or others with control flow transfer managed by the runtime if necessary. Note that the runtime itself is contained within a compartment and isolated from all other compartments, allowing only approved operations to be invoked (via security gates) should a loaded program wish to interact with the runtime monitor directly.
+
+## How to isolate a library
+
+Let's go back to that running example: untrusted program A wishes to call isolated library L's function foo, which is a security gate. First, library L (and its associated runtime state) are contained within compartment CL, while A is contained within CA. Upon call to CL, via the call instruction, the processor pushes the return address to the stack and then jumps. The
+instruction pointer is now in L, pointing at the start of foo. But we are still within context CA! This triggers a page fault, since, because it is isolated, L is not executable in CA.
+The kernel finds CL, where the execution is valid, and then continues with the first instruction. Let's say it's `push rbp`, which it probably is. This triggers a security fault. Why?
+
+See, we must protect against the callee (foo) corrupting some data that A didn't have write access to but L does. The caller could have pointed the stack pointer at some sensitive data and then called foo. To protect against this, the stack that A is using is not writable in CL. The security fault is handled by the runtime monitor, as it's registered itself as the fault handler with the kernel during setup. The runtime monitor then constructs a shadow stack for L, using the object copy-from primitive. Execution is then allowed to proceed normally.
+
+Upon return, we have to do another thing -- we have to check to see if the return address is safe. The caller _could_ have pushed a location within L and then _jumped_ to foo, instead of calling it. This would re-enable arbitrary code execution in L! So the runtime, when constructing the shadow stack, checks the return address. Finally, what if foo just instantly and blindly executes ret? While unlikely, we still have to deal with this. By default, the stack is made not readable from CL, however the runtime still constructs the shadow stack. This option doesn't prevent L from reading A's stack frames, it just prevents L from doing anything with A's stack data before the runtime can interpose.
+
+Finally, we can optionally refuse to create a shadow stack and instead require that the callee has a new stack. This results in the construction of a new stack with a fake frame that returns to the call site, but contains no other data from A's frames.
+
+### So, how do we enforce that the stack isn't writable on context switch?
+
+Yeah, we do need to do this! See, the "prevent corruption" motivation above does still require the runtime to interpose always, which means that the stack pointer _cannot_ be writable (or, even readable sometimes!) when a gate is used. Thus we propose to extend the Twizzler gate model to include the ability to check the validity of _architectural pointers_:
+
+* Stack and base pointer: at least -w- in source and at most r-- in target
+* Thread pointer: at most r-- in both contexts. This covers TLS -- the thread pointer points to a region of memory that is used as the TLS block locator for dynamic memory objects. That index should not be writable by either context, as it is under the control of the runtime.
+* Upcall pointer (not really architectural, but): at most r-x in both contexts. Same logic as thread pointer.
+
+For flexibility, these permissions should not be hardcoded, but instead will allow the gate's creator to specify both required and disallowed masks. However, the above may be the default.
+
+### What about the heap?
+
+Each compartment has a heap, which means each compartment has an independent allocator and libstd. We can achieve this by linking to a compartment-local libruntime that is configured with enough information to manage its own heap independent of the other compartments. This is a different linking algorithm than is standard for dynamic libraries. We are first explicitly linking against a library that has "first dibs" on symbols, and falling back to global symbol resolution only after that.
 
 * executable objects, how they are linked
 
