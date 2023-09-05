@@ -343,11 +343,38 @@ For flexibility, these permissions should not be hardcoded, but instead will all
 
 ### What about the heap?
 
-Each compartment has a heap, which means each compartment has an independent allocator and libstd. We can achieve this by linking to a compartment-local libruntime that is configured with enough information to manage its own heap independent of the other compartments. This is a different linking algorithm than is standard for dynamic libraries. We are first explicitly linking against a library that has "first dibs" on symbols, and falling back to global symbol resolution only after that.
+Each compartment has a heap, which means each compartment has an independent allocator and libstd. We can achieve this by linking to a compartment-local libruntime that is configured with enough information to manage its own heap independent of the other compartments. This is a different linking algorithm than is standard for dynamic libraries. We are first explicitly linking against a library that has "first dibs" on symbols, and falling back to global symbol resolution only after that (ok -- I suppose this is kinda like LD_PRELOAD).
 
-* executable objects, how they are linked
+## How are executable objects linked and loaded?
 
-* how executable objects are loaded: incl how we intercept for perf, local alloc, etc
+We use the linker provided by LLVM to link executables and libraries, however we provide a custom linker script that ensures that the memory layout of the program fits with the runtime.
+For example, a typical program might look like this:
+
+```
+| Section | vaddr  | len   | offset | perms |
+|---------|--------|-------|-------:|:-----:|
+| .text   | 0x1000 | 0x800 |      0 |  r-x  |
+| .rodata | 0x1800 | 0x100 |  0x800 |  r--  |
+| .data   | 0x2000 | 0x100 | 0x1000 |  rw-  |
+| .bss    | 0x2100 | 0x130 |    N/A |  rw-  |
+```
+
+As you can see, the program's sections are loaded into specific memory addresses, with data taken from the offset of the file (this is a simplified table compared to ELF). However, on Twizzler, this is more likely:
+
+```
+| Section | vaddr      | len   | offset | perms |
+|---------|------------|-------|-------:|:-----:|
+| .text   | 0x1000     | 0x800 |      0 |  r-x  |
+| .rodata | 0x1800     | 0x100 |  0x800 |  r--  |
+| .data   | 0x40001000 | 0x100 | 0x1000 |  rw-  |
+| .bss    | 0x40001100 | 0x130 |    N/A |  rw-  |
+```
+
+Note the major change is just in the vaddr field, where we've bumped the data and bss sections to be loaded into the second object slot of the address space (object size 0x40000000). This is already how Twizzler operates. We just need to extend it to be a little more general for loading position-independent libraries. The above example loads data into object slots 0 and 1, respectively. It does this by first directly mapping the executable object to slot 0 (the linker script ensures this direct mapping is correct), and then creates a new data object and copies
+the initial image of the data section from the executable (this is done via the copy-from primitive to leverage copy-on-write), which is then loaded into slot 1. For a position independent library, we'll allocate two consecutive slots and map the executable and read-only data into the first, and the writable data and bss into the second.
+
+At this point, we need to run the standard dynamic linking algorithm, with some small exceptions, to relocate and link any loaded programs and libraries. Intra-compartment symbol resolution
+results in standard dynamic library function calls, whereas inter-compartment results in the limitation of communication to secure gates. The main exceptions to the standard linking process are to ensure that allocations are performed intra-compartment by default, and to ensure that all calls stay within a compartment unless using a secure gate.
 
 * how we deal with libraries: non-iso: nandos ;; iso: secure gates
 
