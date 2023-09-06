@@ -111,32 +111,27 @@ program and libraries to isolate from each other even within the same address sp
 
 Program A links to libstd (S), libruntime (R), and a helper library, L. The resulting address space in Twizzler looks like:
 ```
-+---------------------------+
-|                           |
-| A.text   A.data   A.state |
-|                           |
-|                           |
-| R.text   R.data   R.state |
-|                           |
-|                           |
-| L.text   L.data   L.state |
-|                           |
-|                           |
-| S.text   S.data   S.state |
-|                           |
-|                           |
-| stack    A.heap   thread  |
-|                           |
-|                           |
-| M.text   M.data           |
-|                           |
-+---------------------------+
++-----------------+
+|                 |
+| A.text   A.data |
+|                 |
+| R.text   R.data |
+|                 |
+| L.text   L.data |
+|                 |
+| S.text   S.data |
+|                 |
+| stack    A.heap |
+|                 |
+| M.text   M.data |
+|                 |
+| thread          |
++-----------------+
 ```
 This is a bit of a simplification. Also note that I didn't really try to order these, as with Twizzler's invariant pointers + position-independent code, it doesn't matter. Well.
 Okay, A.text and A.data, as the potentially statically-linked executable, may be forced into slots 0 and 1 respectively, but that's a small detail.
 
-Each loaded executable object is split into two parts, text (executable code) and data (read-write data). We may add a third rodata object in the future. Each loaded object also has
-a state object associated with it that the runtime uses to maintain state. We also have a heap (A.heap, we'll see why it's named as such later), a stack, a thread repr object (see the thread model documentation). We've loaded A and its dependencies (R, L, and S). We also have ourselves, the monitor / loader, as M, loaded.
+Each loaded executable object is split into two parts, text (executable code) and data (read-write data). We may add a third rodata object in the future. We also have a heap (A.heap, we'll see why it's named as such later), a stack, a thread repr object (see the thread model documentation). We've loaded A and its dependencies (R, L, and S). We also have ourselves, the monitor / loader, as M, loaded.
 
 Once everything is loaded and relocated (linked symbols, etc), we can start executing at A's entry point. During execution, A may decide to load more executable objects, or perform an
 operation that causes the runtime to do so automatically. The result is the familiar programming environment we are all used to, in that we can construct statically-linked executables
@@ -171,26 +166,26 @@ Once loaded, the virtual address space will contain:
 ```
 +--------------------------------------------+
 | thread(r--)                                |
-| +----------------------------------------+ |
-| |A.text(r-x)   A.data(rw-)   A.state(rw-)| |
-| |                                        | |
-| |A.heap(rw-)   stack(rw-)                | |
-| |                                        | |
-| |S.text(r-x)   S.data(rw-)   S.state(rw-)| |
-| |                                        | |
-| |R.text(r-x)   R.data(rw-)   R.state(rw-)| |
-| +----------------------------------------+ |
+| +--------------------------+               |
+| |A.text(r-x)   A.data(rw-) |               |
+| |                          |               |
+| |A.heap(rw-)   stack(rw-)  |               |
+| |                          |               |
+| |S.text(r-x)   S.data(rw-) |               |
+| |                          |               |
+| |R.text(r-x)   R.data(rw-) |               |
+| +--------------------------+               |
 |                                            |
 |                                            |
-| +----------------------------------------+ |
-| |L.text(r-x)   L.data(rw-)   L.state(rw-)| |
-| |                                        | |
-| |L.heap(rw-)   L.stack(rw-)              | |
-| |                                        | |
-| |S.text(r-x)   S.data(rw-)   S.state(rw-)| |
-| |                                        | |
-| |R.text(r-x)   R.data(rw-)   R.state(rw-)| |
-| +----------------------------------------+ |
+| +---------------------------+              |
+| |L.text(r-x)   L.data(rw-)  |              |
+| |                           |              |
+| |L.heap(rw-)   L.stack(rw-) |              |
+| |                           |              |
+| |S.text(r-x)   S.data(rw-)  |              |
+| |                           |              |
+| |R.text(r-x)   R.data(rw-)  |              |
+| +---------------------------+              |
 |                                            |
 +--------------------------------------------+
 ```
@@ -236,7 +231,7 @@ The anatomy of a compartment is as follows:
 +-------+     +------+     +-------+
 ```
 
-A program (which may be a library) links against libstd, which links against twizzler-abi (not shown) and libruntime. The runtime library then uses the state object to locate the heap
+A program (which may be a library) links against libstd, which links against twizzler-abi (not shown) and libruntime. The runtime library then uses the state object (one per compartment) to locate the heap
 and handle allocation requests from the standard library.
 
 ### Isolation options
@@ -300,6 +295,89 @@ back across the compartment boundary. The runtime will allow the unwind to be ca
 
 Look, if you make a global variable, and then try to share it across a compartment boundary, it'll be restricted (either read-only or inaccessible), so I guess just plan for that.
 Or just don't use global, shared variables.
+
+## The Reference REPL
+
+As one example of something you could build atop this, let's consider an interactivity model for Twizzler. Instead of a "shell", we'll think of the interaction point as a REPL, broadly
+defined, to be defined concretely in a different RFC. We'll consider some example, shell-like syntax here as a placeholder to avoid bikeshedding. Consider that, in a system where libraries explicitly expose calling points (Nandos, Secure Gates), we could expose these _typed_ interaction points to the command line interface itself. For example, imagine a library exposes an interface for updating the password as follows:
+
+```{rust}
+#[secure_gate]
+pub fn update_password(user: &User, password: String) -> Result<(), UpdatePasswordError>;
+pub fn lookup_user(name: &str) -> Result<User, LookupUserError>;
+```
+
+Not saying this is a _good_ interface, just roll with it. Let's imagine that the `User` type implements `TryFrom<String>`, and the `UpdatePasswordError` and `LookupUserError` types are enums with variants listing possible failures. Further, these error types implement the Error trait. Now, let's say these functions are in a library that gets compiled to an object named `libpasswd`. We can then expose this library to the REPL. The REPL can enumerate the interface for the library. If the source is provided (or, maybe if we look at rust metadata??? or debug data??? or we generate type info in the nando struct???), the REPL _knows_ the interface _and_ all the types for the functions, so it can extrapolate an interface for the command line automatically:
+
+Long form (the `X ?= Y` syntax is sugar for `X = Result::unwrap (Y)`):
+```
+twz> user ?= passwd::lookup_user bob
+twz> passwd::update_passwd user changeme
+Ok(())
+twz>
+```
+
+Wrong username:
+```
+twz> user ?= passwd::lookup_user bobby
+Error: No such user
+```
+
+If we hadn't implemented `TryFrom<String>` for `User`
+```
+twz> passwd::update_passwd bob changeme
+Type Error: Expected 'User' got 'String'
+```
+
+But, since we did, we get a shortcut:
+```
+twz> passwd::update_passwd bob changeme
+Ok(())
+```
+
+Or, with the wrong username:
+```
+twz> passwd::update_passwd bobby changeme
+Error: No such user
+```
+
+Or, if you don't have permission:
+```
+twz> passwd::update_passwd bob changeme
+Security Error: Failed to call update_password in passwd: Permission denied
+```
+
+The basic REPL here has special handling for String, Into/From/TryInto/TryFrom String, impl Error, Result, Option, etc, but otherwise builds this command line interface, including arguments and error reporting, automatically from the types.
+
+Another example would be some library, `foo`, that wants to update some object by ID. So it exposes some function `bar(id: ObjID) -> ...`. Now, typing an object ID is annoying, but doable
+if necessary, so we do allow that. But the REPL can see this type and automatically try to resolve that positional argument with a (default, but configurable) name resolution mechanism. So the user can still type a name, even if the actual programming interface takes an object by ID. And this can be extended to object _handles_, too. Those can even be typed:
+
+```
+#[nando]
+pub fn baz<T: SomeKindaObject>(obj: Object<T>) -> ...;
+```
+
+If "name" resolves to an object that implements `SomeKindaObject`:
+```
+twz> foo::baz name
+...
+```
+
+If "name" resolves to an object that does NOT implement `SomeKindaObject`:
+```
+twz> foo::baz name
+Type Error: Object 'name' does not implement SomeKindaObject.
+```
+
+If "name" does not resolve:
+```
+twz> foo::baz name
+Name Error: Object 'name' failed to resolve: ...
+```
+
+This means that system software _is_ the libraries written to operate or interact with the system. The command line interface is just a translation from command-line interface interaction to library calls, for which the Type info is sufficient to automatically generate.
+
+And of course a more powerful REPL can just expose library calls that interact with the system and the data model directly in its programming language.
 
 # Reference-level explanation
 [reference-level-explanation]: #reference-level-explanation
@@ -375,6 +453,8 @@ the initial image of the data section from the executable (this is done via the 
 
 At this point, we need to run the standard dynamic linking algorithm, with some small exceptions, to relocate and link any loaded programs and libraries. Intra-compartment symbol resolution
 results in standard dynamic library function calls, whereas inter-compartment results in the limitation of communication to secure gates. The main exceptions to the standard linking process are to ensure that allocations are performed intra-compartment by default, and to ensure that all calls stay within a compartment unless using a secure gate.
+
+## Nandos
 
 * how we deal with libraries: non-iso: nandos ;; iso: secure gates
 
