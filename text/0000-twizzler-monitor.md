@@ -427,6 +427,8 @@ For flexibility, these permissions should not be hardcoded, but instead will all
 
 Each compartment has a heap, which means each compartment has an independent allocator and libstd. We can achieve this by linking to a compartment-local libruntime that is configured with enough information to manage its own heap independent of the other compartments. This is a different linking algorithm than is standard for dynamic libraries. We are first explicitly linking against a library that has "first dibs" on symbols, and falling back to global symbol resolution only after that (ok -- I suppose this is kinda like LD_PRELOAD).
 
+This trick, of allowing heap allocation without the runtime, is necessary for correctness (isolation of heap data) but _also_ for performance, since a context switch on every allocation would be a hard pill to swallow. Fortunately, we can make heap allocation just as cheap as it is now with this per-compartment heap trick, at the cost of some additional complexity to share heap data across compartments. Heaps are private by default, but we can always create additional heaps with different permissions and then use Rust's allocator API to allocate data from those heaps instead of the default.
+
 ## How are executable objects linked and loaded?
 
 We use the linker provided by LLVM to link executables and libraries, however we provide a custom linker script that ensures that the memory layout of the program fits with the runtime.
@@ -460,23 +462,23 @@ results in standard dynamic library function calls, whereas inter-compartment re
 
 ## Nandos
 
-* how we deal with libraries: non-iso: nandos ;; iso: secure gates
+## More Details about the Irreducable Rust Runtime
 
-* how secure gates work: how we handle each of "irreducable rust runtime" + accel (allocation). stack: via shadow stack, or new stack, or just on-stack, depending.
+Above we talked a bit about the stack and the heap, two of the most important parts of the runtime. But there is more.
 
-* extension to secure gates as written in the paper: we'll need to protect thread-state-pointers (stack and base pointer, upcall pointer, and thread pointer) as well.
+### Thread Local Storage
 
-* how global, cli-callable nandos work (args are either String or ObjID, automatic lookup of name)
+The thread pointer, mentioned above, points to a per-thread data structure. The complication here is that we'll need to isolate compartments' TLS data from other compartments.
+We can do this by using the higher-overhead TLS implementation that dynamic libraries use, where the thread pointer points to a vector of TLS regions, and we call a helper function
+to actually load a reference to a TLS variable.
 
-* return stack for sec switch
+This vector then must be protected appropriately: read-only, except for the runtime. The runtime sets up the TLS vector, and then other libraries can use that to find their regions. On compartment switch, the runtime could change the thread pointer to a limited vector. This means that we'll need to protect updates to the thread pointer, which we will do by saying that
+the thread pointer can be updated in contexts that have write access to the thread's repr object. A thread doesn't _need_ write access to its own repr, so we can prevent compartments from
+changing the thread pointer. Finally, the kernel can verify properties of the thread pointer (not writable in source or target context) on compartment switch.
 
-This is the technical portion of the RFC. Explain the design in sufficient detail that:
+### Upcall pointer
 
-- Its interaction with other features is clear.
-- It is reasonably clear how the feature would be implemented.
-- Corner cases are dissected by example.
-
-The section should return to the examples given in the previous section, and explain more fully how the detailed proposal makes those examples work.
+This isn't an architectural pointer, but it is necessary for the kernel to deliver synchronous events to a thread. We can play the same trick: disallow updates to the upcall pointer, and have it set so that it enters the runtime on upcall.
 
 # Drawbacks
 [drawbacks]: #drawbacks
