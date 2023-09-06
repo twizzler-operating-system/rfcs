@@ -480,64 +480,67 @@ changing the thread pointer. Finally, the kernel can verify properties of the th
 
 This isn't an architectural pointer, but it is necessary for the kernel to deliver synchronous events to a thread. We can play the same trick: disallow updates to the upcall pointer, and have it set so that it enters the runtime on upcall.
 
+### Unwinding
+
+Since it's undefined behavior to unwind across an FFI boundary, there's a good chance we'll need to catch unwinding panics in a trampoline for a security gate. So if you write something like this:
+
+```{rust}
+#[security_gate]
+pub fn foo(x: u32) -> u32 {...}
+```
+
+Under the hood, it'll get rewritten to something like:
+
+```{rust}
+pub fn foo(x: u32) -> core::thread::Result<u32> {
+    core::panic::catch_unwind(|| __do_foo(x))
+}
+
+fn __do_foo(x: u32) -> u32 {...}
+```
+
 # Drawbacks
 [drawbacks]: #drawbacks
 
-Why should we *not* do this?
+The security limitation do add overhead on a security context switch. However, the comparison should not be to library calls, but to _invoking an entire new process_ on unix.
+
+It is a huge undertaking. We could instead skip this, port a dynamic linker, etc. But I think that would miss out on an opportunity to leverage Twizzler's features to build a better
+programming and system model.
 
 # Rationale and alternatives
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-- Why is this design the best in the space of possible designs?
-- What other designs have been considered and what is the rationale for not choosing them?
-- What is the impact of not doing this?
+This design builds directly off the Twizzler security model and implements, as far as I know, the simplest way to expose a secure programming interface to programmers such that
+the secure programming is easy to do.
+
+This RFC is careful to walk a line between being opinionated about how programming should be done on Twizzler and remaining sufficiently flexible (as would be expected by an OS).
+However, it does essentially propose a _reference runtime_, which brings up worries about locking us into a particular ecosystem. However, the alternative is essentially _no_ standard
+programming environment for Twizzler, which is unacceptable.
 
 # Prior art
 [prior-art]: #prior-art
 
-Discuss prior art, both the good and the bad, in relation to this proposal.
-A few examples of what this can include are:
-
-- Does this feature exist in other operating systems and what experience have their community had?
-- For community proposals: Is this done by some other community and what were their experiences with it?
-- For other teams: What lessons can we learn from what other communities have done here?
-- Papers: Are there any published papers or great posts that discuss this? If you have some relevant papers to refer to, this can serve as a more detailed theoretical background.
-
-This section is intended to encourage you as an author to think about
-the lessons from other systems, provide readers of your RFC with a
-fuller picture.  If there is no prior art, that is fine - your ideas
-are interesting to us whether they are brand new or if it is an
-adaptation from other operating systems.
-
-Note that while precedent set by other operating systems is some
-motivation, it does not on its own motivate an RFC.
+Some useful papers and concepts:
+* Lightweight Contexts (OSDI)
+* Jails
+* Solaris Doors
+* Dynamic linking
+* Compartmentalization
 
 # Unresolved questions
 [unresolved-questions]: #unresolved-questions
 
-- What parts of the design do you expect to resolve through the RFC process before this gets merged?
-- What parts of the design do you expect to resolve through the implementation of this feature before stabilization?
-- What related issues do you consider out of scope for this RFC that could be addressed in the future independently of the solution that comes out of this RFC?
-
-* can we return things using the stack in the shadow stack setup
+- What does the runtime trait look like?
+- How do we hot-plug that runtime?
+- What does the unix compatibility story look like?
+- More syntax bikeshedding about the cli stuff.
+- Key management...
+- Can we return things using the stack in the shadow stack setup?
+- Should the runtime be async by default?
 
 # Future possibilities
 [future-possibilities]: #future-possibilities
 
-Think about what the natural extension and evolution of your proposal
-would be and how it would affect the operating system and project as a
-whole in a holistic way. Try to use this section as a tool to more
-fully consider all possible interactions with the project and system
-in your proposal.  Also consider how this all fits into the roadmap
-for the project and of the relevant sub-team.
+We can imagine the runtime providing deep introspection on the libraries and executables it loads and isolates. For example, imagine a debugger (controlled by the runtime) that can seamlessly transition from debugging a "script" in the REPL to debugging a loaded library (via step-in).
 
-This is also a good place to "dump ideas", if they are out of scope for the
-RFC you are writing but otherwise related.
-
-If you have tried and cannot think of any future possibilities,
-you may simply state that you cannot think of anything.
-
-Note that having something written down in the future-possibilities section
-is not a reason to accept the current or a future RFC; such notes should be
-in the section on motivation or rationale in this or subsequent RFCs.
-The section merely provides additional information.
+If all system software is written this way, and maintains OS configuration data and runtime telemetry data in objects, the REPL can expose a query-like interface for interacting with the OS, and can seamlessly be extended via nandos and secure gates.
