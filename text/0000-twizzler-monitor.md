@@ -139,6 +139,15 @@ or dynamically linked ones. We can load libraries at load or runtime, and use th
 
 ## The Standard Runtime: nandos
 
+For now, until Achilles and I flesh this out, let's just imagine nandos as a function and some associated data:
+
+```{rust}
+#[nando]
+pub fn foo(...) -> ... {...}
+```
+
+This will generate a FooNando struct that the runtime can hook into to understand some details about this nando. However, from a programmer's perspective, they can just do something like `nando!(lib::foo)`, or just `lib::foo(...)`, etc, to invoke it. If the library has no security restrictions, this can be super cheap (either statically linked into the program, or a simple dynamic library call). If it has restrictions, however...
+
 ## The Standard Runtime: secure gates
 
 One major functionality addition to the dynamic linker is compartmentalization. A given library may be called by a program, and that library
@@ -461,6 +470,8 @@ At this point, we need to run the standard dynamic linking algorithm, with some 
 results in standard dynamic library function calls, whereas inter-compartment results in the limitation of communication to secure gates. The main exceptions to the standard linking process are to ensure that allocations are performed intra-compartment by default, and to ensure that all calls stay within a compartment unless using a secure gate.
 
 ## Nandos
+
+TODO
 
 ## More Details about the Irreducable Rust Runtime
 
