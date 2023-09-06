@@ -379,6 +379,10 @@ This means that system software _is_ the libraries written to operate or interac
 
 And of course a more powerful REPL can just expose library calls that interact with the system and the data model directly in its programming language.
 
+Note that you can recover the semantics of a standard unix-like program via `fn cli_main(args: &[&str]) -> i32`, and in fact, this would be an effective wrapper around such programs as a way to invoke them (via just loading it, and passing args via ELF aux data, or whatever).
+
+Also note that I'm just using this above syntax as an example -- one powerful feature of this is not just making scripting the OS even easier than shell scripts, as you get typed library calls instead of invocation of an executable, but doing so without coupling deeply to the _language_.
+
 # Reference-level explanation
 [reference-level-explanation]: #reference-level-explanation
 
