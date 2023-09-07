@@ -427,8 +427,8 @@ Finally, we can optionally refuse to create a shadow stack and instead require t
 Yeah, we do need to do this! See, the "prevent corruption" motivation above does still require the runtime to interpose always, which means that the stack pointer _cannot_ be writable (or, even readable sometimes!) when a gate is used. Thus we propose to extend the Twizzler gate model to include the ability to check the validity of _architectural pointers_:
 
 * Stack and base pointer: at least -w- in source and at most r-- in target
-* Thread pointer: at most r-- in both contexts. This covers TLS -- the thread pointer points to a region of memory that is used as the TLS block locator for dynamic memory objects. That index should not be writable by either context, as it is under the control of the runtime.
-* Upcall pointer (not really architectural, but): at most r-x in both contexts. Same logic as thread pointer.
+* Thread pointer: at most r-- in both contexts. This covers TLS -- the thread pointer points to a region of memory that is used as the TLS block locator for dynamic memory objects. That index should not be writable by either context, as it is under the control of the runtime. Further, the thread pointer should not be _changeable_ in the source context (denoted by the capability to write the thread repr object).
+* Upcall pointer (not really architectural, but): at most r-- in both contexts. The runtime needs to be the handler for upcalls, so we ensure that it cannot be executable in the target, nor do we want the source compartment to handle (e.g.) security violations for the target compartment. Same as thread pointer: not changeable in the source context.
 
 For flexibility, these permissions should not be hardcoded, but instead will allow the gate's creator to specify both required and disallowed masks. However, the above may be the default.
 
@@ -548,6 +548,7 @@ Some useful papers and concepts:
 - Key management...
 - Can we return things using the stack in the shadow stack setup?
 - Should the runtime be async by default?
+- What does it look like to write a command line interface nando? Should it be a `#[cli_interface]` macro that we can use to auto-gen a CliCall struct that contains type info, etc?
 
 # Future possibilities
 [future-possibilities]: #future-possibilities
