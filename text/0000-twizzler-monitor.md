@@ -549,6 +549,7 @@ Some useful papers and concepts:
 - Can we return things using the stack in the shadow stack setup?
 - Should the runtime be async by default?
 - What does it look like to write a command line interface nando? Should it be a `#[cli_interface]` macro that we can use to auto-gen a CliCall struct that contains type info, etc?
+- Can we implement this with ASLR?
 
 # Future possibilities
 [future-possibilities]: #future-possibilities
