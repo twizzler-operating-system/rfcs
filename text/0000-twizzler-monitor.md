@@ -139,7 +139,7 @@ or dynamically linked ones. We can load libraries at load or runtime, and use th
 
 ## The Standard Runtime: nandos
 
-For now, until Achilles and I flesh this out, let's just imagine nandos as a function and some associated data:
+For now, until we flesh this out, let's just imagine nandos as a function and some associated data:
 
 ```{rust}
 #[nando]
@@ -468,10 +468,6 @@ the initial image of the data section from the executable (this is done via the 
 
 At this point, we need to run the standard dynamic linking algorithm, with some small exceptions, to relocate and link any loaded programs and libraries. Intra-compartment symbol resolution
 results in standard dynamic library function calls, whereas inter-compartment results in the limitation of communication to secure gates. The main exceptions to the standard linking process are to ensure that allocations are performed intra-compartment by default, and to ensure that all calls stay within a compartment unless using a secure gate.
-
-## Nandos
-
-TODO
 
 ## More Details about the Irreducable Rust Runtime
 
