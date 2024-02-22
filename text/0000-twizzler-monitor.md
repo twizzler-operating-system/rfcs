@@ -137,17 +137,6 @@ Once everything is loaded and relocated (linked symbols, etc), we can start exec
 operation that causes the runtime to do so automatically. The result is the familiar programming environment we are all used to, in that we can construct statically-linked executables
 or dynamically linked ones. We can load libraries at load or runtime, and use their exported symbols.
 
-## The Standard Runtime: nandos
-
-For now, until we flesh this out, let's just imagine nandos as a function and some associated data:
-
-```{rust}
-#[nando]
-pub fn foo(...) -> ... {...}
-```
-
-This will generate a FooNando struct that the runtime can hook into to understand some details about this nando. However, from a programmer's perspective, they can just do something like `nando!(lib::foo)`, or just `lib::foo(...)`, etc, to invoke it. If the library has no security restrictions, this can be super cheap (either statically linked into the program, or a simple dynamic library call). If it has restrictions, however...
-
 ## The Standard Runtime: secure gates
 
 One major functionality addition to the dynamic linker is compartmentalization. A given library may be called by a program, and that library
@@ -160,7 +149,7 @@ Lets use the same example program and dependencies as from above with the follow
 system state that the caller (A) doesn't have permission to do. Library L defines a function as follows:
 
 ```{rust}
-#[twizzler_runtime::secure_gate]
+#[secure_gate]
 fn update_some_state(args...) -> ... {...}
 ```
 
@@ -265,7 +254,6 @@ Selection of higher isolation levels may come with a tradeoff. In particular, pe
 
 1. No isolation: no overhead above a standard dynamic library call
 2. Any amount of isolation requires security context switches and shadow stack construction.
-3. If the caller doesn't trust the callee to even see its stack, then the callee must run on a brand new stack, so APIs may be restricted to not use the stack for argument passing in this case, although we may be able to get around this with some clever proc macros and trampolining.
 
 ## Notes on "thread state" and secure gates
 
@@ -304,93 +292,6 @@ back across the compartment boundary. The runtime will allow the unwind to be ca
 
 Look, if you make a global variable, and then try to share it across a compartment boundary, it'll be restricted (either read-only or inaccessible), so I guess just plan for that.
 Or just don't use global, shared variables.
-
-## The Reference REPL
-
-As one example of something you could build atop this, let's consider an interactivity model for Twizzler. Instead of a "shell", we'll think of the interaction point as a REPL, broadly
-defined, to be defined concretely in a different RFC. We'll consider some example, shell-like syntax here as a placeholder to avoid bikeshedding. Consider that, in a system where libraries explicitly expose calling points (Nandos, Secure Gates), we could expose these _typed_ interaction points to the command line interface itself. For example, imagine a library exposes an interface for updating the password as follows:
-
-```{rust}
-#[secure_gate]
-pub fn update_password(user: &User, password: String) -> Result<(), UpdatePasswordError>;
-pub fn lookup_user(name: &str) -> Result<User, LookupUserError>;
-```
-
-Not saying this is a _good_ interface, just roll with it. Let's imagine that the `User` type implements `TryFrom<String>`, and the `UpdatePasswordError` and `LookupUserError` types are enums with variants listing possible failures. Further, these error types implement the Error trait. Now, let's say these functions are in a library that gets compiled to an object named `libpasswd`. We can then expose this library to the REPL. The REPL can enumerate the interface for the library. If the source is provided (or, maybe if we look at rust metadata??? or debug data??? or we generate type info in the nando struct???), the REPL _knows_ the interface _and_ all the types for the functions, so it can extrapolate an interface for the command line automatically:
-
-Long form (the `X ?= Y` syntax is sugar for `X = Result::unwrap (Y)`):
-```
-twz> user ?= passwd::lookup_user bob
-twz> passwd::update_passwd user changeme
-Ok(())
-twz>
-```
-
-Wrong username:
-```
-twz> user ?= passwd::lookup_user bobby
-Error: No such user
-```
-
-If we hadn't implemented `TryFrom<String>` for `User`
-```
-twz> passwd::update_passwd bob changeme
-Type Error: Expected 'User' got 'String'
-```
-
-But, since we did, we get a shortcut:
-```
-twz> passwd::update_passwd bob changeme
-Ok(())
-```
-
-Or, with the wrong username:
-```
-twz> passwd::update_passwd bobby changeme
-Error: No such user
-```
-
-Or, if you don't have permission:
-```
-twz> passwd::update_passwd bob changeme
-Security Error: Failed to call update_password in passwd: Permission denied
-```
-
-The basic REPL here has special handling for String, Into/From/TryInto/TryFrom String, impl Error, Result, Option, etc, but otherwise builds this command line interface, including arguments and error reporting, automatically from the types.
-
-Another example would be some library, `foo`, that wants to update some object by ID. So it exposes some function `bar(id: ObjID) -> ...`. Now, typing an object ID is annoying, but doable
-if necessary, so we do allow that. But the REPL can see this type and automatically try to resolve that positional argument with a (default, but configurable) name resolution mechanism. So the user can still type a name, even if the actual programming interface takes an object by ID. And this can be extended to object _handles_, too. Those can even be typed:
-
-```
-#[nando]
-pub fn baz<T: SomeKindaObject>(obj: Object<T>) -> ...;
-```
-
-If "name" resolves to an object that implements `SomeKindaObject`:
-```
-twz> foo::baz name
-...
-```
-
-If "name" resolves to an object that does NOT implement `SomeKindaObject`:
-```
-twz> foo::baz name
-Type Error: Object 'name' does not implement SomeKindaObject.
-```
-
-If "name" does not resolve:
-```
-twz> foo::baz name
-Name Error: Object 'name' failed to resolve: ...
-```
-
-This means that system software _is_ the libraries written to operate or interact with the system. The command line interface is just a translation from command-line interface interaction to library calls, for which the Type info is sufficient to automatically generate.
-
-And of course a more powerful REPL can just expose library calls that interact with the system and the data model directly in its programming language.
-
-Note that you can recover the semantics of a standard unix-like program via `fn cli_main(args: &[&str]) -> i32`, and in fact, this would be an effective wrapper around such programs as a way to invoke them (via just loading it, and passing args via ELF aux data, or whatever).
-
-Also note that I'm just using this above syntax as an example -- one powerful feature of this is not just making scripting the OS even easier than shell scripts, as you get typed library calls instead of invocation of an executable, but doing so without coupling deeply to the _language_.
 
 # Reference-level explanation
 [reference-level-explanation]: #reference-level-explanation
@@ -505,6 +406,130 @@ pub fn foo(x: u32) -> core::thread::Result<u32> {
 
 fn __do_foo(x: u32) -> u32 {...}
 ```
+
+# Drawbacks
+[drawbacks]: #drawbacks
+
+The security limitations do add overhead on a security context switch. However, the comparison should not be to library calls, but to _invoking an entire new process_ on unix.
+
+It is a huge undertaking. We could instead skip this, port a dynamic linker, etc. But I think that would miss out on an opportunity to leverage Twizzler's features to build a better
+programming and system model.
+
+# Rationale and alternatives
+[rationale-and-alternatives]: #rationale-and-alternatives
+
+This design builds directly off the Twizzler security model and implements, as far as I know, the simplest way to expose a secure programming interface to programmers such that
+the secure programming is easy to do.
+
+This RFC is careful to walk a line between being opinionated about how programming should be done on Twizzler and remaining sufficiently flexible (as would be expected by an OS).
+However, it does essentially propose a _reference runtime_, which brings up worries about locking us into a particular ecosystem. However, the alternative is essentially _no_ standard
+programming environment for Twizzler, which is unacceptable.
+
+# Prior art
+[prior-art]: #prior-art
+
+Some useful papers and concepts:
+* Lightweight Contexts (OSDI)
+* Jails
+* Solaris Doors
+* Dynamic linking
+* Compartmentalization
+
+# Unresolved questions
+[unresolved-questions]: #unresolved-questions
+
+None for this RFC.
+
+# Future possibilities
+[future-possibilities]: #future-possibilities
+
+
+## The Reference REPL
+
+As one example of something you could build atop this, let's consider an interactivity model for Twizzler. Instead of a "shell", we'll think of the interaction point as a REPL, broadly
+defined, to be defined concretely in a different RFC. We'll consider some example, shell-like syntax here as a placeholder to avoid bikeshedding. Consider that, in a system where libraries explicitly expose calling points (Nandos, Secure Gates), we could expose these _typed_ interaction points to the command line interface itself. For example, imagine a library exposes an interface for updating the password as follows:
+
+```{rust}
+#[secure_gate]
+pub fn update_password(user: &User, password: String) -> Result<(), UpdatePasswordError>;
+pub fn lookup_user(name: &str) -> Result<User, LookupUserError>;
+```
+
+Not saying this is a _good_ interface, just roll with it. Let's imagine that the `User` type implements `TryFrom<String>`, and the `UpdatePasswordError` and `LookupUserError` types are enums with variants listing possible failures. Further, these error types implement the Error trait. Now, let's say these functions are in a library that gets compiled to an object named `libpasswd`. We can then expose this library to the REPL. The REPL can enumerate the interface for the library. If the source is provided (or, maybe if we look at rust metadata??? or debug data??? or we generate type info in the nando struct???), the REPL _knows_ the interface _and_ all the types for the functions, so it can extrapolate an interface for the command line automatically:
+
+Long form (the `X ?= Y` syntax is sugar for `X = Result::unwrap (Y)`):
+```
+twz> user ?= passwd::lookup_user bob
+twz> passwd::update_passwd user changeme
+Ok(())
+twz>
+```
+
+Wrong username:
+```
+twz> user ?= passwd::lookup_user bobby
+Error: No such user
+```
+
+If we hadn't implemented `TryFrom<String>` for `User`
+```
+twz> passwd::update_passwd bob changeme
+Type Error: Expected 'User' got 'String'
+```
+
+But, since we did, we get a shortcut:
+```
+twz> passwd::update_passwd bob changeme
+Ok(())
+```
+
+Or, with the wrong username:
+```
+twz> passwd::update_passwd bobby changeme
+Error: No such user
+```
+
+Or, if you don't have permission:
+```
+twz> passwd::update_passwd bob changeme
+Security Error: Failed to call update_password in passwd: Permission denied
+```
+
+The basic REPL here has special handling for String, Into/From/TryInto/TryFrom String, impl Error, Result, Option, etc, but otherwise builds this command line interface, including arguments and error reporting, automatically from the types.
+
+Another example would be some library, `foo`, that wants to update some object by ID. So it exposes some function `bar(id: ObjID) -> ...`. Now, typing an object ID is annoying, but doable
+if necessary, so we do allow that. But the REPL can see this type and automatically try to resolve that positional argument with a (default, but configurable) name resolution mechanism. So the user can still type a name, even if the actual programming interface takes an object by ID. And this can be extended to object _handles_, too. Those can even be typed:
+
+```
+#[nando]
+pub fn baz<T: SomeKindaObject>(obj: Object<T>) -> ...;
+```
+
+If "name" resolves to an object that implements `SomeKindaObject`:
+```
+twz> foo::baz name
+...
+```
+
+If "name" resolves to an object that does NOT implement `SomeKindaObject`:
+```
+twz> foo::baz name
+Type Error: Object 'name' does not implement SomeKindaObject.
+```
+
+If "name" does not resolve:
+```
+twz> foo::baz name
+Name Error: Object 'name' failed to resolve: ...
+```
+
+This means that system software _is_ the libraries written to operate or interact with the system. The command line interface is just a translation from command-line interface interaction to library calls, for which the Type info is sufficient to automatically generate.
+
+And of course a more powerful REPL can just expose library calls that interact with the system and the data model directly in its programming language.
+
+Note that you can recover the semantics of a standard unix-like program via `fn cli_main(args: &[&str]) -> i32`, and in fact, this would be an effective wrapper around such programs as a way to invoke them (via just loading it, and passing args via ELF aux data, or whatever).
+
+Also note that I'm just using this above syntax as an example -- one powerful feature of this is not just making scripting the OS even easier than shell scripts, as you get typed library calls instead of invocation of an executable, but doing so without coupling deeply to the _language_.
 
 # Drawbacks
 [drawbacks]: #drawbacks
