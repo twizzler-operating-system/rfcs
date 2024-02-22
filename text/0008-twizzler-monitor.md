@@ -1,6 +1,6 @@
 - Feature Name: twizzler_monitor
 - Start Date: 2023-08-30
-- RFC PR: [twizzler-rfcs/rfcs#0000](https://github.com/twizzler-operating-system/rfcs/pull/0000)
+- RFC PR: [twizzler-rfcs/rfcs#0008](https://github.com/twizzler-operating-system/rfcs/pull/0008)
 - Twizzler Issue: [twizzler-operating-system/twizzler#0000](https://github.com/twizzler-operating-system/twizzler/issues/0000)
 
 # Summary
