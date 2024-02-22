@@ -6,6 +6,8 @@
 # Summary
 [summary]: #summary
 
+Since Twizzler is focused so heavily around persistent state, managing runtime state can be tricky. In particular, there isn't yet a good story
+for the interaction of security policy and runtime state objects (e.g. stack, heap).
 This RFC extends the Twizzler security model with two key mechanisms: runtime object security, and security context instancing. The purpose is
 to support _runtime objects_ (that is, objects created solely for runtime use, e.g. heap and stack objects). Such objects need to be easy and fast
 to create, yet still must be subject to the same (or, as we'll see, nearly the same) rules for security of Twizzler objects.
