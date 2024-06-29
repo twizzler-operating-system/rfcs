@@ -74,7 +74,7 @@ Connects to the Dynlink and Monitor and the Pager.
 ### NVMe
 Non-Volatile Memory Express. A protocol to access the fancy flash memory.
 ### Flash
-The flash far memory. Twizzler is built to optimize for its unique properties. (Is that correct? ^^)
+The Flash memory.
 ### Security Monitor
 There is a security monitor that enforces isolation between the above components.
 ### Goals with the Stick
