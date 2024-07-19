@@ -1,6 +1,6 @@
 - Feature Name: Source of Entropy
 - Start Date: 2024-07-15
-- RFC PR: [twizzler-rfcs/rfcs#0011](https://github.com/twizzler-operating-system/rfcs/pull/0009)
+- RFC PR: [twizzler-rfcs/rfcs#0012](https://github.com/twizzler-operating-system/rfcs/pull/0009)
 - Twizzler Issue: [twizzler-operating-system/twizzler#0011](https://github.com/twizzler-operating-system/twizzler/issues/0009)
 
 # Summary
