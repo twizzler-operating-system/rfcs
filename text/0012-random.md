@@ -92,7 +92,7 @@ Maintaining a pool of entropy (and a CSPRNG) requires some additional memory and
 
 ### To be resolved during the RFC process:
 
-- I hope to also research the security difference between ChaCha12, ChaCha20, and Fortuna, although I suspect ChaCha12 is the better choice for us given that it is faster when there is no sha256 hardware implementation (which is the case on ARM), Linux chose ChaCha20 in 2016, and [this GitHub discussion](https://github.com/rust-random/rand/issues/932) as to why ChaCha20 is overkill (during RFC process before merging).
+- I hope to also research the security difference between ChaCha12, ChaCha20, and Fortuna, although I suspect ChaCha12 is the better choice for us given that it is faster when there is no sha256 hardware implementation (which is the case on ARM), Linux chose ChaCha20 in 2016, and [this GitHub discussion](https://github.com/rust-random/rand/issues/932) as to why ChaCha20 is overkill.
 
 ### During Implementation
 
