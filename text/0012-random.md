@@ -43,7 +43,13 @@ let bytes_overwritten = getrandom_nonblocking(&mut buf);
 
 My current plan is to use the current kernel's `time` interface to measure CPU jitter (see [JitterRng](https://docs.rs/rand_jitter/latest/rand_jitter/struct.JitterRng.html)) to seed an entropy pool.
 
-I intend to design an "EntropyPool" struct which is responsible for XORing bytes on top of the pool's current state while keeping track of the bytes of entropy each source provides. It should then periodically seed and reseed a CSPRNG (probably ChaCha12) once there is enough entropy gathered within the entropy buffer.
+I intend to design an "EntropyPool" struct which is responsible for XORing bytes on top of the pool's current state ~~while keeping track of the bytes of entropy each source provides~~. Never mind, see the following quote from [_Cryptography Engineering_](https://www.schneier.com/wp-content/uploads/2015/12/fortuna.pdf):
+
+> making any kind of estimate of the amount of entropy is extremely difficult, if not impossible. It depends heavily on how much the attacker knows or can know [...]. It tries to measure the entropy of a source using an entropy estimator, and such an estimator is impossible to get right for all situations.
+
+Instead, Fortuna, Yarrow's successor used by MacOS and FreeBSD, simply requires a seed of a certain total length rather than trying to estimate entropy amounts of each source since these entropy estimates are usually innacurate.
+
+It should then periodically seed and reseed a CSPRNG (probably ChaCha12) once there is enough entropy gathered within the entropy buffer.
 
 The CSPRNG should be the final source of entropy which will be returned via the above system calls. Before the CSPRNG is fully seeded calls `getrandom()` should block until it is seeded and calls to `getrandom_nonblocking()` should return 0.
 
@@ -92,7 +98,7 @@ Maintaining a pool of entropy (and a CSPRNG) requires some additional memory and
 
 ### To be resolved during the RFC process:
 
-- I hope to also research the security difference between ChaCha12, ChaCha20, and Fortuna, although I suspect ChaCha12 is the better choice for us given that it is faster when there is no sha256 hardware implementation (which is the case on ARM), Linux chose ChaCha20 in 2016, and [this GitHub discussion](https://github.com/rust-random/rand/issues/932) as to why ChaCha20 is overkill.
+- I hope to also research the security difference between ChaCha12, ChaCha20, and Fortuna, although I suspect ChaCha12 is the better choice for us given that it is faster when there is no sha256 hardware implementation (which is the case on ARM), Linux chose ChaCha20 in 2016, and [this GitHub discussion](https://github.com/rust-random/rand/issues/932) as to why ChaCha20 is overkill. Edit: turns out FreeBSD also uses ChaCha20 as the hashing mechanism within Fortuna ([source](https://github.com/freebsd/freebsd-src/blob/main/sys/dev/random/fortuna.c#L525-L668)). So with all of that evidence, I think using ChaCha12 will be plenty okay for our purposes.
 
 ### During Implementation
 
