@@ -47,7 +47,7 @@ I intend to design an "EntropyPool" struct which is responsible for XORing bytes
 
 > making any kind of estimate of the amount of entropy is extremely difficult, if not impossible. It depends heavily on how much the attacker knows or can know [...]. It tries to measure the entropy of a source using an entropy estimator, and such an estimator is impossible to get right for all situations.
 
-Instead, Fortuna, Yarrow's successor used by MacOS and FreeBSD, simply requires a seed of a certain total length rather than trying to estimate entropy amounts of each source since these entropy estimates are usually innacurate. It also saves previous entropy into a persistent file to be the startup seed for the next boot cycle.
+Instead, Fortuna, Yarrow's successor used by MacOS and FreeBSD, simply requires a seed of a certain total length rather than trying to estimate entropy amounts of each source since these entropy estimates are usually innacurate. It also saves previous entropy into a persistent file to be the startup seed for the next boot cycle to avoid blocking at boot time.
 
 It should then periodically seed and reseed a CSPRNG (probably ChaCha12) once there is enough entropy gathered within the entropy buffer.
 
