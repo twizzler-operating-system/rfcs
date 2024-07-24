@@ -7,35 +7,82 @@
 
 [summary]: #summary
 
-Adds a secure source of entropy to the kernel, similar to /dev/random on Twizzler. It should seed itself at startup with a true random number generator (TRNG) and then use a Cryptographically secure Pseudo Random Number Generator (CSPRNG) to generate following requests for randomness.
+Adds a secure source of entropy to the kernel, similar to /dev/random on Twizzler. It should seed itself at startup with several true random number generators (TRNG) and then use a Cryptographically secure Pseudo Random Number Generator (CSPRNG) to generate following requests for randomness.
 
 # Motivation
 
 [motivation]: #motivation
 
-This RFC is useful because randomness is used for cryptographic operations and the kernel certainly requires cryptographic operations such as private/public key generation and UUID generation for the twizzler security model. It is also very likely userspace programs will also require entropy for userspace cryptographic operations (or games or other applications which require randomness).
+The kernel requires cryptographic operations such as private/public key generation and UUID generation for the twizzler security model. These sort of cryptographic operations require a cryptographically secure source of randomness to ensure their security. It is also very likely userspace programs will also require entropy for userspace cryptographic operations (or games or other programs which require randomness).
 
 # Guide-level explanation
 
 [guide-level-explanation]: #guide-level-explanation
 
-The module should expose a `getrandom(dest: &mut [u8])` function (and syscall) which will entirely fill the `dest` buffer with bytes. It might block while doing so during the initial seeding of the CSPRNG. I also propose providing a `getrandom_nonblocking(dest: &mut [u8]) -> usize` which will do the same but without blocking, returning the number of bytes overwritten into `dest` (which can be 0).
+## Syscall API
+
+The module should expose a `getrandom(dest: &mut [u8], flags: GetRandomFlags) -> usize` function (and syscall) which will entirely fill the `dest` buffer with bytes and returns the number of bytes written into the destination buffer. It might block while doing so during the initial seeding of the CSPRNG. `GetRandomFlags` for now will only consist of a single flag, NONBLOCKING, which will ensure `getrandom` does not block. Note that before the CSPRNG is seeded `getrandom` might write 0 bytes into dest and accordingly return a 0.
 
 ### Example 1 (getrandom)
 
 ```rs
 let mut buf = [u8; 32] // 256 bytes total
-getrandom(&mut buf); // should fully overwrite random bytes into buf
+let bytes_written = getrandom(&mut buf); // should fully overwrite random bytes into buf
+assert!(256 == bytes_written)
+```
+
+### Example 2 (nonblocking)
+
+```rs
+let mut buf = [u8; 32] // 256 bytes total
+// should write `bytes_overwritten` number of bytes into the buf. Might be 0 bytes
+let bytes_written = getrandom_nonblocking(&mut buf, GetRandomFlags::NONBLOCKING);
+```
+
+## Inner-Kernel API
+
+The module should have a public function called `contribute_entropy(entropy: &[u8])` which will allow sporatic entropy contributions from sources which are not consistently able to provide entropy upon requrest. The module should also describe an `EntropySource` trait for sources which can consistently provide entropy upon demand:
+
+```rs
+trait EntropySource {
+  pub fn get_entropy(self) -> &[u8];
+}
+```
+
+There will also be a public registering function `register_entropy_source(source: dyn EntropySource)`. Registered entropy sources will be called during a reseeding of the CSPRNG.
+
+### Example 1
+
+```rs
+let t1 = now()
+// do something that takes a variable amount of time, preferably involving hardware
+let t2 = now()
+let timingDiff = t2 - t1
+// only the first LSB because we mainly care about microsecond jitter
+// as upper bits are typically 0 since the hardware action doesn't take that long
+contribute_entropy([timingDiff as u8])
 ```
 
 ### Example 2
 
 ```rs
-let mut buf = [u8; 32] // 256 bytes total
-// should write `bytes_overwritten` number of bytes into the
-// buf. Might be 0 bytes
-let bytes_overwritten = getrandom_nonblocking(&mut buf);
+struct CpuEntropy;
+
+impl EntropySource for CpuEntropy {
+    fn get_entropy(self) {
+        return get_cpu_entropy().to_ne_bytes();
+    }
+}
+
+pub fn maybe_add_cpu_entropy_source() {
+    if let Some(_) = get_cpu_entropy() {
+        register_entropy_source(CpuEntropy())
+    }
+}
+
 ```
+
+###
 
 # Reference-level explanation
 
@@ -43,15 +90,15 @@ let bytes_overwritten = getrandom_nonblocking(&mut buf);
 
 My current plan is to use the current kernel's `time` interface to measure CPU jitter (see [JitterRng](https://docs.rs/rand_jitter/latest/rand_jitter/struct.JitterRng.html)) to seed an entropy pool.
 
-I intend to design an "EntropyPool" struct which is responsible for XORing bytes on top of the pool's current state ~~while keeping track of the bytes of entropy each source provides~~. Never mind, see the following quote from [_Cryptography Engineering_](https://www.schneier.com/wp-content/uploads/2015/12/fortuna.pdf):
+I intend to design an "EntropyPool" struct which is responsible for XORing an array of hashed bytes on top of the pool's current state once there is enough entropy gathered in the pool to warrant a reseed. See the following quote from [_Cryptography Engineering_](https://www.schneier.com/wp-content/uploads/2015/12/fortuna.pdf) for justificationßß:
 
 > making any kind of estimate of the amount of entropy is extremely difficult, if not impossible. It depends heavily on how much the attacker knows or can know [...]. It tries to measure the entropy of a source using an entropy estimator, and such an estimator is impossible to get right for all situations.
 
-Instead, Fortuna, Yarrow's successor used by MacOS and FreeBSD, simply requires a seed of a certain total length rather than trying to estimate entropy amounts of each source since these entropy estimates are usually innacurate. It also saves previous entropy into a persistent file to be the startup seed for the next boot cycle to avoid blocking at boot time.
+Rather than keeping track of entropy estimates, Fortuna, Yarrow's successor used by MacOS and FreeBSD, simply requires a seed of a certain total length rather than trying to estimate entropy amounts of each source since these entropy estimates are usually innacurate. It also saves previous entropy into a persistent file to be the startup seed for the next boot cycle to avoid blocking at boot time. For our implementation we will simply always block at boot to gather entropy, falling back to JitterRng if there is not enough entropy gathered within the time alotted.
 
 It should then periodically seed and reseed a CSPRNG (probably ChaCha12) once there is enough entropy gathered within the entropy buffer.
 
-The CSPRNG should be the final source of entropy which will be returned via the above system calls. Before the CSPRNG is fully seeded calls `getrandom()` should block until it is seeded and calls to `getrandom_nonblocking()` should return 0.
+The CSPRNG should be the final source of entropy which will be returned via the above system calls. Before the CSPRNG is seeded calls `getrandom()` should block until it is seeded (or return 0 if the NONBLOCKING flag is set).
 
 # Drawbacks
 
@@ -59,7 +106,7 @@ The CSPRNG should be the final source of entropy which will be returned via the 
 
 Why should we _not_ do this?
 
-Maintaining a pool of entropy (and a CSPRNG) requires some additional memory and CPU footprint. In addition, users might end up running their own CSPRNG seeded off of our pool, which might make the kernel's redundant. That said, since the kernel itself requires cryptographically secure RNG for object management and permissions I think it's more than worth exposing the same source of randomness into userspace, just so that userspace doesn't have to reimplement a source of entropy. Also all other common OS's have a source of randomness available.
+Maintaining a pool of entropy (and a CSPRNG) requires some additional memory and CPU footprint. In addition, users might end up running their own CSPRNG seeded off of our pool, which might make the kernel's CSPRNG redundant. That said, since the kernel itself requires cryptographically secure RNG for object management and permissions. I think it's more than worth exposing the same source of randomness into userspace, just so that userspace doesn't have to reimplement a source of entropy. Also all other common modern OS's have a source of cryptographically secure randomness available to userspace.
 
 # Rationale and alternatives
 
@@ -107,7 +154,7 @@ Maintaining a pool of entropy (and a CSPRNG) requires some additional memory and
 
 ### Out of Scope
 
-- Eventually we should support more sources of randomness. At this point however we can start with an insecure timing-jitter based approach.
+- Eventually we should support more sources of randomness. At this point however we can start with an imperfect cpu jitter timing based approach with the possible addition of timing OS interrupts.
 
 # Future possibilities
 
@@ -121,7 +168,11 @@ In FreeBSD this can only be provided by super-users due to security concerns of 
 
 In Linux anyone can contribute additional entropy to the entropy pool, but the entropy count will stay the same.
 
-I am not sure how we want to use Twizzler's permission system in determining who can contribute to the entropy pool. Ideally there should be some way to have drivers contribute to the pool so that interfaces to peripheral sources of entropy do not have to be added to the kernel.
+The random module should eventually have a Twizzler entropy object with a write capability which the kernel is able to grant to various other userspace processes (such as the pager). Then those processes can pull entropy from the various drivers it relies upon (such as the NVMe driver in the pager's case).
+
+### Kernelspace Entropy Contributions
+
+The kernel might also be able to contribute entropy directly from interrupt timing.
 
 ### Other CSPRNGs
 
