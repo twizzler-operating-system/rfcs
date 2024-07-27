@@ -26,7 +26,7 @@ The module should expose a `getrandom(dest: &mut [u8], flags: GetRandomFlags) ->
 
 ```rs
 let mut buf = [u8; 32] // 256 bytes total
-let bytes_written = getrandom(&mut buf); // should fully overwrite random bytes into buf
+let bytes_written = getrandom(&mut buf, 0); // should fully overwrite random bytes into buf
 assert!(256 == bytes_written)
 ```
 
@@ -35,7 +35,7 @@ assert!(256 == bytes_written)
 ```rs
 let mut buf = [u8; 32] // 256 bytes total
 // should write `bytes_overwritten` number of bytes into the buf. Might be 0 bytes
-let bytes_written = getrandom_nonblocking(&mut buf, GetRandomFlags::NONBLOCKING);
+let bytes_written = getrandom(&mut buf, GetRandomFlags::NONBLOCKING);
 ```
 
 ## Inner-Kernel API
@@ -44,7 +44,7 @@ The module should have a public function called `contribute_entropy(entropy: &[u
 
 ```rs
 trait EntropySource {
-  pub fn get_entropy(self) -> &[u8];
+  fn try_fill_entropy(&mut self, dest: &mut [u8]) -> Result<(), rand_core::Error>;
 }
 ```
 
@@ -68,14 +68,19 @@ contribute_entropy([timingDiff as u8])
 struct CpuEntropy;
 
 impl EntropySource for CpuEntropy {
-    fn get_entropy(self) {
-        return get_cpu_entropy().to_ne_bytes();
+    fn try_fill_entropy(&mut self, dest: &mut [u8]) -> Result<(), rand_core::Error> {
+        let mut dest_iter = dest.iter_mut();
+        let mut rndrs_iter = self.try_iter()?;
+        for (d, r) in dest_iter.zip(rndrs_iter) {
+            *d = r?
+        }
+        Ok(())
     }
 }
 
 pub fn maybe_add_cpu_entropy_source() {
-    if let Some(_) = get_cpu_entropy() {
-        register_entropy_source(CpuEntropy())
+    if let Some(cpu_entropy) = CpuEntropy::new() {
+        register_entropy_source(cpu_entropy)
     }
 }
 
