@@ -1,0 +1,521 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>0003-time - Twizzler RFCs</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rfc-process.html"><strong aria-hidden="true">1.</strong> 0001-rfc-process</a></li><li class="chapter-item expanded "><a href="0002-object.html"><strong aria-hidden="true">2.</strong> 0002-object</a></li><li class="chapter-item expanded "><a href="0003-time.html" class="active"><strong aria-hidden="true">3.</strong> 0003-time</a></li><li class="chapter-item expanded "><a href="0004-low-level-device-model.html"><strong aria-hidden="true">4.</strong> 0004-low-level-device-model</a></li><li class="chapter-item expanded "><a href="0005-driver-model.html"><strong aria-hidden="true">5.</strong> 0005-driver-model</a></li><li class="chapter-item expanded "><a href="0006-dma.html"><strong aria-hidden="true">6.</strong> 0006-dma</a></li><li class="chapter-item expanded "><a href="0008-twizzler-monitor.html"><strong aria-hidden="true">7.</strong> 0008-twizzler-monitor</a></li><li class="chapter-item expanded "><a href="0011-random.html"><strong aria-hidden="true">8.</strong> 0011-random</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Twizzler RFCs</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <ul>
+<li>Feature Name: Time</li>
+<li>Start Date: 2022-06-01</li>
+<li>RFC PR: <a href="https://github.com/twizzler-operating-system/rfcs/pull/0003">twizzler-rfcs/rfcs#0003</a></li>
+<li>Twizzler Issue: <a href="https://github.com/twizzler-operating-system/twizzler/issues/0024">twizzler-operating-system/twizzler#0024</a></li>
+</ul>
+<h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
+<p>This document introduces a time sub-system into Twizzler. The time sub-system lays down the foundation for Twizzler's notion of time and interfaces for user space programs. We introduce a trait that abstracts the hardware, new system calls in the kernel, and types to represent clocks.</p>
+<h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
+<p>We care about supporting user space programs, particularly Rust's standard library. A big part of that is providing APIs for time. User programs require services for time to do useful things such as benchmarking.</p>
+<p>Rust exposes an interface for time to user space through various types.</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/time/struct.Duration.html">Duration</a>: represents span of time (sec and ns, like timespec)</li>
+<li><a href="https://doc.rust-lang.org/std/time/struct.Instant.html">Instant</a>: a monotonic non-decreasing type that is implemented using <a href="https://doc.rust-lang.org/std/time/struct.Instant.html#underlying-system-calls">os-specific system calls</a>
+<ul>
+<li>e.g. <code>clock_gettime(CLOCK_MONOTONIC)</code> for Linux</li>
+</ul>
+</li>
+<li><a href="https://doc.rust-lang.org/std/time/struct.SystemTime.html">SystemTime</a>: represents an anchor in time from the unix epoch, non-monotonic
+<ul>
+<li>e.g. <code>clock_gettime(CLOCK_REALTIME)</code> for Linux</li>
+</ul>
+</li>
+</ul>
+<p>To support the current APIs in Rust, we need to provide an implementation of a monotonic clock and system clock. Twizzler currently provides <a href="https://twizzler-operating-system.github.io/nightly/doc/twizzler_abi/time/index.html">stubs</a> so that Rust can call into the kernel. </p>
+<p>The outcome of this work is to: </p>
+<ul>
+<li>Provide strong support for user space Rust applications using its time APIs</li>
+<li>Develop interfaces for Twizzler native programs</li>
+<li>Develop standard interfaces for the kernel to manage the hardware used for clocks.</li>
+</ul>
+<h1 id="guide-level-explanation"><a class="header" href="#guide-level-explanation">Guide-level explanation</a></h1>
+<p>The time interface exposed to users is traditional in the sense that all mechanisms in the kernel hide behind system calls. However, user programs are free to use libraries built on top of system calls, as is done so in the Rust standard library.</p>
+<p>One could imagine a simple Rust program that reads the elapsed time from a monotonic clock, ported over to Twizzler as so:</p>
+<pre><pre class="playground"><code class="language-rust">use std::time::Instant;
+fn main() {
+    // reads a moment in time
+    let now = Instant::now();
+    
+    // elapsed time since now
+    // this returns a Duration type
+    let elapsed_time = now.elapsed();
+    println!(&quot;Running main() took {} nanoseconds.&quot;, elapsed_time.as_nanos());
+}
+</code></pre></pre>
+<h2 id="clock-and-clockinfo"><a class="header" href="#clock-and-clockinfo">Clock and ClockInfo</a></h2>
+<p>To support the above functionality, Twizzler exposes a <code>Clock</code> abstraction to user space, and APIs revolve around this and <code>ClockInfo</code>. A <code>Clock</code> is a logical abstraction exposed to users that serves a particular purpose and ticks at a particular pace.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Clock {
+    info: ClockInfo,
+    group: ClockGroup,
+    id: ClockID
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>ClockInfo</code> is meant to describe a clock to users. It contains the last value read from the clock and properties of the clock, such as resolution.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct ClockInfo {
+    value: TimeSpan,
+    resolution: FemtoSeconds,
+    precision: FemtoSeconds,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The <code>value</code> is a <code>TimeSpan</code> type meant to represent a span of time. To support high precision clock hardware we represent some duration of time using two <code>u64</code> values, one for seconds, and another for the remainder in femtoseconds. Each value is its own type meant to represent the units. The <code>TimeSpan</code> type can easily be converted to support legacy timestamps such as <code>Duration</code> or <code>timespec</code>/<code>timeval</code>. <code>TimeSpan</code> exposes an interface similar to <code>Duration</code>.</p>
+<p>Thus, <code>ClockInfo</code> can be thought of as a POSIX <code>timespec</code>, but much better. It provides descriptions of what is being read, not just the value. This additional metadata is essential for scientific applications that want to use time as a tool for measuring some event. Applications need to know about the properties of clocks to get accurate measurements and reduce errors in experiments.</p>
+<p>We define <code>resolution</code> as the period of a clock tick. In other words, the rate at which a clock advances time. The <code>resolution</code> is expressed in <code>Femtoseconds</code> which is a simple wrapper type for a <code>u64</code> value. We choose to do this to make it clear what the semantic meaning of the value is. Furthermore, we define <code>precision</code> as the stability of the measurements, measured in <code>Femtoseconds</code>. Another value of interest is <code>accuracy</code> which tells us how close measurements are to the true value, based on some reference. This is useful in determining clock error, and will be explored in a future RFC.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[repr(transparent)]
+struct Seconds(u64);
+
+#[repr(transparent)]
+struct FemtoSeconds(u64);
+
+struct TimeSpan(Seconds, FemtoSeconds);
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>ClockGroup</code> are a set of enums that associate some semantic meaning to a clock. This gives users control of what type of clock they are reading from (when talking to the kernel), and they can expect certain invariants to be maintained, such as a clock being monotonic.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum ClockGroup {
+    Unknown,
+    Monotonic,
+    RealTime,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The kernel internally manages a list of usable clocks backed by hardware. The <code>id</code> identifies which clock source is used when interacting with the <code>Clock</code>. The <code>ClockID</code> is a simple wrapper type around a <code>u64</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[repr(transparent)]
+struct ClockID(u64);
+<span class="boring">}
+</span></code></pre></pre>
+<p>User programs can get time in a variety of ways. Either transparently using Rust's <code>std::time</code> crate, directly through system calls, or indirectly through methods exposed by the <code>Clock</code> type. </p>
+<h2 id="system-call-interface"><a class="header" href="#system-call-interface">System Call Interface</a></h2>
+<p>Revisiting our example from earlier, let's see how it would work when performing a system call:</p>
+<pre><pre class="playground"><code class="language-rust">use crate twizzler_abi::syscall::sys_read_clock_info;
+use crate clock::{ClockInfo, ClockSource, ReadClockFlags};
+
+fn main() {
+    // reads a moment in time
+    // returns a ClockInfo type
+    let now = sys_read_clock_info(ClockSource::BestMonotonic, ReadClockFlags::empty());
+    
+    // elapsed time since now
+    let later = sys_read_clock_info(ClockSource::BestMonotonic, ReadClockFlags::empty());
+    // ClockInfo.value() returns a TimeSpan type
+    let elapsed_time = later.value() - now.value();
+    println!(&quot;Running main() took {} nanoseconds.&quot;, elapsed_time.as_nanos());
+}
+</code></pre></pre>
+<p>A few things here. For starters, <code>sys_read_clock_info</code>, a new system call. We pass in the clock we want (<code>ClockSource</code>), and some flags. By default, this returns a <code>ClockInfo</code> object with all fields filled in. The returned <code>ClockInfo</code>, in this case, is generated from a <code>ClockGroup</code> specific clock. We will get to the use of <code>ClockID</code> later.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum ClockSource {
+  BestMonotonic,
+  BestRealTime,
+  ID(ClockID)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>There might be more than one piece of hardware that can be used to serve as the backing for a specific <code>ClockGroup</code>. Hence, <code>sys_read_clock_info</code> returns a value read from the best clock source available. The semantic meanings of <code>ClockSource</code> map directly to <code>ClockGroup</code>.</p>
+<p>Functionally, this is the same program, except it uses different abstractions. The <code>ClockInfo</code> type has a set of methods to return internal values. We calculate the elapsed time by subtracting two <code>TimeSpan</code> types that sampled different points in time from the same clock. Internally, <code>std::time</code> does something like this using the <code>Instant</code> type.</p>
+<p>Twizzler exposes a new set of system calls related to timekeeping. Other than <code>sys_read_clock_info</code>, which is helpful in reading a clock and learning about its properties, users need support to discover available clocks.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn sys_read_clock_info(source: ClockSource, flags: ReadClockFlags) -&gt; Result&lt;ClockInfo, ReadClockError&gt;;
+fn sys_read_clock_list(clock: ClockGroup, flags: ReadClockFlags) -&gt; Result&lt;VecDeque&lt;Clock&gt;, ReadClockError&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Should a user need detailed information about clocks exposed by the kernel to user space, they could use <code>sys_read_clock_list</code>. By default, it returns a list of clocks for every type of clock exposed (<code>ClockGroup</code>). All information in the <code>ClockInfo</code> except the current value is also returned. For clocks with more than one clock source, the first one is returned. Users can get a list of all clocks, and thus all clock sources, for a particular type by specifying the <code>ClockGroup</code> and setting the appropriate flag.</p>
+<p>If a user wants to read an arbitrary clock's value, they could specify the <code>ClockID</code> given to them by <code>sys_read_clock_list</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// reads all clocks as candidates for monotonic
+let clocks = sys_read_clock_list(ClockGroup::Montonic, ReadClockFlags::ClockGroup).expect(&quot;error message&quot;);
+
+// reference to the last clock in list
+// clock type has id of backing clock source
+let clk = clocks.last().unwrap();
+
+// reading from some arbitrary clock source
+let now = sys_read_clock_info(ClockSource::ID(clk.id()), ReadClockFlags::empty());
+
+// ClockInfo.value() returns a TimeSpan type
+println!(&quot;Current value of clock: {} nanoseconds.&quot;, now.value().as_nanos());
+<span class="boring">}
+</span></code></pre></pre>
+<p>The last thing a user might want to do is steer the clock to prevent drift. This is useful for systems that need precise values from an accurate clock. Real-world applications such as PTP/NTP need an interface like this. A full detailed explanation and implementation are out of scope for this RFC and will be explored in another RFC.</p>
+<h2 id="clock-interface"><a class="header" href="#clock-interface">Clock Interface</a></h2>
+<p>The last way of accessing a clock is by using Twizzler's native library for clocks. Each <code>Clock</code> has a set of operations that map directly to the system call interface exposed to time. </p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn read() -&gt; TimeSpan {}
+fn info() -&gt; ClockInfo {}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Our running example would look something like this:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+  // gets a reference to the monotonic clock
+  let clock = Clock::get(ClockGroup::Monotonic);
+
+  // read a moment in time
+  // returns TimeSpan 
+  let now = clock.read();
+
+  // elapsed time since now
+  let later = clock.read();
+  // ClockInfo.value() returns a TimeSpan type
+  let elapsed_time = later - now;
+  println!(&quot;Running main() took {} nanoseconds.&quot;, elapsed_time.as_nanos());
+}
+</code></pre></pre>
+<p>The benefit of doing things this way is that users interact with time at a much higher level than the system call interface, and they are given useful clock metadata. If all a user cares about is the passage of time, then <code>Instant</code> should suffice. However, if they are curious about the precision or accuracy of a clock, then this interface is one way of doing so. It is much cleaner.</p>
+<h1 id="reference-level-explanation"><a class="header" href="#reference-level-explanation">Reference-level explanation</a></h1>
+<p>Twizzler needs an abstraction over hardware used for timekeeping to support the interfaces exposed to users. The purpose of the abstraction in Twizzler is so that the kernel can support different types of hardware. Time can come from many sources: some counter or programmable timer on the processor or board. Another thing the kernel needs is standard interfaces to manage timekeeping hardware.</p>
+<h2 id="clockhardware-and-ticks"><a class="header" href="#clockhardware-and-ticks">ClockHardware and Ticks</a></h2>
+<p>The kernel achieves both of these through the <code>ClockHardware</code> trait defined as follows:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait ClockHardware {
+    fn read(&amp;self) -&gt; Ticks;
+    fn info(&amp;self) -&gt; ClockInfo;
+    // start, isEnabled, callback, etc.
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Rather than having a concrete type, we provide an interface implemented by different architectures for different time sources. <code>ClockHardware</code> exposes methods to read time or get a description of the hardware backing it. This leaves more room to introduce other useful methods, such as disabling/enabling a hardware timer. </p>
+<p>The necessary interfaces will be clear as we integrate this design with the existing kernel code. For example, the kernel currently has a stat clock which is programmed through a number of somewhat ad-hoc APIs. The idea would be to use this to manage the hardware backing the stat-clock in a hardware-agnostic way.</p>
+<p>The purpose of <code>read</code> is to read a value provided by hardware, which requires some assembly, and returns <code>Ticks</code> meant to represent raw time:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Ticks {
+    value: u64,
+    rate: FemtoSeconds
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>Ticks</code> represent some duration on the clock. The width of <code>value</code>, which is 64-bits, is not fundamental and could change. The <code>value</code> can be scaled to some unit of time by multiplying the <code>rate</code> of the time source. This multiplication operation produces a <code>TimeSpan</code>.</p>
+<p>If we were on an x86-64 machine for example, and we wanted to use the TSC as <code>ClockHardware</code>, <code>read</code> would return the value of the TSC. Internally <code>read</code> would call the <code>rdtsc</code> instruction and return the value reported by hardware as <code>Ticks</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl ClockHardware for TSC {
+    fn read(&amp;self) -&gt; Ticks {
+        let t = unsafe { x86::time::rdtsc() };
+        Ticks { value:t , rate: self.resolution() }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>Ticks</code> can be converted to a <code>TimeSpan</code> which is helpful to user space. <code>info</code> generates a <code>ClockInfo</code>, which describes the properties of the hardware timer. This is done in a time source specific way.</p>
+<h2 id="integration"><a class="header" href="#integration">Integration</a></h2>
+<p>The kernel maintains a system-wide list of time sources (<code>TICK_SOURCES</code>) building on these abstractions. <code>TICK_SOURCES</code> is implemented as a vector or an array of <code>ClockHardware</code>. One can think of this as an array of methods determined at runtime, based on the system configuration.</p>
+<p><code>TICK_SOURCES</code> is generated when Twizzler starts up in <code>kernel_main</code> and calls <a href="https://github.com/twizzler-operating-system/twizzler/blob/main/src/kernel/src/main.rs#L112"><code>clock::init();</code></a>. The kernel enumerates all hardware time sources available, and chooses which <code>ClockHardware</code> to serve as the backend that supports a particular <code>Clock</code> exposed to user space (e.g. Monotonic).</p>
+<p>The enumeration of hardware is machine/architecture-specific. Moreover, the materialization of clocks exposed to user space will require an algorithm that understands the requirements of the clock and the functionality provided by the hardware. This is planned to be explored in a future RFC. For now, we could use well-known clock sources for specific platforms.</p>
+<p>Integrating this into the kernel would be done using a set of files:</p>
+<pre><code>&lt;root&gt;/src/kernel/src/
+  arch/
+    x86/
+      tsc.rs // implements clock based on tsc
+      processor.rs // find/save ref to clocks on processor
+    aarch64/
+    mod.rs // decides what to compile
+  machine/
+    pc/dummy.rs // some clock source on platform
+    morello/
+  clock.rs // probing hw clocks (hw/config specific)
+  time.rs // abstracting hw clock sources
+  main.rs // initialize clock subsystem 
+</code></pre>
+<p>For each architecture subdirectory, we have a set of files implementing <code>ClockHardware</code> for specific hardware. Likewise, for timers on the motherboard, we have files that are board specific. The generic code lives in the main Twizzler source, which contains the <code>ClockHardware</code> trait and functions to initialize the time sub-system. At compile time, we decide what architecture to compile to and thus what time code we need to run. At run time, we discover hardware and choose the implementation as appropriate.</p>
+<p>Circling back to our example from earlier, where a user program reads a monotonic clock, we could imagine that the time stamp counter (TSC) backs that clock on an x86 platform. A peek behind the curtain of Rust's <code>std::time</code> call to <code>Instant::now()</code> would look something like this:</p>
+<pre><pre class="playground"><code class="language-rust">use std::time::Instant;
+fn main() {
+  // reads a moment in time
+  let now = Instant::now();
+    // calls into os-implementation
+    let ci = sys_read_clock_info(ClockGroup::Monotonic, 0, ReadClockFlags::empty());
+    //======== jump to kernel space =========
+      // os looks up the ClockHardware backing this clock
+      USER_CLOCK[clock as usize].info();
+      // time source specific generation of ClockInfo
+      ClockHardware.info(self)
+      // read the value given by hardware
+      let t = self.read()
+      // reading TSC (implementation)
+      let tsc = unsafe { x86::time::rdtsc() };
+      Ticks { value: tsc , rate: self.resolution() }
+      // generate ClockInfo from value read
+      ClockInfo::new(
+       TimeSpan::from(t), // conversion to TimeSpec
+       ClockGroup::Monotonic, 
+      //  ...
+      )
+    //======== back to user space ========
+    // read value from ClockInfo returned from sys_read_clock_info
+    let now = ci.value()
+    // Instant implemented as a TimeSpan
+    return now;
+
+  // elapsed time since now
+  // this returns a Duration type
+  let elapsed_time = now.elapsed();
+  println!(&quot;Running main() took {} nanoseconds.&quot;, elapsed_time.as_nanos());
+}
+</code></pre></pre>
+<p>To illustrate this more clearly, we could imagine that the call stack up until the TSC is read would look something like this:</p>
+<pre><code>0: [kernel] x86::time::rdtsc()
+1: [kernel] x86_64::tsc::ClockHardware::read()
+2: [kernel] x86_64::tsc::ClockHardware::info()
+3: [user]   twizzler_abi::syscall::sys_read_clock_info()
+4: [user]   std::time::Instant::now()
+5: [user]   main()
+</code></pre>
+<p>The actual calls in a real implementation would look different. We omit checks for values provided by users, and more efficient, possibly serialized reads of time.</p>
+<h1 id="drawbacks"><a class="header" href="#drawbacks">Drawbacks</a></h1>
+<p>The biggest drawback might be the cost of abstraction. We plan to use Rust's dynamic dispatch, which involves a vtable call to the underlying interface. This layer of direction may or may not be expensive for time APIs. There might be a way around this and have the compiler statically compile all function calls, but it is unclear if possible. </p>
+<p>Another source of overhead is that all interfaces with time require a system call. This can be optimized later for some things, such as reading a clock by exposing read-only memory to user space, similar to a <a href="https://en.wikipedia.org/wiki/VDSO">vDSO</a></p>
+<p>Using 64 bits for the implementation of <code>Ticks</code> may be relatively large for embedded. Likewise, for the standard library implementation of Rust's <code>Duration</code> 64 bits is a lot. For most instances of Twizzler, this should not be a problem.</p>
+<h1 id="rationale-and-alternatives"><a class="header" href="#rationale-and-alternatives">Rationale and alternatives</a></h1>
+<p>This design offers flexibility and provides standard interfaces in the kernel. We can implement <code>ClockHardware</code> for any hardware. Having a standard interface also makes porting easier. Not doing things this way makes this part of the system harder to maintain.</p>
+<p>We have considered other legacy designs and some of them have their <a href="#prior-art">downfalls</a>.</p>
+<h1 id="prior-art"><a class="header" href="#prior-art">Prior art</a></h1>
+<p>It is pretty standard in Rust to use traits to abstract hardware. Such is the case for many <a href="https://github.com/rust-embedded/embedded-hal">projects</a> in the Embedded Rust community. </p>
+<p>As far as time is concerned, the <a href="https://github.com/FluenTech/embedded-time">Embedded Time</a> crate and <a href="https://github.com/tock/tock/blob/master/doc/reference/trd105-time.md">Tock Time HIL</a> are related. Both abstract over hardware used as time sources, have tick and frequency abstractions, and Tock provides a notion of a clock. However, they are not general purpose. </p>
+<p>They do not provide interfaces for programming hardware used for timekeeping. We may use aspects of their design in our work, but we cannot directly use these crates as presented. Another downfall is that they do not describe the time source, which is necessary if applications want to consider the accuracy of their time measurements. Our goals are to provide something general purpose and high level.</p>
+<p>Linux provides system calls for accessing monotonic and real-time clocks with <a href="https://linux.die.net/man/3/clock_gettime"><code>clock_gettime</code></a>. The way we read time is similar, except that we provide more useful metadata to users with <code>ClockInfo</code> instead of <code>timespec</code>. Other researchers in the community have noted the importance of time as a tool and the shortcomings of <code>timespec</code>. Having additional information available, such as accuracy or clock error, is critical to science. Not knowing the properties of clocks can lead to errors in experiments and hurt reproducibility <a href="#1">[1]</a>.</p>
+<h2 id="resources-on-time"><a class="header" href="#resources-on-time">Resources On Time</a></h2>
+<p>Other than the paper mentioned above on the importance of time as a tool, George Neville-Neil gives a good overview of the importance of time and why we need an interface to adjust time <a href="#2">[2]</a>. Not only that, but synchronized clocks are important in many distributed systems. The FAQ page on NTP is also a good resource.</p>
+<p><a id="1">[1]</a> Najafi, Ali, Amy Tai, and Michael Wei. &quot;Systems research is running out of time.&quot; Proceedings of the Workshop on Hot Topics in Operating Systems. 2021. https://dl.acm.org/doi/pdf/10.1145/3458336.3465293.</p>
+<p><a id="2">[2]</a>
+George Neville-Neil. 2015. Time is an Illusion., ACM Queue 13, 9 (November-December 2015), 57–72. https://doi.org/10.1145/2857274.2878574</p>
+<p><a id="3">[3]</a>
+Ulrich Windl, et al. 2006. The NTP FAQ and HOWTO:
+Understanding and using the Network Time Protocol. https://www.ntp.org/ntpfaq</p>
+<h1 id="unresolved-questions"><a class="header" href="#unresolved-questions">Unresolved questions</a></h1>
+<p><strong>Resolved Through RFC</strong></p>
+<p>Currently, there is no guide on how to implement system calls. It is unclear where specific abstractions for user space should go, such as <code>ClockInfo</code>. However, after looking at the <a href="https://github.com/twizzler-operating-system/twizzler/pull/77">changes</a> to the <code>twizzler-abi</code> crate, it makes sense that the user space clock abstractions belong there.</p>
+<p><strong>Resolved Through Implementation</strong></p>
+<ul>
+<li>
+<p>We expect that the necessary interfaces for managing time will be revealed as we implement <code>ClockHardware</code> for different hardware timers. When integrating this with existing code, such as the stat clock, we may add more methods to <code>ClockHardware</code>. </p>
+</li>
+<li>
+<p>We may want an additional <code>ClockHardwareInfo</code> that describes not the logical clock but the hardware clock source. It could answer questions such as <em>&quot;is this monotonic?&quot;</em> It does not seem necessary at this point and could probably be integrated somewhere else. </p>
+</li>
+<li>
+<p>We also don't know the overall performance of the <code>Clock</code> APIs over calls through <code>std::time</code>. </p>
+</li>
+</ul>
+<p><strong>Related Issues</strong></p>
+<p>These are issues out of scope for this RFC, and could be addressed later, possibly in a future RFC.</p>
+<ul>
+<li>This RFC does not introduce a system to allow users to set timers/alarms. This feature could be useful for sleeping or setting a callback but is out of scope. </li>
+<li>We need an algorithm for adjusting sources of time. Standard protocols for this exist, such as NTP/PTP. Support for this requires an interface for adjusting the time that makes sense. Related to this is a definition for accuracy of a clock which is meaningful to the programmer.</li>
+<li>Selecting the appropriate source of time for a particular clock use case. Some hardware timers are unfit for one reason or another. Maybe the resolution is low, the cost of reading the timer is high, or the timer measurements are unstable.</li>
+<li>This design does not consider heterogeneous hardware or even differences in hardware among homogenous processors. This may or may not be an issue.</li>
+</ul>
+<h1 id="future-possibilities"><a class="header" href="#future-possibilities">Future possibilities</a></h1>
+<p>These APIs and abstractions are necessary to support user space applications. This feature is marked on the Twizzler roadmap as a milestone.</p>
+<p>Some additional features or optimizations are listed below that might be explored in the future if deemed necessary.</p>
+<ul>
+<li><code>ClockGroup</code> expanded to expose more logical clock types</li>
+<li>A system call to register hardware as a new clock source</li>
+<li>By design, we do not implicitly serialize operations that read timers. We could provide some flag that makes calls using arch-specific instruction barriers.</li>
+<li>Faster reads of clocks can be achieved through read-only shared memory with user space. </li>
+<li>We might want to be able to dynamically add a hardware source if, say, a CPU suddenly came online.</li>
+<li>We may explore designs that encapsulate the time sub-system within a microkernel-style user space service</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="0002-object.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="0004-low-level-device-model.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="0002-object.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="0004-low-level-device-model.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

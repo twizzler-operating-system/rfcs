@@ -1,0 +1,452 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>0006-dma - Twizzler RFCs</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rfc-process.html"><strong aria-hidden="true">1.</strong> 0001-rfc-process</a></li><li class="chapter-item expanded "><a href="0002-object.html"><strong aria-hidden="true">2.</strong> 0002-object</a></li><li class="chapter-item expanded "><a href="0003-time.html"><strong aria-hidden="true">3.</strong> 0003-time</a></li><li class="chapter-item expanded "><a href="0004-low-level-device-model.html"><strong aria-hidden="true">4.</strong> 0004-low-level-device-model</a></li><li class="chapter-item expanded "><a href="0005-driver-model.html"><strong aria-hidden="true">5.</strong> 0005-driver-model</a></li><li class="chapter-item expanded "><a href="0006-dma.html" class="active"><strong aria-hidden="true">6.</strong> 0006-dma</a></li><li class="chapter-item expanded "><a href="0008-twizzler-monitor.html"><strong aria-hidden="true">7.</strong> 0008-twizzler-monitor</a></li><li class="chapter-item expanded "><a href="0011-random.html"><strong aria-hidden="true">8.</strong> 0011-random</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Twizzler RFCs</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <ul>
+<li>Feature Name: dma_and_device_mapping</li>
+<li>Start Date: 2022-08-12</li>
+<li>RFC PR: <a href="https://github.com/twizzler-operating-system/rfcs/pull/0006">twizzler-rfcs/rfcs#0006</a></li>
+<li>Twizzler Issue: <a href="https://github.com/twizzler-operating-system/twizzler/issues/0084">twizzler-operating-system/twizzler#0084</a></li>
+</ul>
+<h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
+<p>This RFC introduces support for DMA (Direct Memory Access) and bus address mapping for device drivers by providing
+kernel support for setting up mappings for objects, kernel APIs for getting lists of physical or bus mappings for
+object pages, and twizzler-driver APIs for managing DMA objects and mappings in a memory safe manner.</p>
+<h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
+<p>DMA is a fundamental aspect of writing device drivers, as devices use DMA to transfer data to and
+from host memory. However, thinking of devices accessing host memory solely via single one-shot DMA
+transfers is an outdated and limited model. The goal of this RFC is to provide a unified mechanism
+for supplying devices with bus addresses that correspond to physical memory that backs object memory
+in such a way that drivers can program both &quot;streaming&quot; (e.g. buffers) and &quot;long-term-bidirectional&quot;
+(e.g. command rings) memory.</p>
+<h1 id="guide-level-explanation"><a class="header" href="#guide-level-explanation">Guide-level explanation</a></h1>
+<h2 id="considerations-for-dma"><a class="header" href="#considerations-for-dma">Considerations for DMA</a></h2>
+<p>When programs access memory in Twizzler they do so via accessing object memory, which involves an
+MMU translating some kind of object address to a physical address. On x86, for example, this
+involves a software translation to a virtual address followed by a translation via the Memory
+Management Unit (MMU) to a physical address. Similarly, when a device accesses memory, it emits a
+memory address (likely programmed by the driver) that may undergo no translation or some other
+translation on the bus before attempting to access host memory. There are two important
+considerations that are the result of this alternate (or no) translation:</p>
+<ul>
+<li><strong>Contiguous addresses</strong>. While object memory is contiguous (within an object), the physical
+memory that backs that object memory may not be. Thus devices and drivers need to be capable of
+handling access to memory in a scatter-gather manner.</li>
+<li><strong>Access Control</strong>. Access control can be applied differently between host-side driver software
+and devices. Thus driver software must be aware that it may have access to memory via the device
+that it should not directly. We can use devices like the IOMMU to limit this effect.</li>
+</ul>
+<p>In addition to the above, we need to consider the issue of coherence. While CPU caches are coherent
+across cores, devices accessing host memory do not necessarily invalidate caches. Thus we have to
+handle both flushing data to main-memory after writing before the device reads it and invalidating
+caches if a device writes to memory. Some systems automatically invalidate caches, but not all do.</p>
+<h3 id="memory-safety"><a class="header" href="#memory-safety">Memory Safety</a></h3>
+<p>Finally, we must consider memory safety, which is an issue because while we can control writes from
+host software to DMA buffers, we cannot necessarily control how <em>the device</em> will access that
+memory. To ensure memory safety of shared regions, we would need to ensure:</p>
+<ol>
+<li>The device and host software cannot both mutate shared state at the same time (thread safety).
+Note that this <em>may</em> be okay in some situations, such as atomic variables that are updated from
+the device without tearing possibility or touch neighboring memory, however encoding this at
+compile time to prove safety may be impossible in general.</li>
+<li>The device mutates data such that each mutation is valid for the ABI of the type of the memory
+region.</li>
+</ol>
+<p>Enforcing these at all times may cause overhead and increase API complexity. Another stance we could
+take is Rust's approach to &quot;external influences on memory&quot;, such as <a href="https://doc.rust-lang.org/std/os/unix/io/index.html#procselfmem-and-similar-os-features">accessing /proc/self/mem on
+UNIX</a>,
+which is basically to say that this is outside the scope of the compiler's ability to ensure safety.
+I think, though, that since programming shared access between driver software and the device is a
+fundamental part of driver software development, some middle ground that provides some safety is
+desireable, even if it means reaching for some unsafe here and there (possibly merely for efficiency).</p>
+<h2 id="using-dma-in-a-device-driver"><a class="header" href="#using-dma-in-a-device-driver">Using DMA in a Device Driver</a></h2>
+<p>Twizzler will provide an interface for making a single Twizzler object accessible to a device by way
+of the <code>DmaObject</code> type exposed by the twizzler-driver crate. The DmaObject can be created from any
+Twizzler object, and exposes APIs for ensuring coherence and memory safety. Let's take as example a
+device that has a command ring buffer that is used to submit commands and to indicate when a command
+has been completed. A command in the ring buffer can point to another DMA buffer that is used to
+transfer data, and may look like the following:</p>
+<pre><code class="language-{rust}">struct Command {
+    op: u32,
+    status: u32,
+    buffer: u64,
+}
+</code></pre>
+<p>The <code>op</code> field specifies some operation to perform (send packet, etc.), the <code>status</code> field specifies
+the result of the command (say, for example, is set to 1 when the command is completed and must be
+cleared to zero for a command to be processed). Finally, the <code>buffer</code> field points to the physical
+address of some buffer. Let's also imagine some mechanism for communicating to the device the head
+of the ring so that we might communicate to the device a collection of new commands to process via
+a write to some MMIO register. For the sake of simplicity, let's assume that the buffer is at most 1
+page long.</p>
+<p>Setting up some DMA regions may look like:</p>
+<pre><code class="language-{rust}">let object = create_new_object();
+let dma = DmaObject::new(object);
+
+let command_ring = dma.slice_region::&lt;Command&gt;(some_command_len, Access::BiDirectional, DmaOptions::default());
+let buffer = dma.slice_region::&lt;u8&gt;(some_buffer_len, Access::HostToDevice, DmaOptions::default());
+</code></pre>
+<p>At this point, both <code>command_ring</code> and <code>buffer</code> have types <code>DmaSliceRegion&lt;Command&gt;</code> and <code>DmaSliceRegion&lt;u8&gt;</code> 
+respectively. Note that we distinguish between <code>DmaRegion</code> and <code>DmaSliceRegion</code>. Both provide a
+similar purpose, but have slightly different signatures on some functions. For example, both provide
+a <code>with</code> function (see below), but the <code>DmaSliceRegion</code> allows specifying a sub-slice. The rest of
+this document will use <code>DmaRegion</code> to stand for both types to avoid duplication of specification.</p>
+<p>We can use <code>DmaRegion::pin()</code> to get a list of physical pages associated with the
+region so that we may program the device to operate on this command ring. Then, submitting a command
+would look like:</p>
+<pre><code class="language-{rust}">buffer.with_mut(0..0x1000, |buf| {
+    fill_out_buffer(buf);
+});
+// Grab a 'pin'of the buffer, which ensures that the associated physical addresses and IOMMU maps will remain
+// static until the dma object is dropped.
+let buffer_pin = buffer.pin().unwrap();
+// Get the physical address of the first page.
+let buffer_addr = buffer_pin[0].addr();
+// Fill out a new command.
+command_ring.with_mut(0..1, |ring| {
+    ring[0] = Command::new(buffer_addr);
+});
+increment_head();
+</code></pre>
+<p>A pin object can manually release the pages it refers to, but otherwise the lifetime of pinned
+physical memory is the same as the DmaObject itself. By tying pin lifetime to the DMA object and not
+the pin object reduces management complexity of
+avoiding accidentally programming a device with stale physical addresses.</p>
+<p>The <code>DmaRegion::with_mut</code> function runs a closure while ensuring coherence between host and device. Before the
+closure, it ensures any writes from the device are visible, and after running the closure, it
+ensures that any writes made by driver software are visible to the device. A similar function, <code>with</code>,
+allows driver software to read the DMA region and not write it, allowing the system to skip ensuring
+coherent writes from host to device.</p>
+<h2 id="simple-allocation"><a class="header" href="#simple-allocation">Simple Allocation</a></h2>
+<p>If a driver needs to allocate a large number of dynamically sized DMA regions, doing so with a
+single object may prove difficult as we can easily run out of space. Thus twizzler-driver also
+provides a type for managing a collection of DmaObjects all of a similar type: <code>DmaPool</code>. We can use
+it as follows:</p>
+<pre><code class="language-{rust}">let pool = DmaPool::new(DmaPool::default_spec(), Access::HostToDevice, DmaOptions::default());
+let region = pool.allocate::&lt;Foo&gt;(Foo::default()).unwrap();
+// Dropping region causes it to deallocate.
+</code></pre>
+<h2 id="coherence-models-and-memory-safety"><a class="header" href="#coherence-models-and-memory-safety">Coherence Models and Memory Safety</a></h2>
+<p>In the above example, we used default DMA options, which ensures the following:</p>
+<ol>
+<li>Writes by host software are readable by the device once the <code>with_mut</code> function returns.</li>
+<li>Coherence is synchronized at the start of the <code>with</code> or <code>with_mut</code> calls.</li>
+</ol>
+<p>More relaxed models are available that do not do any synchronization unless the driver explicitly
+calls <code>DmaRegion::sync</code>. Note that we are <em>not</em> ensuring that no memory access conflicts occur
+between the device and driver software, since that is not possible to do at compile time or
+runtime<sup class="footnote-reference"><a href="#1">1</a></sup>. We are further not ensuring that the device maintains the ABI of the <code>Command</code> type. In
+this example, this doesn't really matter, as all the constituents of this type are simple integers,
+but imagine instead that <code>status</code> was an enum with only a few defined values. The device could
+update the value of status to a non-defined value, which would cause problems.</p>
+<p>To avoid the type ABI problem, we require that a region be a type that implements the <code>DeviceSync</code>
+and <code>Copy</code> marker traits. The <code>DeviceSync</code> trait is a promise that the ABI for the type can handle
+any update to it that the device might make and that it can handle possible memory conflicts with writes
+from the device.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p><em>Efficiently</em>, anyway. We could use the IOMMU to ensure that physical addresses are only
+available for the device to access during certain windows. However, this would involve a LOT of
+system calls and IOMMU reprogramming, which is currently not terribly fast. Note, however, that
+as-written this API would allow for this kind of enforcement if we choose to do it in the
+future.</p>
+</div>
+<h2 id="shared-objects"><a class="header" href="#shared-objects">Shared Objects</a></h2>
+<p>One final consideration is for drivers that want to point devices towards object memory that exists
+within an object that is shared across different programs. The twizzler-driver library cannot (at
+this level of the system) enforce mutability rules for these objects. Thus driver software should
+use the manual sync operations to ensure coherence (of course, parts of the object modified via the
+<code>with</code> functions will still have coherence rules applied as normal, see above).</p>
+<h2 id="dmaoptions-and-access"><a class="header" href="#dmaoptions-and-access"><code>DmaOptions</code> and <code>Access</code></a></h2>
+<p>DmaOptions modify how a region (or pool, see below) of DMA memory is treated by the host. The
+options are a bitwise-or'd collection, with the following defined:</p>
+<ul>
+<li><code>UNSAFE_MANUAL_COHERENCE</code>. Default: No. If set, the <code>with</code> functions do not perform any coherence
+operations. </li>
+</ul>
+<p>The Access enum specified the direction of the DmaTransfers that will be made with this region, and
+can be used to optimize coherence and inform access controll for IOMMU mappings. The options are:</p>
+<ul>
+<li>HostToDevice -- for transfers in which the device reads.</li>
+<li>DeviceToHost -- for transfers in which the device writes.</li>
+<li>BiDirectional -- for transfers in which the device reads and writes.</li>
+</ul>
+<h1 id="reference-level-explanation"><a class="header" href="#reference-level-explanation">Reference-level explanation</a></h1>
+<h2 id="kernel-api"><a class="header" href="#kernel-api">Kernel API</a></h2>
+<p>Accessing physical mappings information is done, from consumers of the twizzler-driver API, via the
+<code>pin</code> function on a <code>DmaObject</code>. The pin function learns about physical mappings from the kernel by
+calling a KAction command on the underlying object for pinning pages, which returns a token along
+with information about physical addresses. That token is tied, in the kernel, to the list of
+physical mapping information that that call returns. After this call returns, the kernel ensures
+that the mappings information that it has returned stays correct (&quot;active&quot;) until the pin is manually released
+via another KAction call.</p>
+<p>Internally, the kernel will manage per-object information on which pages are pinned so as to not
+evict or change such pages. Ensuring that these active pins remain correct requires some interaction
+with the copy-on-write (COW) mechanism in the object copy functionality. In particular, pins do not get
+copied into new objects that source data from an existing object, however if a pin applies to a
+source object, that object is copied (via COW) to a new object, and the range that is copied
+intersects with the pin, <em>and</em> a write is performed to the pinned region in the source object <em>while
+the underlying pages are still shared for COW</em>, the kernel will need to copy the page for <em>all other
+objects</em> instead of just the source object. For this reason, we will break the kernel-side
+implementation into two feature gates:</p>
+<ol>
+<li>Basic pin support, but not supporting COW-intersecting-with-pins.</li>
+<li>Full support as described above.</li>
+</ol>
+<h2 id="userspace-implementation"><a class="header" href="#userspace-implementation">Userspace Implementation</a></h2>
+<p>Let's consider the examples in the previous section and discuss implementation.</p>
+<h3 id="dmaobjectslice_region-and-dmaobjectregion"><a class="header" href="#dmaobjectslice_region-and-dmaobjectregion"><code>DmaObject::slice_region</code> and <code>DmaObject::region</code></a></h3>
+<p>These provide simple ways to just return some object memory as a <code>[T; N]</code> or a <code>T</code>. They return a
+struct (DmaRegion) that just manages a typed region of memory of a size determined by T (and N), and expose the
+pin function.</p>
+<h3 id="pin"><a class="header" href="#pin"><code>pin</code></a></h3>
+<p>The pin function calls the kernel to setup a pin and then manages the pin information in memory,
+allowing it to be called multiple times without having to negotiate with the kernel each time. Note
+that pins are not released to the kernel when the DmaRegion is dropped; instead all pins on an
+object are released when the DmaObject is dropped.</p>
+<h3 id="with-and-with_mut"><a class="header" href="#with-and-with_mut"><code>with</code> and <code>with_mut</code></a></h3>
+<p>These functions provide access to the internal memory managed by a DmaRegion to a closure. Before
+the closure is run, it ensures coherence for the host reading the memory, and after the closure is
+run it ensures coherence for the device to read memory. The <code>with</code> variant may skip the second step.</p>
+<h3 id="pools-and-allocation"><a class="header" href="#pools-and-allocation">Pools and Allocation</a></h3>
+<p>Regions can also be gotten from a DmaPool, which internally manages a collection of DmaObjects
+(derived from objects that it creates as needed). All regions created this way share the DmaOptions
+with which the pool is created. Allocation is managed internally via a memory allocation algorithm,
+however all regions must be aligned on page size.</p>
+<h1 id="drawbacks"><a class="header" href="#drawbacks">Drawbacks</a></h1>
+<p>DMA is vital to any driver written for the vast majority of devices that we care about. However, the
+particular design choices herein do have some drawbacks:</p>
+<ol>
+<li>Pinning memory adds complexity to the eviction algorithms in the kernel and the pager, as they
+need to be made aware of pinned memory.</li>
+<li>There is currently no attempt to limit the amount of pinned memory an application can request,
+thus opening an easy door to denial of service attacks. We can mitigate this somewhat via access
+control.</li>
+<li>Currently we don't define a way to request that all physical addresses fit within 32 (or fewer)
+bits, as the kernel is not currently setup to do manage memory in a way that would make this
+easy. Ensuring physical addresses stay under the 4G mark is useful (mostly) for older hardware
+that cannot work with 64-bit addresses. Currently, we don't have any immediate need to support
+such hardware. If the need arises, however, we can extend the DmaOptions enum to include
+specifications for physical memory address limitations.</li>
+</ol>
+<h1 id="rationale-and-alternatives"><a class="header" href="#rationale-and-alternatives">Rationale and alternatives</a></h1>
+<h2 id="pinned-memory"><a class="header" href="#pinned-memory">Pinned Memory</a></h2>
+<p>The overall goal is to make it possible for userspace code to program devices to access physical
+memory. We want to stay within the overall Twizzler object model to do this, thus the API herein is
+focused around making it possible to create objects that we can then use for DMA transfers.</p>
+<h2 id="pin-leaks"><a class="header" href="#pin-leaks">Pin Leaks</a></h2>
+<p>One immediate concern is pin leaks. Since the pins must be manually released to the kernel by the
+library (not the user), we can imagine a device driver crashing and causing a section of object
+memory to be pinned forever (at least, until the kernel restarts). The decision to allow this,
+however, is intentional.</p>
+<p>Should a device driver crash, we have no guarantee on the state of the device that it was
+programming. It's entirely possible that the device be programmed with physical addresses that it
+may make use of after the device driver crashes, thus blindly writing to memory that, in the case
+that pins get removed if the program creating them crashes, may no longer refer to the object memory
+that was originally intended by the (now crashed) driver.</p>
+<p>Thus the choice of allowing leaks in the face of a driver malfunction is there to mitigate the
+possibility of corrupted memory. Of course, use of an IOMMU may be able to mitigate this, however I
+do not wish to rely on it, and this would also introduce many inefficiencies. If we prove to be able
+to efficiently make use of IOMMU hardware in the future, this design may change.</p>
+<h1 id="prior-art"><a class="header" href="#prior-art">Prior art</a></h1>
+<p>Basically every major operating system provides some API for setting up DMA transfers. Most of them
+are quite similar, largely relying on the driver to manually synchronize for coherence and/or
+specify directionality of transfers. Some (e.g. Linux) additionally classify a region of
+memory-to-be-DMA'd as fully coherent or streaming, usually using this information to specify caching
+type for memory mappings.</p>
+<p>Fuchsia uses a similar mechanism to what is outlined herein, also supporting pinned memory regions.
+There are a number of differences, however, that largely stem from our desire to (at least somewhat)
+follow Rust memory safety requirements. Fuchsia, in addition, does allow a limited ability to
+control contiguity of physical memory, which we do not (yet). </p>
+<p>FreeBSD and Linux both have a significantly different style of interface, stemming from the fact
+that they implement their device drivers in-kernel, and so their DMA interfaces can be tightly
+coupled with their virtual memory subsystem. The two systems differ in the details of how they
+control coherence and synchronization (single-versus-all-cpus, streaming-versus-coherent, and
+FreeBSD allowing finer control over sync operations) and how they control contiguity and maximum
+address size. Otherwise, the differences are largely down to API specifics and not really
+functionality, with the exception of FreeBSD supporting a recursive-like pattern of region
+configuration inheritance, which is kinda cool.</p>
+<p>Windows offers little additional insight into DMA operation and design tradeoffs, except
+as a case study of how not to name functions or other aspects of an API.</p>
+<h1 id="future-possibilities"><a class="header" href="#future-possibilities">Future possibilities</a></h1>
+<p>This RFC is only intended to cover &quot;dumb&quot; devices -- that is, devices that are fully programmed by
+the host software and, while they may interact with memory via DMA, do not really &quot;go off on their
+own&quot;. Essentially, most devices on the market that do things like NVMe, networking, etc. Such
+devices are fully controlled by the host and all memory access is either initiated by the same or
+initiated by the device to a pre-programmed section of memory, and the device can be thought of as a
+simple state machine.</p>
+<p>In future it may be better to model devices a fully separate machines that access
+physical memory cooperatively with the host CPU and run their own programs. Should we reach that
+future, we will probably need a new model for programming such devices that will exceed in needed
+richness the model presented here.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="0005-driver-model.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="0008-twizzler-monitor.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="0005-driver-model.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="0008-twizzler-monitor.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

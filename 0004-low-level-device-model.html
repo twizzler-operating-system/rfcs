@@ -1,0 +1,421 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>0004-low-level-device-model - Twizzler RFCs</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rfc-process.html"><strong aria-hidden="true">1.</strong> 0001-rfc-process</a></li><li class="chapter-item expanded "><a href="0002-object.html"><strong aria-hidden="true">2.</strong> 0002-object</a></li><li class="chapter-item expanded "><a href="0003-time.html"><strong aria-hidden="true">3.</strong> 0003-time</a></li><li class="chapter-item expanded "><a href="0004-low-level-device-model.html" class="active"><strong aria-hidden="true">4.</strong> 0004-low-level-device-model</a></li><li class="chapter-item expanded "><a href="0005-driver-model.html"><strong aria-hidden="true">5.</strong> 0005-driver-model</a></li><li class="chapter-item expanded "><a href="0006-dma.html"><strong aria-hidden="true">6.</strong> 0006-dma</a></li><li class="chapter-item expanded "><a href="0008-twizzler-monitor.html"><strong aria-hidden="true">7.</strong> 0008-twizzler-monitor</a></li><li class="chapter-item expanded "><a href="0011-random.html"><strong aria-hidden="true">8.</strong> 0011-random</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Twizzler RFCs</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <ul>
+<li>Feature Name: low_level_device_model</li>
+<li>Start Date: 2022-07-14</li>
+<li>RFC PR: <a href="https://github.com/twizzler-operating-system/rfcs/pull/0004">twizzler-rfcs/rfcs#0004</a></li>
+<li>Twizzler Issue: <a href="https://github.com/twizzler-operating-system/twizzler/issues/82">twizzler-operating-system/twizzler#0082</a></li>
+</ul>
+<h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
+<p>This RFC defines the interface that the kernel provides for userspace device management and driver
+implementation. It provides a generic interface that allows for userspace access to
+device memory and features through Twizzler objects, including memory-mapped IO (MMIO) registers,
+interrupt handling, device event messages, and structured device trees.</p>
+<blockquote>
+<p>This low-level interface is not intended to be used by application programmers, and even driver
+programmers are expected to use higher-level abstractions for some aspects of their work (coming in
+a future RFC), though many aspects of the interface presented here will be used directly.</p>
+</blockquote>
+<h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
+<p>Devices and drivers are, by and large, very complicated and (along with the surrounding
+infrastructure) make up large parts of modern OS kernels. In a more microkernel fashion, we would
+like to support userspace taking as much responsibility for device management and drivers as
+possible. However, due to the aforementioned complexity, providing a generic interface that allows
+for programming all possible devices is tricky -- we need to provide an interface that allows
+generic access to device memory (and/or IO ports), interrupt progamming services, etc., all while
+trying to minimize the responsibility of in-kernel code to handle these cases.</p>
+<p>This RFC does not attempt to describe a higher-level, more convenient driver-programming API set;
+that is planned for a future RFC. Instead, we will cover only the basic user-kernel interface for
+device abstractions.</p>
+<h1 id="guide-level-explanation"><a class="header" href="#guide-level-explanation">Guide-level explanation</a></h1>
+<p>Twizzler organizes devices and busses into a tree structure, where devices are children of busses,
+which are children of some root node (devices can have children too). These devices are each an
+object that contains information about the device as well as a mechanism of programming device
+interrupts. Each of these devices can also have a number of additional objects attached to it
+(called sub-objects) that provide access to device MMIO registers and bus-specific device
+information.</p>
+<p>This low-level interface is not intended to be used by application programmers, and even driver
+programmers are expected to use higher-level abstractions for some aspects of their work (coming in
+a future RFC), though many aspects of the interface presented here will be used directly.</p>
+<p>The meaning of &quot;device&quot; here is a little fluid, as it depends on the semantics of the hardware of
+the system. The following are &quot;devices&quot; according to this model:</p>
+<ul>
+<li>Any &quot;pseudo-devices&quot; that the kernel might create as an abstraction atop some internal mechanism.</li>
+<li>Any busses that the kernel identifies (e.g. a PCIe segment).</li>
+<li>Devices that sit on a bus that would be programmed as a device on a bus (e.g. present devices on
+a given bus:device.function on a PCIe segment, including bridges etc.).</li>
+</ul>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>As an example, lets consider a PCIe segment with several devices on it, say a NIC at <code>0:1.0</code>
+and an NVMe device at <code>0:2.0</code>. The resulting tree would be:</p>
+<pre><code>[Bus Root]
+  [PCIe Segment 0]
+    [0:1.0 (NIC)]
+    [0:2.0 (NVMe)]
+  [...additional PCIe segments...]
+  [...additional busses...]
+</code></pre>
+<p>Say the NVMe device has a region of device memory for programming the controller's MMIO registers, a
+region for the interrupt table,
+and the PCIe bus provides an info sub-object that contains PCIe information. The device would have
+sub-objects that describe the device, and sub-objects that map all the device's memory for access.</p>
+<p><strong>Why is the PCIe <em>bus</em> considered a <em>device</em>?</strong> The philosophy here is that the PCIe bus is
+programmed by accessing memory-mapped IO registers in device configuration space (including bridges,
+etc.). Thus we can allow userspace to program it like it's a device that has sub-devices.</p>
+<h1 id="reference-level-explanation"><a class="header" href="#reference-level-explanation">Reference-level explanation</a></h1>
+<p>The core of the device model centers around the <em>device object</em>, a Twizzler object whose base is of
+type <code>DeviceRepr</code>. Internally, these device objects are organized into a <em>Device Tree</em>, where each
+device object may have up to 65Ki children. The root of this tree is special object called the Bus
+Root, which has no data and only acts as the root of the device tree. Operations on a device object
+are abstracted by the Device type defined in the twizzler-driver crate.</p>
+<h2 id="tree-access"><a class="header" href="#tree-access">Tree access</a></h2>
+<p>The <code>Device</code> type exposes a function, <code>children(&amp;self)</code>, which returns an iterator that iterates
+over all this device's children. This is a wrapper around a kaction (see: sys_kaction) request to the kernel on the
+device object with the command <code>KactionCmd::Generic(KactionGenericCmd::GetChild(n))</code> where <code>n</code> is
+the nth child of the device in the tree. The kernel returns either the object ID of the child
+device, or <code>KactionError::NotFound</code> if <code>n</code> is larger than the number of children.</p>
+<p>The tree is manipulated via bus-specific APIs. For example, the PCIe bus uses userspace to perform
+device initialization, and thus exposes a kaction command for initializing a device on a given entry
+of the PCIe segment. Busses that support device removal can also expose functions to remove devices
+from the tree.</p>
+<h2 id="the-devicerepr-type"><a class="header" href="#the-devicerepr-type">The DeviceRepr type</a></h2>
+<p>The device object's base type is a DeviceRepr, which has the following layout:</p>
+<pre><code class="language-{rust}">#[repr(C)]
+pub struct DeviceRepr {
+    kso_hdr: KsoHdr,
+    device_type: DeviceType,
+    bus_type: BusType,
+    device_id: DeviceId,
+    interrupts: [DeviceInterrupt; NUM_DEVICE_INTERRUPTS],
+    mailboxes: [AtomicU64; MailboxPriority::Num as usize],
+}
+</code></pre>
+<p>The <code>DeviceType</code> enum can be either <code>Unknown</code> (and should be ignored), <code>Bus</code>, or <code>Device</code>. The
+<code>BusType</code> enum specifies which bus this device is attached to (or, it it's a bus, what type of bus
+this is). Finally, the last identifier is the <code>DeviceId</code>, which is a newtype wrapping a <code>u32</code> whose
+meaning is bus specific.</p>
+<p>In the example from earlier, the NIC would have a device ID that encodes 0:1.0 as a 32-bit integer,
+bus type PCIe, and device type Device.</p>
+<h3 id="interrupts"><a class="header" href="#interrupts">Interrupts</a></h3>
+<p>Each device supports up to <code>NUM_DEVICE_INTERRUPTS</code> interrupt entries. The actual mechanism for
+setting up interrupts with the kernel is bus-specific and relies on a small amount of in-kernel
+bus-driver code. The <code>DeviceInterrupt</code> struct is as follows:</p>
+<pre><code class="language-{rust}">#[repr(C)]
+pub struct DeviceInterrupt {
+    sync: AtomicU64,
+    vec: InterruptVector,
+    flags: DeviceInterruptFlags,
+    taken: AtomicU16,
+}
+</code></pre>
+<p>When a registered interrupt fires, the kernel's interrupt handler writes a non-zero value to <code>sync</code>
+and executes a thread_sync wake up on that word of memory, causing any user threads sleeping on that
+variable to wake up. The <code>DeviceInterruptFlags</code> field a bitflags of size u16 and is currently
+unused. The <code>vec</code> field refers to the actual vector number allocated by the kernel, and can be used
+to program device interrupt funcionality (e.g. MSI or MSI-X in PCIe). Finally, the <code>taken</code> field is
+used to indicate that a given entry is used or free.</p>
+<h3 id="mailboxes"><a class="header" href="#mailboxes">Mailboxes</a></h3>
+<p>A device has several mailbox entries. These are distinct from interrupts in that they are raised by
+software (either in the kernel or not) and are statically initialized. Messages sent to device
+mailboxes are not specified in this RFC.</p>
+<p>The <code>DeviceRepr</code> has <code>MailboxPriority::Num</code> mailboxes, each a different priority level: High, Low,
+and Idle. Each mailbox is a single <code>AtomicU64</code>. Submitting a message to the mailbox involves
+performing a compare-and-swap (CAS) operation, writing a non-zero value if the value is zero. Should
+the CAS fail, the submitter may perform a thread_sync sleep operation on the mailbox word. Should
+the CAS succeed, the submitter must perform a thread_sync wake operation on the mailbox word.
+Mailbox communication is not intended to be efficient.</p>
+<p>When checking the mailbox, driver software performs an atomic swap with 0, reading the value. A
+non-zero value means that the mailbox had a message. On swap returning non-zero, software must
+perform a thread_sync wake up on the mailbox. Software may sleep on this word when receiving.</p>
+<p>Driver software should prioritize the High priority mailbox above that of device interrupts, should
+prioritize the low
+priority mailbox below interrupts and High priority mailbox messages (but still ensure that the
+mailbox gets checked even if the device is constantly sending interrupts), and should prioritize the
+Idle mailbox lowest of all (and is allowed to ignore messages in this mailbox as it sees fit).</p>
+<h2 id="sub-objects"><a class="header" href="#sub-objects">Sub-objects</a></h2>
+<p>Each device has some number of sub-objects. Each sub-object can be one of the types specified by
+<code>SubObjectType</code>: <code>Info</code> or <code>Mmio</code>. An info sub-object is an object whose base data is bus- or
+device-specific. An mmio sub-object contains a header that describes the mapping, followed by mapped
+MMIO space in the object space for accessing device memory. The Device type provides functions for accessing these sub-objects:</p>
+<ul>
+<li><code>fn get_mmio(&amp;self, idx: u8) -&gt; Option&lt;MmioObject&gt;</code></li>
+<li><code>unsafe fn get_info&lt;T&gt;(&amp;self, idx: u8) -&gt; Option&lt;InfoObject&gt;</code></li>
+</ul>
+<p>The get_info function is unsafe because there is no checking that <code>T</code> is the correct type for the
+stored data. The fact that the index is a u8 means that there can be up to 256 sub objects per type.</p>
+<h3 id="mmio-sub-objects"><a class="header" href="#mmio-sub-objects">MMIO Sub-Objects</a></h3>
+<p>The <code>MmioObject</code> type wraps the mmio sub object and allows for accessing the information about this
+mapping and the mapping itself:</p>
+<ul>
+<li><code>fn get_info(&amp;self) -&gt; &amp;MmioInfo</code></li>
+<li><code>unsafe fn get_mmio_offset&lt;T&gt;(&amp;self, offset: usize) -&gt; &amp;T</code></li>
+</ul>
+<p>The MmioInfo struct describes information about this mapping, including its length, a
+device-specific <code>info</code> field, and the caching type of the mapping (uncachable, write-back, etc.).
+The <code>get_mmio_offset</code> function returns a reference to a location within this mmio memory mapping.</p>
+<h2 id="example-pcie"><a class="header" href="#example-pcie">Example: PCIe</a></h2>
+<p>PCIe is a common bus mechanism. It provides access to devices via a series of segments, each of
+which have a region of physical memory comprising its <em>configuration space</em>. Each device on the PCIe
+segment is assigned a <em>bus</em>, <em>device</em>, and <em>function</em> value that, together, indicate which page of
+the configuration space is associated with this particular device (the device's PCIe configuration
+registers). Each device on a PCIe bus has a set of six Base Address Registers (BARs) that describe the location
+and length of mappings to the device's memory (e.g. MMIO registers, interrupt tables, etc.).
+Finally, PCIe requires devices to support message-signaled interrupts (either via MSI or MSI-X).</p>
+<p>On startup, the kernel enumerates the PCIe segments (e.g. via the ACPI tables) and creates a
+bus-type device per segment. The segment's device has one info sub-object that specifies the
+information the kernel knows about the segment (start and end bus numbers). The device also has an
+mmio sub-object that maps the entire configuration space for the segment as Uncachable. Thus
+userspace can get to all configuration memory for this segment.</p>
+<p>The userspace device manager enumerates over all the PCIe segments, and for each one performs a
+standard PCIe probing algorithm by reading the configuration memory. For each device that it finds,
+it executes a kaction on the bus device object:
+<code>KactionCmd::Specific(PcieKactionSpecific::RegisterDevice)</code> and passes as argument the bus, device
+and function number encoded into a 64-bit value. The kernel then creates a new device entry as a
+child of the bus with the following sub-objects:</p>
+<ul>
+<li>Info sub-object: <code>PcieDeviceInfo</code> (which contains identifying information about the device).</li>
+<li>Mmio sub-object: this device's portion of the PCIe configuration space. The <code>info</code> field in the
+<code>MmioInfo</code> struct is 0xff.</li>
+<li>Mmio sub-object: one for each mapped BAR. The <code>info</code> field in the
+<code>MmioInfo</code> struct is the BAR number.</li>
+</ul>
+<p>When allocating an interrupt, software is responsible for programming the MSI or MSI-X tables and
+the device to generate a proper interrupt. To register a device interrupt with the kernel's PCIe
+driver, the kaction-specific command <code>PcieKactionSpecific::AllocateInterrupt</code> can be used. The
+64-bit argument is an encoding of which <code>DeviceInterrupt</code> in the <code>DeviceRepr</code> to use, and additional
+flags about isolation.</p>
+<p>This provides sufficient support for userspace to implement drivers for devices that allows
+programming of:</p>
+<ul>
+<li>Device interrupts via message-signaled interrupts.</li>
+<li>Access to the MMIO registers for the device's PCIe configuration space.</li>
+<li>Access to the MMIO registers for the device's BARs.</li>
+<li>Access to any other device memory exposed via PCIe.</li>
+</ul>
+<h3 id="the-nvme-device-from-the-example-at-the-start"><a class="header" href="#the-nvme-device-from-the-example-at-the-start">The NVMe device from the example at the start</a></h3>
+<p>The NVMe device I have maps the controller MMIO registers at BAR0 and the MSI-X table at BAR4. Thus
+its MMIO sub-objects would be:</p>
+<ul>
+<li>0: The PCIe configuration space, info = 0xff, uncachable.</li>
+<li>1: BAR0, info = 0, uncachable.</li>
+<li>2: BAR4, info = 4, uncachable.</li>
+</ul>
+<h1 id="drawbacks"><a class="header" href="#drawbacks">Drawbacks</a></h1>
+<p>One major drawback is some additional complexity over in-kernel device management. Since we now need
+to coordinate between userspace and the kernel for device management, it complicates the user-kernel
+interface. However, the vast majority of users can ignore this.</p>
+<p>By putting all driver software in userspace, we add overhead to interrupt handling, which now must
+(in the upper half anyway) schedule a thread and context switch in the worst-case. However, we
+expect driver software that is sensitive to this to implement at least partial polling for
+performance, and the additional overhead is minor anyway compared to monolithic kernel designs that
+still schedule threads to handle interrupts.</p>
+<h1 id="rationale-and-alternatives"><a class="header" href="#rationale-and-alternatives">Rationale and alternatives</a></h1>
+<p>A device model is a required part of the operating system. While the large-scale device model,
+mechanisms, driver APIs, and management are larger in scope than this RFC, here we lay out a base
+level of support for devices atop which we can build additional abstractions.</p>
+<p>This model is designed to provide a flexible model that requires little kernel support. The device
+tree model is a generic structuring of devices that can fit many different hardwares (they don't
+have to use the tree model and can just be flat). The interrupt model provides an abstraction that
+is based around how message-signaled interrupts are designed, which are commonly used. The
+sub-object abstraction is designed to allow for numerous memory mappings for devices that have a lot
+of them, and the info objects allow arbitrary information about devices to be encoded. Finally, the
+mailbox system is designed for software to communcate with drivers (or between drivers, or drivers
+and the bus) in a generic way.</p>
+<p>An alternative mechanism would be to implement it all in the kernel and run driver software via
+loadable modules. While this model doesn't preclude loadable modules, putting things in userspace
+dramatically simplifies the kernel.</p>
+<h1 id="prior-art"><a class="header" href="#prior-art">Prior art</a></h1>
+<ul>
+<li>Microkernel OSes often place driver responsibilities into userspace.</li>
+<li>Monolithic kernels instead have drivers in the kernel, either compiled in or loaded as modules.
+These drivers enjoy higher privilege, but must rely on kernel infrastructure for programming.</li>
+<li>The descriptions of PCIe were based on the latest official PCIe specifications.</li>
+</ul>
+<h1 id="unresolved-questions"><a class="header" href="#unresolved-questions">Unresolved questions</a></h1>
+<ul>
+<li>Is the interrupt mechanism sufficient (for now) to allow effective programming of devices?</li>
+<li>What is the correct security model to apply here? Probably a set a approved programs can access
+the device tree and that's it.</li>
+<li>Some PCIe devices should have their memory mapped as write-combinting (framebuffers, for example),
+but PCIe doesn't encode this information in the BARs. We need a way for userspace to perhaps remap
+a BAR as WC.</li>
+</ul>
+<h1 id="future-possibilities"><a class="header" href="#future-possibilities">Future possibilities</a></h1>
+<p>One major aspect that has been left out is some kind of generic &quot;reporting&quot; facility, where a driver
+could report device status back to the device manager (or the kernel) some generic status
+information. I have hesitated to design and include this, since I do not yet know what this would be
+used for or look like, and would prefer instead to save it for a future RFC.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="0003-time.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="0005-driver-model.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="0003-time.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="0005-driver-model.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

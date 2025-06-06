@@ -1,0 +1,601 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>0008-twizzler-monitor - Twizzler RFCs</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rfc-process.html"><strong aria-hidden="true">1.</strong> 0001-rfc-process</a></li><li class="chapter-item expanded "><a href="0002-object.html"><strong aria-hidden="true">2.</strong> 0002-object</a></li><li class="chapter-item expanded "><a href="0003-time.html"><strong aria-hidden="true">3.</strong> 0003-time</a></li><li class="chapter-item expanded "><a href="0004-low-level-device-model.html"><strong aria-hidden="true">4.</strong> 0004-low-level-device-model</a></li><li class="chapter-item expanded "><a href="0005-driver-model.html"><strong aria-hidden="true">5.</strong> 0005-driver-model</a></li><li class="chapter-item expanded "><a href="0006-dma.html"><strong aria-hidden="true">6.</strong> 0006-dma</a></li><li class="chapter-item expanded "><a href="0008-twizzler-monitor.html" class="active"><strong aria-hidden="true">7.</strong> 0008-twizzler-monitor</a></li><li class="chapter-item expanded "><a href="0011-random.html"><strong aria-hidden="true">8.</strong> 0011-random</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Twizzler RFCs</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <ul>
+<li>Feature Name: twizzler_monitor</li>
+<li>Start Date: 2023-08-30</li>
+<li>RFC PR: <a href="https://github.com/twizzler-operating-system/rfcs/pull/0008">twizzler-rfcs/rfcs#0008</a></li>
+<li>Twizzler Issue: <a href="https://github.com/twizzler-operating-system/twizzler/issues/0000">twizzler-operating-system/twizzler#0000</a></li>
+</ul>
+<h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
+<p>This RFC describes the core functionality of what may be described as the &quot;core Twizzler monitor&quot; program. It proposes a formalized definition
+of:
+0. How we can have a flexible runtime system that enables users to run &quot;bare-metal&quot; against twizzler-abi, against a more complete runtime, and even swap out the runtime system if they like.</p>
+<ol>
+<li>How programs (including libraries which may expose &quot;nando&quot;s, either secure or not) are <strong>linked</strong> and formed into objects.</li>
+<li>How programs are <strong>loaded</strong>, including how they are isolated from each other.</li>
+<li>What a program's <strong>runtime</strong> looks like, including the execution environment, threading, etc, and how the monitor supports programs.</li>
+<li>How we achieve (optional) <strong>isolation</strong> between the loaded components of a running execution. </li>
+<li>How users might <strong>interact</strong> with this runtime at a high level.</li>
+</ol>
+<p>A huge portion of this program is, essentially, a dynamic linker, or will have to be. However, it's a dynamic linker that is supported by
+kernel-supported security contexts and gates, and a language (with runtime) that assists with both portability and abstraction.</p>
+<h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
+<p>As we are working towards an environment that enables programmers to write software for Twizzler, we need to set ourselves up
+now for an extensible and well-defined runtime system and execution environment. In particular, this work will dramatically
+improve the extensibility of the userspace parts of Twizzler and provide a core foundation upon which we can build higher-level
+and secure software. In fact, a number of items in our respective roadmaps depend heavily on the functionality described by this RFC.</p>
+<p>Additionally, this work will enable us to more easily use and demonstrate the usefulness of several core parts of the planned Twizzler programming
+model, namely Nandos and Secure Gates. We also plan, as part of this work, to reach a semi-stable version of twizzler-abi, engineering this crate so
+that the runtime can hook into core aspects of what Rust's standard library depend on and swap them out, allowing us more flexibility without having
+to recompile programs for different runtimes.</p>
+<p>Now, you may be asking, &quot;why do we need a monitor&quot;. Well, lets consider the <em>minimum</em> required secure environment that some sensitive software is running in.
+In particular, notice that, in a traditional system, we must trust the kernel, the toolchain, the standard library (and all linked-to libraries), and the dynamic linker.
+The issue of a trusted toolchain is out of scope of this RFC. We will focus instead on how we can ensure that the kernel, library, and dynamic linker can work together
+to provide isolation. As a result, the dynamic linker for Twizzler will be Twizzler specific. This isn't particularly weird -- most dynamic linkers have a bunch of OS specific 
+and arch specific code. Note that a traditional dynamic linker is already, kinda, a monitor, loading programs and libraries as required, etc.</p>
+<h1 id="guide-level-explanation"><a class="header" href="#guide-level-explanation">Guide-level explanation</a></h1>
+<p>The runtime is a program that acts as a security monitor and dynamic linker. It loads programs and libraries into memory and executes them. Any program
+or library that is loaded by the runtime is then under the control of that runtime. The runtime organizes programs and libraries that are loaded into
+<em>compartments</em>, each one providing a configurable level of isolation from the others for the programs and libraries residing within.</p>
+<h2 id="the-execution-environment"><a class="header" href="#the-execution-environment">The execution environment</a></h2>
+<p>The basic environment of a Twizzler program can be supported either by twizzler-abi directly or by a runtime which provides
+some additional support on top of the basic twizzler-abi functionality. This may, for example, include access to a more useful
+naming service, logging, debugging, networking, etc. Each piece of the system is defined as follows:</p>
+<ol>
+<li>The twizzler-kernel provides the basic kernel services. It should only be accessed through twizzler-abi.</li>
+<li>The twizzler-abi crate defines the interaction with the kernel, including syscall ABI, API, etc. It also defines the <em>Runtime</em> trait.</li>
+<li>The runtime trait provides an implementation of a twizzler runtime. It exposes the interface that Rust's standard library uses to interact with the runtime. A given implementation of runtime is selectable both at compile time <em>and</em> at load time.</li>
+<li>Twizzler ships with two runtimes: a default one provided by twizzler-abi that implements a bare minimum set of features to start up a program running against twizzler-abi. The second is the standard runtime that acts as a security monitor, dynamic linker, and program loader. It also facilitates secure gate calls between components.</li>
+</ol>
+<pre><code>+------------------------+   +-------------------+
+|&quot;Bare Metal&quot; environment|   |Runtime Environment|
++---------+-+------------+   +-------+-+---------+
+          | ^                        | ^
+          | |                        | |
+          v |                        v |
+     +----+-+-------+         +------+-+---------+
+     |              +--------&gt;+                  |
+     | twizzler-abi |         | twizzler-runtime |
+     |              +&lt;--------+                  |
+     +------+-+-----+         +------------------+
+            ^ |
+            | |
+            | v
+  +---------+-+-----+
+  |                 |
+  | twizzler-kernel |
+  |                 |
+  +-----------------+
+</code></pre>
+<p>Here are two examples of how a runtime may offer functionality over that of the twizzler-abi runtime:</p>
+<p><strong>Naming</strong>: The runtime provides a default service for resolving names into object IDs. This requires a fair bit of runtime to work, as it needs a service running to
+manage naming, persistence of naming, etc. However, we want Rust's std to be able to use this for paths too, so twizzler-abi needs to expose a hook for the more featureful
+runtime to provide that functionality. What, then, does the &quot;bare-metal&quot; environment get? Well, those programmers could still implement their own naming system or hook into
+one, but by default we'll have the twizzler-abi crate expose a read-only mapping of &quot;initrd&quot; names.</p>
+<p><strong>stdout/stderr</strong>: These, too, require a bit of runtime to make them as flexible as programmers generally expect them to be. The basic twizzler-abi runtime implements these by
+writing to the kernel log. What else could it do? The more featureful runtime could collect output, stream it to different programs, log it, etc.</p>
+<p>As a result, you can write a program for twizzler-abi and it is loadable into the more featureful runtime as well. The reverse may be true as well, though of course a program dependent
+upon a specific runtime may not function correctly elsewhere.</p>
+<h2 id="the-standard-runtime-loading-programs"><a class="header" href="#the-standard-runtime-loading-programs">The Standard Runtime: loading programs</a></h2>
+<p>A core piece of the runtime is a dynamic linker. In particular, the runtime monitor loads and links programs and libraries both at load and run times. This means that 
+the runtime needs to be able to load executable objects, map them, and (depending on the executable format) relocate them. Now, I'm not so crazy as to suggest we implement
+our own executable format. ELF is a sufficiently weird machine that we'll probably get all the functionality we need out of it.</p>
+<h3 id="so-whats-a-program"><a class="header" href="#so-whats-a-program">So, what's a program?</a></h3>
+<p>The runtime supports both statically linked executables (or, dynamically linked traditional executables) and libraries (dynamic linked objects).
+Executable programs have a defined entry point, libraries expose a set of symbols that are linked when the library is loaded. A program or library is contained within a single
+object that contains an ELF file. This file is parsed and mapped into memory via Twizzler object APIs (notably, the copy-from primitive is used heavily along with direct mapping).
+Note that not every ELF file will work. It does need to target Twizzler and link using the Twizzler linker script built into the Rust compiler's Twizzler support.</p>
+<h3 id="the-loading-process-and-example-in-a-virtual-address-space"><a class="header" href="#the-loading-process-and-example-in-a-virtual-address-space">The Loading Process: and example in a virtual address space</a></h3>
+<p>The monitor, when loading an executable program, does all the normal things a dynamic linker does, with the addition of a few things. First, it allows subcomponents of the
+program and libraries to isolate from each other even within the same address space (this uses security contexts and secure gates). Let's imagine we have the following setup:</p>
+<p>Program A links to libstd (S), libruntime (R), and a helper library, L. The resulting address space in Twizzler looks like:</p>
+<pre><code>+-----------------+
+|                 |
+| A.text   A.data |
+|                 |
+| R.text   R.data |
+|                 |
+| L.text   L.data |
+|                 |
+| S.text   S.data |
+|                 |
+| stack    A.heap |
+|                 |
+| M.text   M.data |
+|                 |
+| thread          |
++-----------------+
+</code></pre>
+<p>This is a bit of a simplification. Also note that I didn't really try to order these, as with Twizzler's invariant pointers + position-independent code, it doesn't matter. Well.
+Okay, A.text and A.data, as the potentially statically-linked executable, may be forced into slots 0 and 1 respectively, but that's a small detail.</p>
+<p>Each loaded executable object is split into two parts, text (executable code) and data (read-write data). We may add a third rodata object in the future. We also have a heap (A.heap, we'll see why it's named as such later), a stack, a thread repr object (see the thread model documentation). We've loaded A and its dependencies (R, L, and S). We also have ourselves, the monitor / loader, as M, loaded.</p>
+<p>Once everything is loaded and relocated (linked symbols, etc), we can start executing at A's entry point. During execution, A may decide to load more executable objects, or perform an
+operation that causes the runtime to do so automatically. The result is the familiar programming environment we are all used to, in that we can construct statically-linked executables
+or dynamically linked ones. We can load libraries at load or runtime, and use their exported symbols.</p>
+<h2 id="the-standard-runtime-secure-gates"><a class="header" href="#the-standard-runtime-secure-gates">The Standard Runtime: secure gates</a></h2>
+<p>One major functionality addition to the dynamic linker is compartmentalization. A given library may be called by a program, and that library
+may be fully isolated from the caller. This is useful for building secure OS services, for example, a network library may manipulate configuration
+data directly if it has write permission on that data. But your average program that <em>calls</em> that library shouldn't be given write permission to that
+data, as it could then trash it. Thus a key primitive that the runtime enables is for some insecure software to call a secure function in a library
+that has some additional permissions not to be granted to the caller: a secure gated API.</p>
+<p>Lets use the same example program and dependencies as from above with the following addition: The library L has additional permissions to update some
+system state that the caller (A) doesn't have permission to do. Library L defines a function as follows:</p>
+<pre><code class="language-{rust}">#[secure_gate]
+fn update_some_state(args...) -&gt; ... {...}
+</code></pre>
+<p>The caller can then just call <code>L::update_some_state(...)</code>. The runtime, during load, will ensure the following security properties:</p>
+<ol>
+<li>The library L is protected from <em>arbitrary code execution</em> by secure gates support in security contexts.</li>
+<li>The &quot;irreducible Rust Runtime&quot; (discussed below) remains isolated within this library (we'll discuss what this means below).</li>
+<li>The caller's stack cannot be corrupted (optional, adds overhead)</li>
+<li>The callee's stack frames cannot be leaked to the caller (optional, adds overhead)</li>
+<li>The caller's stack is not accessible at all by the callee (optional, limits API)</li>
+</ol>
+<p>Once loaded, the virtual address space will contain:</p>
+<pre><code>+--------------------------------------------+
+| thread(r--)                                |
+| +--------------------------+               |
+| |A.text(r-x)   A.data(rw-) |               |
+| |                          |               |
+| |A.heap(rw-)   stack(rw-)  |               |
+| |                          |               |
+| |S.text(r-x)   S.data(rw-) |               |
+| |                          |               |
+| |R.text(r-x)   R.data(rw-) |               |
+| +--------------------------+               |
+|                                            |
+|                                            |
+| +---------------------------+              |
+| |L.text(r-x)   L.data(rw-)  |              |
+| |                           |              |
+| |L.heap(rw-)   L.stack(rw-) |              |
+| |                           |              |
+| |S.text(r-x)   S.data(rw-)  |              |
+| |                           |              |
+| |R.text(r-x)   R.data(rw-)  |              |
+| +---------------------------+              |
+|                                            |
++--------------------------------------------+
+</code></pre>
+<p>Note how there are multiple &quot;compartments&quot; of objects, here. This has not actual bearing on virtual address space layout, they are compartments for
+ensuring isolation. The specified permissions only apply to within a given compartment. The resulting, high-level view of the runtime monitor is then:</p>
+<pre><code>  +-----------------------------------------------+
+  |                                               |
+  |C_A: A's data, text, and non-isolated libraries|
+  |                                               |
+  +-----------------------------------------------+    +-----------+
+                                       ^               |           |
+                                       |               |  Monitor  |
+                                       +&lt;--------------+           |
+                                       |               +-----------+
+                                       v
+  +-----------------------------------------------+
+  |                                               |
+  |C_B: B's data, text, and non-isolated libraries|
+  |                                               |
+  +-----------------------------------------------+
+</code></pre>
+<p>Wherein the monitor controls isolation between compartments, and within a compartment, it adds no overhead to control transfer between components. The resulting programming
+model is one where a programmer can easily call functions exposed by system libraries that operate securely on protected data. These functions can go on to call other non-isolated
+<em>or</em> isolated functions, and the runtime will handle it.</p>
+<p>The anatomy of a compartment is as follows:</p>
+<pre><code>           +---------+
+           | program |
+           +--------++
+                    ^
+                    |
+                    |
+                    v
++------------+     ++-------+
+| libruntime +&lt;---&gt;+ libstd |
++----+-------+     +--------+
+     |
+     v
++----+--+     +------+     +-------+
+| state +----&gt;+ heap |     | stack |
++-------+     +------+     +-------+
+</code></pre>
+<p>A program (which may be a library) links against libstd, which links against twizzler-abi (not shown) and libruntime. The runtime library then uses the state object (one per compartment) to locate the heap
+and handle allocation requests from the standard library.</p>
+<h3 id="isolation-options"><a class="header" href="#isolation-options">Isolation options</a></h3>
+<p>The minimum isolation required by a library can be set by the library at compile time, or by the caller of the library at load time. Once a library is
+loaded, there is no way to change isolation levels without spinning up another compartmentalization of the same library.</p>
+<p>There are, broadly, two major isolation directions to consider: does the caller trust the callee, does the callee trust the caller, or does neither party trust the other. The resulting table
+shows the different options:</p>
+<table><thead><tr><th>Trust relationship</th><th>Model</th></tr></thead><tbody>
+<tr><td>Both trust each other</td><td>No isolation -- simple dynamic library call</td></tr>
+<tr><td>Callee doesn't trust caller</td><td>Isolated callee (e.g. library to safely update system state)</td></tr>
+<tr><td>Caller doesn't trust callee</td><td>Isolated caller (e.g. program that operates on protected data calls an untrusted library)</td></tr>
+<tr><td>Neither trust the other</td><td>Full isolation</td></tr>
+</tbody></table>
+<p>Whether or not the callee trusts the caller is set by a flag in the secure gate itself, so the caller can never bypass the isolation by setting a different policy. Similarly, the
+caller can specify its trust level at load or runtime.</p>
+<p>Selection of higher isolation levels may come with a tradeoff. In particular, performance and restrictions on what APIs are possible. They are as follows:</p>
+<ol>
+<li>No isolation: no overhead above a standard dynamic library call</li>
+<li>Any amount of isolation requires security context switches and shadow stack construction.</li>
+</ol>
+<h2 id="notes-on-thread-state-and-secure-gates"><a class="header" href="#notes-on-thread-state-and-secure-gates">Notes on &quot;thread state&quot; and secure gates</a></h2>
+<p>When switching between compartments, we must be careful to avoid 1) improper transfer of control flow to a compartment, 2) isolation of sensitive information within a compartment, and 3) prevention of the isolated compartment getting &quot;tricked&quot; into writing somewhere it didn't intend. The details of <em>how</em> we'll deal with these will be described by the reference level explanation below, but here we'll quickly discuss some basic concepts. </p>
+<h3 id="the-stack"><a class="header" href="#the-stack">The stack</a></h3>
+<p>One key aspect of thread runtime state that we don't have direct control over normally is the stack. Instructions generated by the compiler interact with the stack frequently and in automatic ways relative to our level of abstraction in programming Rust. Thus we, as programmers, have little control over when and how the stack is accessed, and cannot ensure that we get to &quot;check&quot; that the stack pointer is &quot;okay&quot; before its used -- after all, a checking function will still use the stack!</p>
+<p>Why do we care? Well, imagine an attack where an untrusted program calls a sensitive, isolated library to modify data in object O. Normally, the untrusted program cannot access object O, but imagine if we pointed our stack pointer into O and then called the secure gate! The isolated library will then corrupt O with stack frame data before it even gets a chance to do anything else.</p>
+<p>Thus the runtime will ensure that the isolated library cannot accidentally corrupt some object using its stack pointer (details later).</p>
+<p>Another concern is privacy -- any stack frames pushed to the stack by the isolated library could be visible to the untrusted program if they shared stacks. For this reason, the runtime
+sets up a shadow stack so that pushed stack frames by the isolated library stay within that library, and any stack arguments are still accessible. Note, however, that this now restricts using the stack for return values. We'll need to figure this one out.</p>
+<h3 id="the-heap"><a class="header" href="#the-heap">The heap</a></h3>
+<p>The heap is another big issue. See, Rust follows the common programming model of a global heap, one per process. If we were to continue with this model, we'd need to put the APIs for accessing the global heap behind secure gates into the runtime, and even then we'd need <em>hardware</em> capabilities to prevent isolated compartments from corrupting heap data. Instead,
+we'll change the model to one heap per compartment, that way allocation can happen without huge overhead.</p>
+<p>One thing this means is that heap data may, sometimes, not be sharable across compartments. We propose to default to a private-heap-per-compartment, so normal allocations are contained,
+however we can use Rust's allocator API to allocate from heaps that can be shared across compartments.</p>
+<h3 id="tls"><a class="header" href="#tls">TLS</a></h3>
+<p>Thread-local storage is another major concern, as it involves the use of an architectural thread-pointer that we need to ensure has similar restrictions as the stack.</p>
+<h3 id="unwinding"><a class="header" href="#unwinding">Unwinding</a></h3>
+<p>Unwinding across a foreign function interface is undefined behavior in Rust. While we're not <em>exactly</em> crossing an FFI boundary, we kinda are, since the heap and stack pointer change
+dramatically between compartments. On top of that, as we'll see later, the way we return from a compartment requires a bit of extra work. Thus we must always catch an unwind before going
+back across the compartment boundary. The runtime will allow the unwind to be caught, and resumed, across the boundary.</p>
+<h3 id="global-variables"><a class="header" href="#global-variables">Global variables</a></h3>
+<p>Look, if you make a global variable, and then try to share it across a compartment boundary, it'll be restricted (either read-only or inaccessible), so I guess just plan for that.
+Or just don't use global, shared variables.</p>
+<h1 id="reference-level-explanation"><a class="header" href="#reference-level-explanation">Reference-level explanation</a></h1>
+<p>Phew, okay. Let's start in on how we can make this happen.</p>
+<p>The runtime is a combination security monitor and dynamic linker, managing the loading and linking of programs and libraries within and across
+isolation domains called <em>compartments</em>. It is, explicitly, part of the trusted computing base.</p>
+<h2 id="security-contexts"><a class="header" href="#security-contexts">Security Contexts</a></h2>
+<p>Twizzler offers an abstraction of a security context with the following properties:</p>
+<ol>
+<li>A context contains capabilities that define the access rights of a thread that has this context as active.</li>
+<li>A thread can be <em>attached</em> to multiple contexts, though only one may be active at one time.</li>
+<li>A thread switches contexts automatically if a security fault occurs, and the thread is attached to a context in which the instruction would not cause a security fault.</li>
+<li>Transfer of control between contexts is limited by an object's <em>secure gates</em>, a set of allowed entry points into this object. If a security context switch occurs, and the instruction pointer is not pointing to a valid gate, that context is not considered a valid context to switch to.</li>
+</ol>
+<p>The runtime uses this feature via a 1-1 mapping of compartment to security context. All programs and libraries within a given compartment all run within the same security context (if possible), or others with control flow transfer managed by the runtime if necessary. Note that the runtime itself is contained within a compartment and isolated from all other compartments, allowing only approved operations to be invoked (via security gates) should a loaded program wish to interact with the runtime monitor directly.</p>
+<h2 id="how-to-isolate-a-library"><a class="header" href="#how-to-isolate-a-library">How to isolate a library</a></h2>
+<p>Let's go back to that running example: untrusted program A wishes to call isolated library L's function foo, which is a security gate. First, library L (and its associated runtime state) are contained within compartment CL, while A is contained within CA. Upon call to CL, via the call instruction, the processor pushes the return address to the stack and then jumps. The
+instruction pointer is now in L, pointing at the start of foo. But we are still within context CA! This triggers a page fault, since, because it is isolated, L is not executable in CA.
+The kernel finds CL, where the execution is valid, and then continues with the first instruction. Let's say it's <code>push rbp</code>, which it probably is. This triggers a security fault. Why?</p>
+<p>See, we must protect against the callee (foo) corrupting some data that A didn't have write access to but L does. The caller could have pointed the stack pointer at some sensitive data and then called foo. To protect against this, the stack that A is using is not writable in CL. The security fault is handled by the runtime monitor, as it's registered itself as the fault handler with the kernel during setup. The runtime monitor then constructs a shadow stack for L, using the object copy-from primitive. Execution is then allowed to proceed normally.</p>
+<p>Upon return, we have to do another thing -- we have to check to see if the return address is safe. The caller <em>could</em> have pushed a location within L and then <em>jumped</em> to foo, instead of calling it. This would re-enable arbitrary code execution in L! So the runtime, when constructing the shadow stack, checks the return address. Finally, what if foo just instantly and blindly executes ret? While unlikely, we still have to deal with this. By default, the stack is made not readable from CL, however the runtime still constructs the shadow stack. This option doesn't prevent L from reading A's stack frames, it just prevents L from doing anything with A's stack data before the runtime can interpose.</p>
+<p>Finally, we can optionally refuse to create a shadow stack and instead require that the callee has a new stack. This results in the construction of a new stack with a fake frame that returns to the call site, but contains no other data from A's frames.</p>
+<h3 id="so-how-do-we-enforce-that-the-stack-isnt-writable-on-context-switch"><a class="header" href="#so-how-do-we-enforce-that-the-stack-isnt-writable-on-context-switch">So, how do we enforce that the stack isn't writable on context switch?</a></h3>
+<p>Yeah, we do need to do this! See, the &quot;prevent corruption&quot; motivation above does still require the runtime to interpose always, which means that the stack pointer <em>cannot</em> be writable (or, even readable sometimes!) when a gate is used. Thus we propose to extend the Twizzler gate model to include the ability to check the validity of <em>architectural pointers</em>:</p>
+<ul>
+<li>Stack and base pointer: at least -w- in source and at most r-- in target</li>
+<li>Thread pointer: at most r-- in both contexts. This covers TLS -- the thread pointer points to a region of memory that is used as the TLS block locator for dynamic memory objects. That index should not be writable by either context, as it is under the control of the runtime. Further, the thread pointer should not be <em>changeable</em> in the source context (denoted by the capability to write the thread repr object).</li>
+<li>Upcall pointer (not really architectural, but): at most r-- in both contexts. The runtime needs to be the handler for upcalls, so we ensure that it cannot be executable in the target, nor do we want the source compartment to handle (e.g.) security violations for the target compartment. Same as thread pointer: not changeable in the source context.</li>
+</ul>
+<p>For flexibility, these permissions should not be hardcoded, but instead will allow the gate's creator to specify both required and disallowed masks. However, the above may be the default.</p>
+<h3 id="what-about-the-heap"><a class="header" href="#what-about-the-heap">What about the heap?</a></h3>
+<p>Each compartment has a heap, which means each compartment has an independent allocator and libstd. We can achieve this by linking to a compartment-local libruntime that is configured with enough information to manage its own heap independent of the other compartments. This is a different linking algorithm than is standard for dynamic libraries. We are first explicitly linking against a library that has &quot;first dibs&quot; on symbols, and falling back to global symbol resolution only after that (ok -- I suppose this is kinda like LD_PRELOAD).</p>
+<p>This trick, of allowing heap allocation without the runtime, is necessary for correctness (isolation of heap data) but <em>also</em> for performance, since a context switch on every allocation would be a hard pill to swallow. Fortunately, we can make heap allocation just as cheap as it is now with this per-compartment heap trick, at the cost of some additional complexity to share heap data across compartments. Heaps are private by default, but we can always create additional heaps with different permissions and then use Rust's allocator API to allocate data from those heaps instead of the default.</p>
+<h2 id="how-are-executable-objects-linked-and-loaded"><a class="header" href="#how-are-executable-objects-linked-and-loaded">How are executable objects linked and loaded?</a></h2>
+<p>We use the linker provided by LLVM to link executables and libraries, however we provide a custom linker script that ensures that the memory layout of the program fits with the runtime.
+For example, a typical program might look like this:</p>
+<pre><code>| Section | vaddr  | len   | offset | perms |
+|---------|--------|-------|-------:|:-----:|
+| .text   | 0x1000 | 0x800 |      0 |  r-x  |
+| .rodata | 0x1800 | 0x100 |  0x800 |  r--  |
+| .data   | 0x2000 | 0x100 | 0x1000 |  rw-  |
+| .bss    | 0x2100 | 0x130 |    N/A |  rw-  |
+</code></pre>
+<p>As you can see, the program's sections are loaded into specific memory addresses, with data taken from the offset of the file (this is a simplified table compared to ELF). However, on Twizzler, this is more likely:</p>
+<pre><code>| Section | vaddr      | len   | offset | perms |
+|---------|------------|-------|-------:|:-----:|
+| .text   | 0x1000     | 0x800 |      0 |  r-x  |
+| .rodata | 0x1800     | 0x100 |  0x800 |  r--  |
+| .data   | 0x40001000 | 0x100 | 0x1000 |  rw-  |
+| .bss    | 0x40001100 | 0x130 |    N/A |  rw-  |
+</code></pre>
+<p>Note the major change is just in the vaddr field, where we've bumped the data and bss sections to be loaded into the second object slot of the address space (object size 0x40000000). This is already how Twizzler operates. We just need to extend it to be a little more general for loading position-independent libraries. The above example loads data into object slots 0 and 1, respectively. It does this by first directly mapping the executable object to slot 0 (the linker script ensures this direct mapping is correct), and then creates a new data object and copies
+the initial image of the data section from the executable (this is done via the copy-from primitive to leverage copy-on-write), which is then loaded into slot 1. For a position independent library, we'll allocate two consecutive slots and map the executable and read-only data into the first, and the writable data and bss into the second.</p>
+<p>At this point, we need to run the standard dynamic linking algorithm, with some small exceptions, to relocate and link any loaded programs and libraries. Intra-compartment symbol resolution
+results in standard dynamic library function calls, whereas inter-compartment results in the limitation of communication to secure gates. The main exceptions to the standard linking process are to ensure that allocations are performed intra-compartment by default, and to ensure that all calls stay within a compartment unless using a secure gate.</p>
+<h2 id="more-details-about-the-irreducable-rust-runtime"><a class="header" href="#more-details-about-the-irreducable-rust-runtime">More Details about the Irreducable Rust Runtime</a></h2>
+<p>Above we talked a bit about the stack and the heap, two of the most important parts of the runtime. But there is more.</p>
+<h3 id="thread-local-storage"><a class="header" href="#thread-local-storage">Thread Local Storage</a></h3>
+<p>The thread pointer, mentioned above, points to a per-thread data structure. The complication here is that we'll need to isolate compartments' TLS data from other compartments.
+We can do this by using the higher-overhead TLS implementation that dynamic libraries use, where the thread pointer points to a vector of TLS regions, and we call a helper function
+to actually load a reference to a TLS variable.</p>
+<p>This vector then must be protected appropriately: read-only, except for the runtime. The runtime sets up the TLS vector, and then other libraries can use that to find their regions. On compartment switch, the runtime could change the thread pointer to a limited vector. This means that we'll need to protect updates to the thread pointer, which we will do by saying that
+the thread pointer can be updated in contexts that have write access to the thread's repr object. A thread doesn't <em>need</em> write access to its own repr, so we can prevent compartments from
+changing the thread pointer. Finally, the kernel can verify properties of the thread pointer (not writable in source or target context) on compartment switch.</p>
+<h3 id="upcall-pointer"><a class="header" href="#upcall-pointer">Upcall pointer</a></h3>
+<p>This isn't an architectural pointer, but it is necessary for the kernel to deliver synchronous events to a thread. We can play the same trick: disallow updates to the upcall pointer, and have it set so that it enters the runtime on upcall.</p>
+<h3 id="unwinding-1"><a class="header" href="#unwinding-1">Unwinding</a></h3>
+<p>Since it's undefined behavior to unwind across an FFI boundary, there's a good chance we'll need to catch unwinding panics in a trampoline for a security gate. So if you write something like this:</p>
+<pre><code class="language-{rust}">#[security_gate]
+pub fn foo(x: u32) -&gt; u32 {...}
+</code></pre>
+<p>Under the hood, it'll get rewritten to something like:</p>
+<pre><code class="language-{rust}">pub fn foo(x: u32) -&gt; core::thread::Result&lt;u32&gt; {
+    core::panic::catch_unwind(|| __do_foo(x))
+}
+
+fn __do_foo(x: u32) -&gt; u32 {...}
+</code></pre>
+<h1 id="drawbacks"><a class="header" href="#drawbacks">Drawbacks</a></h1>
+<p>The security limitations do add overhead on a security context switch. However, the comparison should not be to library calls, but to <em>invoking an entire new process</em> on unix.</p>
+<p>It is a huge undertaking. We could instead skip this, port a dynamic linker, etc. But I think that would miss out on an opportunity to leverage Twizzler's features to build a better
+programming and system model.</p>
+<h1 id="rationale-and-alternatives"><a class="header" href="#rationale-and-alternatives">Rationale and alternatives</a></h1>
+<p>This design builds directly off the Twizzler security model and implements, as far as I know, the simplest way to expose a secure programming interface to programmers such that
+the secure programming is easy to do.</p>
+<p>This RFC is careful to walk a line between being opinionated about how programming should be done on Twizzler and remaining sufficiently flexible (as would be expected by an OS).
+However, it does essentially propose a <em>reference runtime</em>, which brings up worries about locking us into a particular ecosystem. However, the alternative is essentially <em>no</em> standard
+programming environment for Twizzler, which is unacceptable.</p>
+<h1 id="prior-art"><a class="header" href="#prior-art">Prior art</a></h1>
+<p>Some useful papers and concepts:</p>
+<ul>
+<li>Lightweight Contexts (OSDI)</li>
+<li>Jails</li>
+<li>Solaris Doors</li>
+<li>Dynamic linking</li>
+<li>Compartmentalization</li>
+</ul>
+<h1 id="unresolved-questions"><a class="header" href="#unresolved-questions">Unresolved questions</a></h1>
+<p>None for this RFC.</p>
+<h1 id="future-possibilities"><a class="header" href="#future-possibilities">Future possibilities</a></h1>
+<h2 id="the-reference-repl"><a class="header" href="#the-reference-repl">The Reference REPL</a></h2>
+<p>As one example of something you could build atop this, let's consider an interactivity model for Twizzler. Instead of a &quot;shell&quot;, we'll think of the interaction point as a REPL, broadly
+defined, to be defined concretely in a different RFC. We'll consider some example, shell-like syntax here as a placeholder to avoid bikeshedding. Consider that, in a system where libraries explicitly expose calling points (Nandos, Secure Gates), we could expose these <em>typed</em> interaction points to the command line interface itself. For example, imagine a library exposes an interface for updating the password as follows:</p>
+<pre><code class="language-{rust}">#[secure_gate]
+pub fn update_password(user: &amp;User, password: String) -&gt; Result&lt;(), UpdatePasswordError&gt;;
+pub fn lookup_user(name: &amp;str) -&gt; Result&lt;User, LookupUserError&gt;;
+</code></pre>
+<p>Not saying this is a <em>good</em> interface, just roll with it. Let's imagine that the <code>User</code> type implements <code>TryFrom&lt;String&gt;</code>, and the <code>UpdatePasswordError</code> and <code>LookupUserError</code> types are enums with variants listing possible failures. Further, these error types implement the Error trait. Now, let's say these functions are in a library that gets compiled to an object named <code>libpasswd</code>. We can then expose this library to the REPL. The REPL can enumerate the interface for the library. If the source is provided (or, maybe if we look at rust metadata??? or debug data??? or we generate type info in the nando struct???), the REPL <em>knows</em> the interface <em>and</em> all the types for the functions, so it can extrapolate an interface for the command line automatically:</p>
+<p>Long form (the <code>X ?= Y</code> syntax is sugar for <code>X = Result::unwrap (Y)</code>):</p>
+<pre><code>twz&gt; user ?= passwd::lookup_user bob
+twz&gt; passwd::update_passwd user changeme
+Ok(())
+twz&gt;
+</code></pre>
+<p>Wrong username:</p>
+<pre><code>twz&gt; user ?= passwd::lookup_user bobby
+Error: No such user
+</code></pre>
+<p>If we hadn't implemented <code>TryFrom&lt;String&gt;</code> for <code>User</code></p>
+<pre><code>twz&gt; passwd::update_passwd bob changeme
+Type Error: Expected 'User' got 'String'
+</code></pre>
+<p>But, since we did, we get a shortcut:</p>
+<pre><code>twz&gt; passwd::update_passwd bob changeme
+Ok(())
+</code></pre>
+<p>Or, with the wrong username:</p>
+<pre><code>twz&gt; passwd::update_passwd bobby changeme
+Error: No such user
+</code></pre>
+<p>Or, if you don't have permission:</p>
+<pre><code>twz&gt; passwd::update_passwd bob changeme
+Security Error: Failed to call update_password in passwd: Permission denied
+</code></pre>
+<p>The basic REPL here has special handling for String, Into/From/TryInto/TryFrom String, impl Error, Result, Option, etc, but otherwise builds this command line interface, including arguments and error reporting, automatically from the types.</p>
+<p>Another example would be some library, <code>foo</code>, that wants to update some object by ID. So it exposes some function <code>bar(id: ObjID) -&gt; ...</code>. Now, typing an object ID is annoying, but doable
+if necessary, so we do allow that. But the REPL can see this type and automatically try to resolve that positional argument with a (default, but configurable) name resolution mechanism. So the user can still type a name, even if the actual programming interface takes an object by ID. And this can be extended to object <em>handles</em>, too. Those can even be typed:</p>
+<pre><code>#[nando]
+pub fn baz&lt;T: SomeKindaObject&gt;(obj: Object&lt;T&gt;) -&gt; ...;
+</code></pre>
+<p>If &quot;name&quot; resolves to an object that implements <code>SomeKindaObject</code>:</p>
+<pre><code>twz&gt; foo::baz name
+...
+</code></pre>
+<p>If &quot;name&quot; resolves to an object that does NOT implement <code>SomeKindaObject</code>:</p>
+<pre><code>twz&gt; foo::baz name
+Type Error: Object 'name' does not implement SomeKindaObject.
+</code></pre>
+<p>If &quot;name&quot; does not resolve:</p>
+<pre><code>twz&gt; foo::baz name
+Name Error: Object 'name' failed to resolve: ...
+</code></pre>
+<p>This means that system software <em>is</em> the libraries written to operate or interact with the system. The command line interface is just a translation from command-line interface interaction to library calls, for which the Type info is sufficient to automatically generate.</p>
+<p>And of course a more powerful REPL can just expose library calls that interact with the system and the data model directly in its programming language.</p>
+<p>Note that you can recover the semantics of a standard unix-like program via <code>fn cli_main(args: &amp;[&amp;str]) -&gt; i32</code>, and in fact, this would be an effective wrapper around such programs as a way to invoke them (via just loading it, and passing args via ELF aux data, or whatever).</p>
+<p>Also note that I'm just using this above syntax as an example -- one powerful feature of this is not just making scripting the OS even easier than shell scripts, as you get typed library calls instead of invocation of an executable, but doing so without coupling deeply to the <em>language</em>.</p>
+<h1 id="drawbacks-1"><a class="header" href="#drawbacks-1">Drawbacks</a></h1>
+<p>The security limitation do add overhead on a security context switch. However, the comparison should not be to library calls, but to <em>invoking an entire new process</em> on unix.</p>
+<p>It is a huge undertaking. We could instead skip this, port a dynamic linker, etc. But I think that would miss out on an opportunity to leverage Twizzler's features to build a better
+programming and system model.</p>
+<h1 id="rationale-and-alternatives-1"><a class="header" href="#rationale-and-alternatives-1">Rationale and alternatives</a></h1>
+<p>This design builds directly off the Twizzler security model and implements, as far as I know, the simplest way to expose a secure programming interface to programmers such that
+the secure programming is easy to do.</p>
+<p>This RFC is careful to walk a line between being opinionated about how programming should be done on Twizzler and remaining sufficiently flexible (as would be expected by an OS).
+However, it does essentially propose a <em>reference runtime</em>, which brings up worries about locking us into a particular ecosystem. However, the alternative is essentially <em>no</em> standard
+programming environment for Twizzler, which is unacceptable.</p>
+<h1 id="prior-art-1"><a class="header" href="#prior-art-1">Prior art</a></h1>
+<p>Some useful papers and concepts:</p>
+<ul>
+<li>Lightweight Contexts (OSDI)</li>
+<li>Jails</li>
+<li>Solaris Doors</li>
+<li>Dynamic linking</li>
+<li>Compartmentalization</li>
+</ul>
+<h1 id="unresolved-questions-1"><a class="header" href="#unresolved-questions-1">Unresolved questions</a></h1>
+<ul>
+<li>What does the runtime trait look like?</li>
+<li>How do we hot-plug that runtime?</li>
+<li>What does the unix compatibility story look like?</li>
+<li>More syntax bikeshedding about the cli stuff.</li>
+<li>Key management...</li>
+<li>Can we return things using the stack in the shadow stack setup?</li>
+<li>Should the runtime be async by default?</li>
+<li>What does it look like to write a command line interface nando? Should it be a <code>#[cli_interface]</code> macro that we can use to auto-gen a CliCall struct that contains type info, etc?</li>
+<li>Can we implement this with ASLR?</li>
+</ul>
+<h1 id="future-possibilities-1"><a class="header" href="#future-possibilities-1">Future possibilities</a></h1>
+<p>We can imagine the runtime providing deep introspection on the libraries and executables it loads and isolates. For example, imagine a debugger (controlled by the runtime) that can seamlessly transition from debugging a &quot;script&quot; in the REPL to debugging a loaded library (via step-in).</p>
+<p>If all system software is written this way, and maintains OS configuration data and runtime telemetry data in objects, the REPL can expose a query-like interface for interacting with the OS, and can seamlessly be extended via nandos and secure gates.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="0006-dma.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="0011-random.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="0006-dma.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="0011-random.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

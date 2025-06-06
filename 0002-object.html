@@ -1,0 +1,380 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>0002-object - Twizzler RFCs</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rfc-process.html"><strong aria-hidden="true">1.</strong> 0001-rfc-process</a></li><li class="chapter-item expanded "><a href="0002-object.html" class="active"><strong aria-hidden="true">2.</strong> 0002-object</a></li><li class="chapter-item expanded "><a href="0003-time.html"><strong aria-hidden="true">3.</strong> 0003-time</a></li><li class="chapter-item expanded "><a href="0004-low-level-device-model.html"><strong aria-hidden="true">4.</strong> 0004-low-level-device-model</a></li><li class="chapter-item expanded "><a href="0005-driver-model.html"><strong aria-hidden="true">5.</strong> 0005-driver-model</a></li><li class="chapter-item expanded "><a href="0006-dma.html"><strong aria-hidden="true">6.</strong> 0006-dma</a></li><li class="chapter-item expanded "><a href="0008-twizzler-monitor.html"><strong aria-hidden="true">7.</strong> 0008-twizzler-monitor</a></li><li class="chapter-item expanded "><a href="0011-random.html"><strong aria-hidden="true">8.</strong> 0011-random</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Twizzler RFCs</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="basic-objects"><a class="header" href="#basic-objects">Basic Objects</a></h1>
+<p>Objects in Twizzler form the basis for memory organization and data identity in a global address
+space. The core features that all objects share are:</p>
+<ul>
+<li>Invariant references. Pointers in an object can reference any other object regardless of location.</li>
+<li>Base structure. Objects have a &quot;known entry point&quot; that represents the overall type of the
+object.</li>
+<li>Metadata. Objects have a metadata structure that contains a core metadata.</li>
+<li>Access control. Objects may be read/write/execute depending on security context.</li>
+<li>Metadata extensions. An object may &quot;respond&quot; to various APIs.</li>
+</ul>
+<p>This document serves to outline the core object layout and the design and rationale of the
+twizzler-object crate. In short, twizzler-object provides safe functions to get always-immutable
+information about objects, unsafe functions to get references to any object memory, a low-level part
+of the runtime that manages memory slots for objects, and some type definitions for object layout.
+Any safe (transactional) mutability of objects will be done via twizzler-nando, which will be
+described in an upcoming RFC.</p>
+<h2 id="object-layout"><a class="header" href="#object-layout">Object Layout</a></h2>
+<p>Objects form a 1GB contiguous sparsely populated collection of pages, and are all identified by a
+unique 128-bit ID. Objects may be either mutable or immutable (this property is, itself,
+immutable)<sup class="footnote-reference"><a href="#1">1</a></sup>. An object may be either <strong>shared</strong> or <strong>volatile</strong>. A shared object is one that may
+be operated on by multiple <em>instances of a host</em><sup class="footnote-reference"><a href="#2">2</a></sup>. </p>
+<p>The high-level layout is:</p>
+<pre><code>+---+--------------------------+---+-------+
+| N | B                      F | M | E     |
+| U | A --&gt;              &lt;-- O | E | X --&gt; |
+| L | S --&gt;              &lt;-- T | T | T --&gt; |
+| L | E                      e | A | s     |
++---+--------------------------+---+---+---+
+</code></pre>
+<p>At the very start of an object, we devote an entire page to an unmapped page. This serves two
+purposes:</p>
+<ul>
+<li>Invariant pointers can be NULL and always refer to an unmapped page.</li>
+<li>An unmapped page between objects prevents runaway writes from escaping an object.</li>
+</ul>
+<p>After the null page we have the base of the object, which acts as a type for the object. The base
+can be <code>unit</code> if there is no meaningful base type. The rationale for having a base type is that it
+provides a simple way to represent a simple type and an entry point for objects. It allows the
+kernel to interact with some kinds of objects without needing to understand the more complex aspects
+of object layout.</p>
+<p>After the base, the object memory is
+application-defined up until the end of the foreign object table (FOT), which grows downward. Often the remaining memory
+after the base is given to a per-object allocator. Near the top of the object, there is a metadata
+struct that has the same layout for all objects. Following the metadata struct is a number of
+extensions that allow the object to specify that is responds to a certain API.</p>
+<p>The metadata region is needed because we need a mechanism for invariant pointers (the FOT), so it's
+not that the overhead of the metadata is justified, it's that it's required. Even for objects with
+no outgoing pointers, the metadata struct provides information for object ID derivation, base type
+type verification, and commonly used meta extensions.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Note that there's a chicken and egg problem here. An immutable object is immutable upon
+creation, and so it can only be created via the object create system call (which supports
+scatter-gather specification for how to construct object memory).</p>
+</div>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>An instance of a host includes 1) different computers, 2) different power cycles of a single
+computer, or 3) different kernels running on different heterogeneous devices in a single
+computer. Another way to think about it is that volatile objects fate-share with the running
+kernel they are associated with. Note that this doesn't mean that volatile objects are limited
+to a single host, but that they must <em>move</em> instead of being shared.</p>
+</div>
+<h3 id="meta-types"><a class="header" href="#meta-types">Meta types</a></h3>
+<p>The meta struct is defined as follows:</p>
+<pre><code class="language-{rust}">struct MetaData {
+    nonce: Nonce,
+    kuid: ObjID,
+    p_flags: u32,
+    flags: u32,
+    fotentries: u32,
+    metaexts: u32,
+    basetag: Tag,
+    version: Version,
+}
+</code></pre>
+<p>The nonce, kuid, and p_flags are related to security, the flags are used for future extension, the
+fotentries and metaexts fields count the number of FOT entries and meta extensions. The basetag and
+version fields are used for BaseType versioning and verification.</p>
+<p>The FOT starts just below the meta data struct, and is an array of entries defined as follows:</p>
+<pre><code class="language-{rust}">struct FOTEntry {
+    union {
+        id: ObjID,
+        nameinfo: { name: u64, resolver: u64 },
+    },
+    refs: u32, // ref count of this entry
+    flags: u32, // requested protections
+    resv0: u32, // unused (must be zero)
+    resv1: u32, // unused (must be zero)
+}
+</code></pre>
+<p>The meta extensions entries are defined as:</p>
+<pre><code class="language-{rust}">struct MetaExt {
+    tag: u64,
+    value: u64,
+}
+</code></pre>
+<p>The tag field specifies which extension this is, and the value field is dependent on the extension.
+Tags have a simple constraint that if the top 32 bits are zero, then that is a value reserved for
+the system.</p>
+<h2 id="the-twizzler-object-crate"><a class="header" href="#the-twizzler-object-crate">The twizzler-object Crate</a></h2>
+<p>The twizzler-object crate provides a foundation and interfaces for interacting with Twizzler
+objects. It exports a selection of core types and traits that make it possible to build a
+higher-level management system (if required):</p>
+<ul>
+<li>The metadata types defined above (may be reexported from the twizzler-abi crate).</li>
+<li>Object creation, deletion, and lifetime controls.</li>
+<li>The <code>Object&lt;T&gt;</code> type.</li>
+<li>Invariant pointers.</li>
+<li>Object Safety trait.</li>
+</ul>
+<h3 id="object-safety"><a class="header" href="#object-safety">Object Safety</a></h3>
+<p>The crate provides an auto marker trait: ObjSafe. The ObjSafe trait denotes two things:</p>
+<ul>
+<li>The data structure does not contain a non-invariant pointer.</li>
+<li>The data structure ensures that mutation is possible only via the twizzler-nando crate.</li>
+</ul>
+<p>The first is done by <code>impl&lt;T&gt; !ObjSafe for *const T</code> (etc), and the second is done by implementing
+<code>!ObjSafe</code> for UnsafeCell. Any memory that is located in an object should implement
+ObjSafe (which happens automatically usually). Of course, a data structure may unsafely implement
+ObjSafe.</p>
+<h3 id="the-basetype-trait"><a class="header" href="#the-basetype-trait">The BaseType trait</a></h3>
+<p>Object base types have a few constraints on top of simple object safety. They must be able to prove
+that some persistent value stored in memory is a valid instance of the type without any provenance,
+and they must provide an initialization mechanism for creating objects. The trait contains the
+following:</p>
+<pre><code class="language-{rust}">trait BaseType {
+    /// Constructs a Self, optionally using some arguments.
+    fn init&lt;T&gt;(args: T) -&gt; Self;
+    /// List of all tag, version pairs supported by this type.
+    fn tags() -&gt; &amp;'static [(Tag, Version)];
+}
+</code></pre>
+<p>A BaseType's init function is called by the object creation function as a way to create the initial
+object's base. An additional mechanism for creating an object by running an arbitrary transaction
+will also be supported.</p>
+<p>The tags and version information is used as a runtime check for <code>Object&lt;T: BaseType&gt;::base()</code>, to
+ensure that an object actually has a <code>T</code> at its base. The version information is currently matched
+against, but unused, with the purpose of later implementing an upgrade mechanism.</p>
+<h3 id="objectt"><a class="header" href="#objectt"><code>Object&lt;T&gt;</code></a></h3>
+<p>The key type the twizzler-object crate provides is the <code>Object&lt;T&gt;</code> type, which represents a single
+Twizzler object. This type exposes the following interfaces:</p>
+<pre><code class="language-{rust}">fn id(&amp;self) -&gt; ObjID;
+fn init_id(id: ObjID, prot: Protections, flags: InitFlags) -&gt; Result&lt;Self, InitError&gt;;
+fn base(&amp;self) -&gt; &amp;T;
+</code></pre>
+<p>Note that the base function returns an immutable reference to the base, and there is no safe way to
+get a mutable reference. This is because all mutation should be done via the twizzler-nando crate.
+In addition to the above functions, the twizzler-object crate provides unsafe functions to get
+mutable references to (e.g.) the base, and functions to read immutable fields of the meta struct.</p>
+<h3 id="slots"><a class="header" href="#slots">Slots</a></h3>
+<p>A key interface provided by twizzler-object is management of slots of memory. This allows programs
+following pointers to reuse already-mapped object slots for new references, reducing kernel
+overhead. The exact interface is unstable, as it is intended to be used internally only to assist
+in the implementation of twizzler-nando.</p>
+<h3 id="standard-meta-extensions"><a class="header" href="#standard-meta-extensions">Standard Meta Extensions</a></h3>
+<p>Twizzler reserves meta extensions with a tag value that has the top 32 bits as all zero for system
+use and for standard universal extensions. Two system use values here are:</p>
+<ul>
+<li>null (tag = 0x0): This marks the end of the metaext array (which may be before the end as
+specified by <code>MetaData::metaexts</code>).</li>
+<li>tombstone (tag = 0xdeadbeef): A previous entry that has been deleted, and should be ignored. It
+may be reused, and it does not mark the end of the array.</li>
+</ul>
+<h4 id="size-tag-value-0x1"><a class="header" href="#size-tag-value-0x1">Size (tag value: 0x1)</a></h4>
+<p>Some objects may have a notion of &quot;size&quot;, where the amount of data in the data region grows and
+shrinks such that there is always a maximal size (eg. file size in Unix). The value part of the
+extension contains this size value. The API will be explored in a future RFC.</p>
+<h3 id="invariant-pointers"><a class="header" href="#invariant-pointers">Invariant Pointers</a></h3>
+<p>An invariant pointer functions similar to a raw pointer in semantics. It does not convey lifetime or
+reference counting, and may be null.</p>
+<pre><code class="language-{rust}">// size: 64 bits
+#[repr(transparent)]
+struct InvPtr&lt;T&gt; {
+    ...
+}
+
+impl&lt;T&gt; InvPtr&lt;T&gt; {
+    fn null() -&gt; Self;
+    fn is_null(&amp;self) -&gt; bool; 
+    fn from_parts(fote: usize, off: u64) -&gt; Self;
+    fn raw_parts(&amp;self) -&gt; (usize, u64);
+}
+</code></pre>
+<p>The actual interesting aspects of the invariant pointers will be implemented in the twizzler-nando crate.</p>
+<h2 id="alternatives"><a class="header" href="#alternatives">Alternatives</a></h2>
+<p>The design of invariant pointers forms the basis for sharing and the global address space. Other
+invariant designs (fat pointers) have problems.</p>
+<p>The twizzler-object crate is small, and provides only a limited view of objects. Any part of an
+object that can mutate cannot be exposed by the twizzler-object crate at all, even via immutable
+reference. The only exception is atomically reading an invariant pointer, but even this requires
+interpretation via the FOT to be useful, and this requires interaction with twizzler-nando to be
+safe. The twizzler-object crate <em>does</em> expose <em>unsafe</em> functions for getting access to mutable
+object memory for the purposes of implementing twizzler-nando atop twizzler-object.</p>
+<h2 id="status"><a class="header" href="#status">Status</a></h2>
+<p>This document is a draft and must be completed. Initial exploratory work has begun in the
+<code>dbittman-object</code> branch on the twizzler repository.</p>
+<h2 id="future"><a class="header" href="#future">Future</a></h2>
+<p>Future, planned RFCs include:</p>
+<ul>
+<li>Names in FOT entries, and manual FOT entry specification.</li>
+<li>Append-type objects and the Size meta extension.</li>
+<li>The twizzler-nando crate.</li>
+<li>More on versioning.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="0001-rfc-process.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="0003-time.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="0001-rfc-process.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="0003-time.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

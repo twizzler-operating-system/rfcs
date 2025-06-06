@@ -1,0 +1,2149 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Twizzler RFCs</title>
+        <meta name="robots" content="noindex" />
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rfc-process.html"><strong aria-hidden="true">1.</strong> 0001-rfc-process</a></li><li class="chapter-item expanded "><a href="0002-object.html"><strong aria-hidden="true">2.</strong> 0002-object</a></li><li class="chapter-item expanded "><a href="0003-time.html"><strong aria-hidden="true">3.</strong> 0003-time</a></li><li class="chapter-item expanded "><a href="0004-low-level-device-model.html"><strong aria-hidden="true">4.</strong> 0004-low-level-device-model</a></li><li class="chapter-item expanded "><a href="0005-driver-model.html"><strong aria-hidden="true">5.</strong> 0005-driver-model</a></li><li class="chapter-item expanded "><a href="0006-dma.html"><strong aria-hidden="true">6.</strong> 0006-dma</a></li><li class="chapter-item expanded "><a href="0008-twizzler-monitor.html"><strong aria-hidden="true">7.</strong> 0008-twizzler-monitor</a></li><li class="chapter-item expanded "><a href="0011-random.html"><strong aria-hidden="true">8.</strong> 0011-random</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Twizzler RFCs</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="the-twizzler-rfcs-book"><a class="header" href="#the-twizzler-rfcs-book">The Twizzler RFCs Book</a></h1>
+<ul>
+<li><a href="https://github.com/twizzler-operating-system/twizzler/issues/0024">Time Subsystem (twizzler-operating-system/twizzler#0024)</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><ul>
+<li>Start Date: 2020-06-01</li>
+</ul>
+<p>This document copied and modified from the Rust Community's RFC
+0002-rfc-process.md.</p>
+<h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
+<p>The &quot;RFC&quot; (request for comments) process is intended to provide a
+consistent and controlled path for new features to enter the language
+and standard libraries, so that all stakeholders can be confident about
+the direction the language is evolving in.</p>
+<h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
+<p>For Twizzler to become a mature platform we need to employ
+self-discipline when it comes to changing the system.  This is a
+proposal for a more principled RFC process to make it a more integral
+part of the overall development process, and one that is followed
+consistently to introduce features to Twizzler.</p>
+<h1 id="detailed-design"><a class="header" href="#detailed-design">Detailed design</a></h1>
+<p>Many changes, including bug fixes and documentation improvements can be
+implemented and reviewed via the normal GitHub pull request workflow.</p>
+<p>Some changes though are &quot;substantial&quot;, and we ask that these be put
+through a bit of a design process and produce a consensus among the
+Twizzler community and the [core team].</p>
+<h2 id="when-you-need-to-follow-this-process"><a class="header" href="#when-you-need-to-follow-this-process">When you need to follow this process</a></h2>
+<p>You need to follow this process if you intend to make &quot;substantial&quot;
+changes to the Twizzler Operating System. What constitutes a
+&quot;substantial&quot; change is still evolving, but may include the following:</p>
+<ul>
+<li>Any user visible breaking change (API change).</li>
+<li>Anything that would violate the (Principle of Least Astonishment)[https://docs.freebsd.org/en/books/handbook/glossary/#pola-glossary]</li>
+<li>Removing user visible features.</li>
+</ul>
+<p>Some changes do not require an RFC:</p>
+<ul>
+<li>Rephrasing, reorganizing, refactoring, or otherwise &quot;changing shape
+does not change meaning&quot;.</li>
+<li>Additions that strictly improve objective, numerical quality
+criteria (warning removal, speedup, better platform coverage, more
+parallelism, trap more errors, etc.)</li>
+<li>Additions only likely to be <em>noticed by</em> other
+developers-of-twizzler, invisible to users-of-twizzler.</li>
+</ul>
+<p>If you submit a pull request to implement a new feature without going
+through the RFC process, it may be closed with a polite request to
+submit an RFC first.</p>
+<h2 id="what-the-process-is"><a class="header" href="#what-the-process-is">What the process is</a></h2>
+<p>In short, to get a major feature added to Twizzler, one must first get
+the RFC merged into the RFC repo as a markdown file. At that point the
+RFC is 'active' and may be implemented with the goal of eventual
+inclusion into Twizzler.</p>
+<ul>
+<li>Fork the RFC repo twizzler-operating-system/rfcs.git</li>
+<li>Copy <code>0000-template.md</code> to <code>text/0000-my-feature.md</code> (where
+'my-feature' is descriptive. don't assign an RFC number yet).</li>
+<li>Fill in the RFC</li>
+<li>Submit a pull request. The pull request is the time to get review of
+the design from the larger community.</li>
+<li>Build consensus and integrate feedback. RFCs that have broad support
+are much more likely to make progress than those that don't receive any
+comments.</li>
+</ul>
+<p>Eventually, somebody on the [core team] will either accept the RFC by
+merging the pull request, at which point the RFC is 'active', or
+reject it by closing the pull request.</p>
+<p>Whomever merges the RFC should do the following:</p>
+<ul>
+<li>Assign an id, using the PR number of the RFC pull request. (If the RFC
+has multiple pull requests associated with it, choose one PR number,
+preferably the minimal one.)</li>
+<li>Add the file in the <code>text/</code> directory.</li>
+<li>Create a corresponding issue on <a href="https://github.com/twizzler-operating-system/twizzler">Twizzler repo</a></li>
+<li>Fill in the remaining metadata in the RFC header, including links for
+the original pull request(s) and the newly created Twizzler issue.</li>
+<li>Add an entry in the <a href="../README.html#active-rfc-list">Active RFC List</a> of the root <code>README.md</code>.</li>
+<li>Commit everything.</li>
+</ul>
+<p>Once an RFC becomes active then authors may implement it and submit the
+feature as a pull request to the Twizzler repo. An 'active' is not a rubber
+stamp, and in particular still does not mean the feature will ultimately
+be merged; it does mean that in principle all the major stakeholders
+have agreed to the feature and are amenable to merging it.</p>
+<p>Modifications to active RFC's can be done in followup PR's. An RFC that
+makes it through the entire process to implementation is considered
+'complete' and is removed from the <a href="../README.html#active-rfc-list">Active RFC List</a>; an RFC that fails
+after becoming active is 'inactive' and moves to the 'inactive' folder.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="basic-objects"><a class="header" href="#basic-objects">Basic Objects</a></h1>
+<p>Objects in Twizzler form the basis for memory organization and data identity in a global address
+space. The core features that all objects share are:</p>
+<ul>
+<li>Invariant references. Pointers in an object can reference any other object regardless of location.</li>
+<li>Base structure. Objects have a &quot;known entry point&quot; that represents the overall type of the
+object.</li>
+<li>Metadata. Objects have a metadata structure that contains a core metadata.</li>
+<li>Access control. Objects may be read/write/execute depending on security context.</li>
+<li>Metadata extensions. An object may &quot;respond&quot; to various APIs.</li>
+</ul>
+<p>This document serves to outline the core object layout and the design and rationale of the
+twizzler-object crate. In short, twizzler-object provides safe functions to get always-immutable
+information about objects, unsafe functions to get references to any object memory, a low-level part
+of the runtime that manages memory slots for objects, and some type definitions for object layout.
+Any safe (transactional) mutability of objects will be done via twizzler-nando, which will be
+described in an upcoming RFC.</p>
+<h2 id="object-layout"><a class="header" href="#object-layout">Object Layout</a></h2>
+<p>Objects form a 1GB contiguous sparsely populated collection of pages, and are all identified by a
+unique 128-bit ID. Objects may be either mutable or immutable (this property is, itself,
+immutable)<sup class="footnote-reference"><a href="#1">1</a></sup>. An object may be either <strong>shared</strong> or <strong>volatile</strong>. A shared object is one that may
+be operated on by multiple <em>instances of a host</em><sup class="footnote-reference"><a href="#2">2</a></sup>. </p>
+<p>The high-level layout is:</p>
+<pre><code>+---+--------------------------+---+-------+
+| N | B                      F | M | E     |
+| U | A --&gt;              &lt;-- O | E | X --&gt; |
+| L | S --&gt;              &lt;-- T | T | T --&gt; |
+| L | E                      e | A | s     |
++---+--------------------------+---+---+---+
+</code></pre>
+<p>At the very start of an object, we devote an entire page to an unmapped page. This serves two
+purposes:</p>
+<ul>
+<li>Invariant pointers can be NULL and always refer to an unmapped page.</li>
+<li>An unmapped page between objects prevents runaway writes from escaping an object.</li>
+</ul>
+<p>After the null page we have the base of the object, which acts as a type for the object. The base
+can be <code>unit</code> if there is no meaningful base type. The rationale for having a base type is that it
+provides a simple way to represent a simple type and an entry point for objects. It allows the
+kernel to interact with some kinds of objects without needing to understand the more complex aspects
+of object layout.</p>
+<p>After the base, the object memory is
+application-defined up until the end of the foreign object table (FOT), which grows downward. Often the remaining memory
+after the base is given to a per-object allocator. Near the top of the object, there is a metadata
+struct that has the same layout for all objects. Following the metadata struct is a number of
+extensions that allow the object to specify that is responds to a certain API.</p>
+<p>The metadata region is needed because we need a mechanism for invariant pointers (the FOT), so it's
+not that the overhead of the metadata is justified, it's that it's required. Even for objects with
+no outgoing pointers, the metadata struct provides information for object ID derivation, base type
+type verification, and commonly used meta extensions.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Note that there's a chicken and egg problem here. An immutable object is immutable upon
+creation, and so it can only be created via the object create system call (which supports
+scatter-gather specification for how to construct object memory).</p>
+</div>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>An instance of a host includes 1) different computers, 2) different power cycles of a single
+computer, or 3) different kernels running on different heterogeneous devices in a single
+computer. Another way to think about it is that volatile objects fate-share with the running
+kernel they are associated with. Note that this doesn't mean that volatile objects are limited
+to a single host, but that they must <em>move</em> instead of being shared.</p>
+</div>
+<h3 id="meta-types"><a class="header" href="#meta-types">Meta types</a></h3>
+<p>The meta struct is defined as follows:</p>
+<pre><code class="language-{rust}">struct MetaData {
+    nonce: Nonce,
+    kuid: ObjID,
+    p_flags: u32,
+    flags: u32,
+    fotentries: u32,
+    metaexts: u32,
+    basetag: Tag,
+    version: Version,
+}
+</code></pre>
+<p>The nonce, kuid, and p_flags are related to security, the flags are used for future extension, the
+fotentries and metaexts fields count the number of FOT entries and meta extensions. The basetag and
+version fields are used for BaseType versioning and verification.</p>
+<p>The FOT starts just below the meta data struct, and is an array of entries defined as follows:</p>
+<pre><code class="language-{rust}">struct FOTEntry {
+    union {
+        id: ObjID,
+        nameinfo: { name: u64, resolver: u64 },
+    },
+    refs: u32, // ref count of this entry
+    flags: u32, // requested protections
+    resv0: u32, // unused (must be zero)
+    resv1: u32, // unused (must be zero)
+}
+</code></pre>
+<p>The meta extensions entries are defined as:</p>
+<pre><code class="language-{rust}">struct MetaExt {
+    tag: u64,
+    value: u64,
+}
+</code></pre>
+<p>The tag field specifies which extension this is, and the value field is dependent on the extension.
+Tags have a simple constraint that if the top 32 bits are zero, then that is a value reserved for
+the system.</p>
+<h2 id="the-twizzler-object-crate"><a class="header" href="#the-twizzler-object-crate">The twizzler-object Crate</a></h2>
+<p>The twizzler-object crate provides a foundation and interfaces for interacting with Twizzler
+objects. It exports a selection of core types and traits that make it possible to build a
+higher-level management system (if required):</p>
+<ul>
+<li>The metadata types defined above (may be reexported from the twizzler-abi crate).</li>
+<li>Object creation, deletion, and lifetime controls.</li>
+<li>The <code>Object&lt;T&gt;</code> type.</li>
+<li>Invariant pointers.</li>
+<li>Object Safety trait.</li>
+</ul>
+<h3 id="object-safety"><a class="header" href="#object-safety">Object Safety</a></h3>
+<p>The crate provides an auto marker trait: ObjSafe. The ObjSafe trait denotes two things:</p>
+<ul>
+<li>The data structure does not contain a non-invariant pointer.</li>
+<li>The data structure ensures that mutation is possible only via the twizzler-nando crate.</li>
+</ul>
+<p>The first is done by <code>impl&lt;T&gt; !ObjSafe for *const T</code> (etc), and the second is done by implementing
+<code>!ObjSafe</code> for UnsafeCell. Any memory that is located in an object should implement
+ObjSafe (which happens automatically usually). Of course, a data structure may unsafely implement
+ObjSafe.</p>
+<h3 id="the-basetype-trait"><a class="header" href="#the-basetype-trait">The BaseType trait</a></h3>
+<p>Object base types have a few constraints on top of simple object safety. They must be able to prove
+that some persistent value stored in memory is a valid instance of the type without any provenance,
+and they must provide an initialization mechanism for creating objects. The trait contains the
+following:</p>
+<pre><code class="language-{rust}">trait BaseType {
+    /// Constructs a Self, optionally using some arguments.
+    fn init&lt;T&gt;(args: T) -&gt; Self;
+    /// List of all tag, version pairs supported by this type.
+    fn tags() -&gt; &amp;'static [(Tag, Version)];
+}
+</code></pre>
+<p>A BaseType's init function is called by the object creation function as a way to create the initial
+object's base. An additional mechanism for creating an object by running an arbitrary transaction
+will also be supported.</p>
+<p>The tags and version information is used as a runtime check for <code>Object&lt;T: BaseType&gt;::base()</code>, to
+ensure that an object actually has a <code>T</code> at its base. The version information is currently matched
+against, but unused, with the purpose of later implementing an upgrade mechanism.</p>
+<h3 id="objectt"><a class="header" href="#objectt"><code>Object&lt;T&gt;</code></a></h3>
+<p>The key type the twizzler-object crate provides is the <code>Object&lt;T&gt;</code> type, which represents a single
+Twizzler object. This type exposes the following interfaces:</p>
+<pre><code class="language-{rust}">fn id(&amp;self) -&gt; ObjID;
+fn init_id(id: ObjID, prot: Protections, flags: InitFlags) -&gt; Result&lt;Self, InitError&gt;;
+fn base(&amp;self) -&gt; &amp;T;
+</code></pre>
+<p>Note that the base function returns an immutable reference to the base, and there is no safe way to
+get a mutable reference. This is because all mutation should be done via the twizzler-nando crate.
+In addition to the above functions, the twizzler-object crate provides unsafe functions to get
+mutable references to (e.g.) the base, and functions to read immutable fields of the meta struct.</p>
+<h3 id="slots"><a class="header" href="#slots">Slots</a></h3>
+<p>A key interface provided by twizzler-object is management of slots of memory. This allows programs
+following pointers to reuse already-mapped object slots for new references, reducing kernel
+overhead. The exact interface is unstable, as it is intended to be used internally only to assist
+in the implementation of twizzler-nando.</p>
+<h3 id="standard-meta-extensions"><a class="header" href="#standard-meta-extensions">Standard Meta Extensions</a></h3>
+<p>Twizzler reserves meta extensions with a tag value that has the top 32 bits as all zero for system
+use and for standard universal extensions. Two system use values here are:</p>
+<ul>
+<li>null (tag = 0x0): This marks the end of the metaext array (which may be before the end as
+specified by <code>MetaData::metaexts</code>).</li>
+<li>tombstone (tag = 0xdeadbeef): A previous entry that has been deleted, and should be ignored. It
+may be reused, and it does not mark the end of the array.</li>
+</ul>
+<h4 id="size-tag-value-0x1"><a class="header" href="#size-tag-value-0x1">Size (tag value: 0x1)</a></h4>
+<p>Some objects may have a notion of &quot;size&quot;, where the amount of data in the data region grows and
+shrinks such that there is always a maximal size (eg. file size in Unix). The value part of the
+extension contains this size value. The API will be explored in a future RFC.</p>
+<h3 id="invariant-pointers"><a class="header" href="#invariant-pointers">Invariant Pointers</a></h3>
+<p>An invariant pointer functions similar to a raw pointer in semantics. It does not convey lifetime or
+reference counting, and may be null.</p>
+<pre><code class="language-{rust}">// size: 64 bits
+#[repr(transparent)]
+struct InvPtr&lt;T&gt; {
+    ...
+}
+
+impl&lt;T&gt; InvPtr&lt;T&gt; {
+    fn null() -&gt; Self;
+    fn is_null(&amp;self) -&gt; bool; 
+    fn from_parts(fote: usize, off: u64) -&gt; Self;
+    fn raw_parts(&amp;self) -&gt; (usize, u64);
+}
+</code></pre>
+<p>The actual interesting aspects of the invariant pointers will be implemented in the twizzler-nando crate.</p>
+<h2 id="alternatives"><a class="header" href="#alternatives">Alternatives</a></h2>
+<p>The design of invariant pointers forms the basis for sharing and the global address space. Other
+invariant designs (fat pointers) have problems.</p>
+<p>The twizzler-object crate is small, and provides only a limited view of objects. Any part of an
+object that can mutate cannot be exposed by the twizzler-object crate at all, even via immutable
+reference. The only exception is atomically reading an invariant pointer, but even this requires
+interpretation via the FOT to be useful, and this requires interaction with twizzler-nando to be
+safe. The twizzler-object crate <em>does</em> expose <em>unsafe</em> functions for getting access to mutable
+object memory for the purposes of implementing twizzler-nando atop twizzler-object.</p>
+<h2 id="status"><a class="header" href="#status">Status</a></h2>
+<p>This document is a draft and must be completed. Initial exploratory work has begun in the
+<code>dbittman-object</code> branch on the twizzler repository.</p>
+<h2 id="future"><a class="header" href="#future">Future</a></h2>
+<p>Future, planned RFCs include:</p>
+<ul>
+<li>Names in FOT entries, and manual FOT entry specification.</li>
+<li>Append-type objects and the Size meta extension.</li>
+<li>The twizzler-nando crate.</li>
+<li>More on versioning.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><ul>
+<li>Feature Name: Time</li>
+<li>Start Date: 2022-06-01</li>
+<li>RFC PR: <a href="https://github.com/twizzler-operating-system/rfcs/pull/0003">twizzler-rfcs/rfcs#0003</a></li>
+<li>Twizzler Issue: <a href="https://github.com/twizzler-operating-system/twizzler/issues/0024">twizzler-operating-system/twizzler#0024</a></li>
+</ul>
+<h1 id="summary-1"><a class="header" href="#summary-1">Summary</a></h1>
+<p>This document introduces a time sub-system into Twizzler. The time sub-system lays down the foundation for Twizzler's notion of time and interfaces for user space programs. We introduce a trait that abstracts the hardware, new system calls in the kernel, and types to represent clocks.</p>
+<h1 id="motivation-1"><a class="header" href="#motivation-1">Motivation</a></h1>
+<p>We care about supporting user space programs, particularly Rust's standard library. A big part of that is providing APIs for time. User programs require services for time to do useful things such as benchmarking.</p>
+<p>Rust exposes an interface for time to user space through various types.</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/time/struct.Duration.html">Duration</a>: represents span of time (sec and ns, like timespec)</li>
+<li><a href="https://doc.rust-lang.org/std/time/struct.Instant.html">Instant</a>: a monotonic non-decreasing type that is implemented using <a href="https://doc.rust-lang.org/std/time/struct.Instant.html#underlying-system-calls">os-specific system calls</a>
+<ul>
+<li>e.g. <code>clock_gettime(CLOCK_MONOTONIC)</code> for Linux</li>
+</ul>
+</li>
+<li><a href="https://doc.rust-lang.org/std/time/struct.SystemTime.html">SystemTime</a>: represents an anchor in time from the unix epoch, non-monotonic
+<ul>
+<li>e.g. <code>clock_gettime(CLOCK_REALTIME)</code> for Linux</li>
+</ul>
+</li>
+</ul>
+<p>To support the current APIs in Rust, we need to provide an implementation of a monotonic clock and system clock. Twizzler currently provides <a href="https://twizzler-operating-system.github.io/nightly/doc/twizzler_abi/time/index.html">stubs</a> so that Rust can call into the kernel. </p>
+<p>The outcome of this work is to: </p>
+<ul>
+<li>Provide strong support for user space Rust applications using its time APIs</li>
+<li>Develop interfaces for Twizzler native programs</li>
+<li>Develop standard interfaces for the kernel to manage the hardware used for clocks.</li>
+</ul>
+<h1 id="guide-level-explanation"><a class="header" href="#guide-level-explanation">Guide-level explanation</a></h1>
+<p>The time interface exposed to users is traditional in the sense that all mechanisms in the kernel hide behind system calls. However, user programs are free to use libraries built on top of system calls, as is done so in the Rust standard library.</p>
+<p>One could imagine a simple Rust program that reads the elapsed time from a monotonic clock, ported over to Twizzler as so:</p>
+<pre><pre class="playground"><code class="language-rust">use std::time::Instant;
+fn main() {
+    // reads a moment in time
+    let now = Instant::now();
+    
+    // elapsed time since now
+    // this returns a Duration type
+    let elapsed_time = now.elapsed();
+    println!(&quot;Running main() took {} nanoseconds.&quot;, elapsed_time.as_nanos());
+}
+</code></pre></pre>
+<h2 id="clock-and-clockinfo"><a class="header" href="#clock-and-clockinfo">Clock and ClockInfo</a></h2>
+<p>To support the above functionality, Twizzler exposes a <code>Clock</code> abstraction to user space, and APIs revolve around this and <code>ClockInfo</code>. A <code>Clock</code> is a logical abstraction exposed to users that serves a particular purpose and ticks at a particular pace.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Clock {
+    info: ClockInfo,
+    group: ClockGroup,
+    id: ClockID
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>ClockInfo</code> is meant to describe a clock to users. It contains the last value read from the clock and properties of the clock, such as resolution.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct ClockInfo {
+    value: TimeSpan,
+    resolution: FemtoSeconds,
+    precision: FemtoSeconds,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The <code>value</code> is a <code>TimeSpan</code> type meant to represent a span of time. To support high precision clock hardware we represent some duration of time using two <code>u64</code> values, one for seconds, and another for the remainder in femtoseconds. Each value is its own type meant to represent the units. The <code>TimeSpan</code> type can easily be converted to support legacy timestamps such as <code>Duration</code> or <code>timespec</code>/<code>timeval</code>. <code>TimeSpan</code> exposes an interface similar to <code>Duration</code>.</p>
+<p>Thus, <code>ClockInfo</code> can be thought of as a POSIX <code>timespec</code>, but much better. It provides descriptions of what is being read, not just the value. This additional metadata is essential for scientific applications that want to use time as a tool for measuring some event. Applications need to know about the properties of clocks to get accurate measurements and reduce errors in experiments.</p>
+<p>We define <code>resolution</code> as the period of a clock tick. In other words, the rate at which a clock advances time. The <code>resolution</code> is expressed in <code>Femtoseconds</code> which is a simple wrapper type for a <code>u64</code> value. We choose to do this to make it clear what the semantic meaning of the value is. Furthermore, we define <code>precision</code> as the stability of the measurements, measured in <code>Femtoseconds</code>. Another value of interest is <code>accuracy</code> which tells us how close measurements are to the true value, based on some reference. This is useful in determining clock error, and will be explored in a future RFC.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[repr(transparent)]
+struct Seconds(u64);
+
+#[repr(transparent)]
+struct FemtoSeconds(u64);
+
+struct TimeSpan(Seconds, FemtoSeconds);
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>ClockGroup</code> are a set of enums that associate some semantic meaning to a clock. This gives users control of what type of clock they are reading from (when talking to the kernel), and they can expect certain invariants to be maintained, such as a clock being monotonic.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum ClockGroup {
+    Unknown,
+    Monotonic,
+    RealTime,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The kernel internally manages a list of usable clocks backed by hardware. The <code>id</code> identifies which clock source is used when interacting with the <code>Clock</code>. The <code>ClockID</code> is a simple wrapper type around a <code>u64</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[repr(transparent)]
+struct ClockID(u64);
+<span class="boring">}
+</span></code></pre></pre>
+<p>User programs can get time in a variety of ways. Either transparently using Rust's <code>std::time</code> crate, directly through system calls, or indirectly through methods exposed by the <code>Clock</code> type. </p>
+<h2 id="system-call-interface"><a class="header" href="#system-call-interface">System Call Interface</a></h2>
+<p>Revisiting our example from earlier, let's see how it would work when performing a system call:</p>
+<pre><pre class="playground"><code class="language-rust">use crate twizzler_abi::syscall::sys_read_clock_info;
+use crate clock::{ClockInfo, ClockSource, ReadClockFlags};
+
+fn main() {
+    // reads a moment in time
+    // returns a ClockInfo type
+    let now = sys_read_clock_info(ClockSource::BestMonotonic, ReadClockFlags::empty());
+    
+    // elapsed time since now
+    let later = sys_read_clock_info(ClockSource::BestMonotonic, ReadClockFlags::empty());
+    // ClockInfo.value() returns a TimeSpan type
+    let elapsed_time = later.value() - now.value();
+    println!(&quot;Running main() took {} nanoseconds.&quot;, elapsed_time.as_nanos());
+}
+</code></pre></pre>
+<p>A few things here. For starters, <code>sys_read_clock_info</code>, a new system call. We pass in the clock we want (<code>ClockSource</code>), and some flags. By default, this returns a <code>ClockInfo</code> object with all fields filled in. The returned <code>ClockInfo</code>, in this case, is generated from a <code>ClockGroup</code> specific clock. We will get to the use of <code>ClockID</code> later.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum ClockSource {
+  BestMonotonic,
+  BestRealTime,
+  ID(ClockID)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>There might be more than one piece of hardware that can be used to serve as the backing for a specific <code>ClockGroup</code>. Hence, <code>sys_read_clock_info</code> returns a value read from the best clock source available. The semantic meanings of <code>ClockSource</code> map directly to <code>ClockGroup</code>.</p>
+<p>Functionally, this is the same program, except it uses different abstractions. The <code>ClockInfo</code> type has a set of methods to return internal values. We calculate the elapsed time by subtracting two <code>TimeSpan</code> types that sampled different points in time from the same clock. Internally, <code>std::time</code> does something like this using the <code>Instant</code> type.</p>
+<p>Twizzler exposes a new set of system calls related to timekeeping. Other than <code>sys_read_clock_info</code>, which is helpful in reading a clock and learning about its properties, users need support to discover available clocks.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn sys_read_clock_info(source: ClockSource, flags: ReadClockFlags) -&gt; Result&lt;ClockInfo, ReadClockError&gt;;
+fn sys_read_clock_list(clock: ClockGroup, flags: ReadClockFlags) -&gt; Result&lt;VecDeque&lt;Clock&gt;, ReadClockError&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Should a user need detailed information about clocks exposed by the kernel to user space, they could use <code>sys_read_clock_list</code>. By default, it returns a list of clocks for every type of clock exposed (<code>ClockGroup</code>). All information in the <code>ClockInfo</code> except the current value is also returned. For clocks with more than one clock source, the first one is returned. Users can get a list of all clocks, and thus all clock sources, for a particular type by specifying the <code>ClockGroup</code> and setting the appropriate flag.</p>
+<p>If a user wants to read an arbitrary clock's value, they could specify the <code>ClockID</code> given to them by <code>sys_read_clock_list</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// reads all clocks as candidates for monotonic
+let clocks = sys_read_clock_list(ClockGroup::Montonic, ReadClockFlags::ClockGroup).expect(&quot;error message&quot;);
+
+// reference to the last clock in list
+// clock type has id of backing clock source
+let clk = clocks.last().unwrap();
+
+// reading from some arbitrary clock source
+let now = sys_read_clock_info(ClockSource::ID(clk.id()), ReadClockFlags::empty());
+
+// ClockInfo.value() returns a TimeSpan type
+println!(&quot;Current value of clock: {} nanoseconds.&quot;, now.value().as_nanos());
+<span class="boring">}
+</span></code></pre></pre>
+<p>The last thing a user might want to do is steer the clock to prevent drift. This is useful for systems that need precise values from an accurate clock. Real-world applications such as PTP/NTP need an interface like this. A full detailed explanation and implementation are out of scope for this RFC and will be explored in another RFC.</p>
+<h2 id="clock-interface"><a class="header" href="#clock-interface">Clock Interface</a></h2>
+<p>The last way of accessing a clock is by using Twizzler's native library for clocks. Each <code>Clock</code> has a set of operations that map directly to the system call interface exposed to time. </p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn read() -&gt; TimeSpan {}
+fn info() -&gt; ClockInfo {}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Our running example would look something like this:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+  // gets a reference to the monotonic clock
+  let clock = Clock::get(ClockGroup::Monotonic);
+
+  // read a moment in time
+  // returns TimeSpan 
+  let now = clock.read();
+
+  // elapsed time since now
+  let later = clock.read();
+  // ClockInfo.value() returns a TimeSpan type
+  let elapsed_time = later - now;
+  println!(&quot;Running main() took {} nanoseconds.&quot;, elapsed_time.as_nanos());
+}
+</code></pre></pre>
+<p>The benefit of doing things this way is that users interact with time at a much higher level than the system call interface, and they are given useful clock metadata. If all a user cares about is the passage of time, then <code>Instant</code> should suffice. However, if they are curious about the precision or accuracy of a clock, then this interface is one way of doing so. It is much cleaner.</p>
+<h1 id="reference-level-explanation"><a class="header" href="#reference-level-explanation">Reference-level explanation</a></h1>
+<p>Twizzler needs an abstraction over hardware used for timekeeping to support the interfaces exposed to users. The purpose of the abstraction in Twizzler is so that the kernel can support different types of hardware. Time can come from many sources: some counter or programmable timer on the processor or board. Another thing the kernel needs is standard interfaces to manage timekeeping hardware.</p>
+<h2 id="clockhardware-and-ticks"><a class="header" href="#clockhardware-and-ticks">ClockHardware and Ticks</a></h2>
+<p>The kernel achieves both of these through the <code>ClockHardware</code> trait defined as follows:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait ClockHardware {
+    fn read(&amp;self) -&gt; Ticks;
+    fn info(&amp;self) -&gt; ClockInfo;
+    // start, isEnabled, callback, etc.
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Rather than having a concrete type, we provide an interface implemented by different architectures for different time sources. <code>ClockHardware</code> exposes methods to read time or get a description of the hardware backing it. This leaves more room to introduce other useful methods, such as disabling/enabling a hardware timer. </p>
+<p>The necessary interfaces will be clear as we integrate this design with the existing kernel code. For example, the kernel currently has a stat clock which is programmed through a number of somewhat ad-hoc APIs. The idea would be to use this to manage the hardware backing the stat-clock in a hardware-agnostic way.</p>
+<p>The purpose of <code>read</code> is to read a value provided by hardware, which requires some assembly, and returns <code>Ticks</code> meant to represent raw time:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Ticks {
+    value: u64,
+    rate: FemtoSeconds
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>Ticks</code> represent some duration on the clock. The width of <code>value</code>, which is 64-bits, is not fundamental and could change. The <code>value</code> can be scaled to some unit of time by multiplying the <code>rate</code> of the time source. This multiplication operation produces a <code>TimeSpan</code>.</p>
+<p>If we were on an x86-64 machine for example, and we wanted to use the TSC as <code>ClockHardware</code>, <code>read</code> would return the value of the TSC. Internally <code>read</code> would call the <code>rdtsc</code> instruction and return the value reported by hardware as <code>Ticks</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl ClockHardware for TSC {
+    fn read(&amp;self) -&gt; Ticks {
+        let t = unsafe { x86::time::rdtsc() };
+        Ticks { value:t , rate: self.resolution() }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>Ticks</code> can be converted to a <code>TimeSpan</code> which is helpful to user space. <code>info</code> generates a <code>ClockInfo</code>, which describes the properties of the hardware timer. This is done in a time source specific way.</p>
+<h2 id="integration"><a class="header" href="#integration">Integration</a></h2>
+<p>The kernel maintains a system-wide list of time sources (<code>TICK_SOURCES</code>) building on these abstractions. <code>TICK_SOURCES</code> is implemented as a vector or an array of <code>ClockHardware</code>. One can think of this as an array of methods determined at runtime, based on the system configuration.</p>
+<p><code>TICK_SOURCES</code> is generated when Twizzler starts up in <code>kernel_main</code> and calls <a href="https://github.com/twizzler-operating-system/twizzler/blob/main/src/kernel/src/main.rs#L112"><code>clock::init();</code></a>. The kernel enumerates all hardware time sources available, and chooses which <code>ClockHardware</code> to serve as the backend that supports a particular <code>Clock</code> exposed to user space (e.g. Monotonic).</p>
+<p>The enumeration of hardware is machine/architecture-specific. Moreover, the materialization of clocks exposed to user space will require an algorithm that understands the requirements of the clock and the functionality provided by the hardware. This is planned to be explored in a future RFC. For now, we could use well-known clock sources for specific platforms.</p>
+<p>Integrating this into the kernel would be done using a set of files:</p>
+<pre><code>&lt;root&gt;/src/kernel/src/
+  arch/
+    x86/
+      tsc.rs // implements clock based on tsc
+      processor.rs // find/save ref to clocks on processor
+    aarch64/
+    mod.rs // decides what to compile
+  machine/
+    pc/dummy.rs // some clock source on platform
+    morello/
+  clock.rs // probing hw clocks (hw/config specific)
+  time.rs // abstracting hw clock sources
+  main.rs // initialize clock subsystem 
+</code></pre>
+<p>For each architecture subdirectory, we have a set of files implementing <code>ClockHardware</code> for specific hardware. Likewise, for timers on the motherboard, we have files that are board specific. The generic code lives in the main Twizzler source, which contains the <code>ClockHardware</code> trait and functions to initialize the time sub-system. At compile time, we decide what architecture to compile to and thus what time code we need to run. At run time, we discover hardware and choose the implementation as appropriate.</p>
+<p>Circling back to our example from earlier, where a user program reads a monotonic clock, we could imagine that the time stamp counter (TSC) backs that clock on an x86 platform. A peek behind the curtain of Rust's <code>std::time</code> call to <code>Instant::now()</code> would look something like this:</p>
+<pre><pre class="playground"><code class="language-rust">use std::time::Instant;
+fn main() {
+  // reads a moment in time
+  let now = Instant::now();
+    // calls into os-implementation
+    let ci = sys_read_clock_info(ClockGroup::Monotonic, 0, ReadClockFlags::empty());
+    //======== jump to kernel space =========
+      // os looks up the ClockHardware backing this clock
+      USER_CLOCK[clock as usize].info();
+      // time source specific generation of ClockInfo
+      ClockHardware.info(self)
+      // read the value given by hardware
+      let t = self.read()
+      // reading TSC (implementation)
+      let tsc = unsafe { x86::time::rdtsc() };
+      Ticks { value: tsc , rate: self.resolution() }
+      // generate ClockInfo from value read
+      ClockInfo::new(
+       TimeSpan::from(t), // conversion to TimeSpec
+       ClockGroup::Monotonic, 
+      //  ...
+      )
+    //======== back to user space ========
+    // read value from ClockInfo returned from sys_read_clock_info
+    let now = ci.value()
+    // Instant implemented as a TimeSpan
+    return now;
+
+  // elapsed time since now
+  // this returns a Duration type
+  let elapsed_time = now.elapsed();
+  println!(&quot;Running main() took {} nanoseconds.&quot;, elapsed_time.as_nanos());
+}
+</code></pre></pre>
+<p>To illustrate this more clearly, we could imagine that the call stack up until the TSC is read would look something like this:</p>
+<pre><code>0: [kernel] x86::time::rdtsc()
+1: [kernel] x86_64::tsc::ClockHardware::read()
+2: [kernel] x86_64::tsc::ClockHardware::info()
+3: [user]   twizzler_abi::syscall::sys_read_clock_info()
+4: [user]   std::time::Instant::now()
+5: [user]   main()
+</code></pre>
+<p>The actual calls in a real implementation would look different. We omit checks for values provided by users, and more efficient, possibly serialized reads of time.</p>
+<h1 id="drawbacks"><a class="header" href="#drawbacks">Drawbacks</a></h1>
+<p>The biggest drawback might be the cost of abstraction. We plan to use Rust's dynamic dispatch, which involves a vtable call to the underlying interface. This layer of direction may or may not be expensive for time APIs. There might be a way around this and have the compiler statically compile all function calls, but it is unclear if possible. </p>
+<p>Another source of overhead is that all interfaces with time require a system call. This can be optimized later for some things, such as reading a clock by exposing read-only memory to user space, similar to a <a href="https://en.wikipedia.org/wiki/VDSO">vDSO</a></p>
+<p>Using 64 bits for the implementation of <code>Ticks</code> may be relatively large for embedded. Likewise, for the standard library implementation of Rust's <code>Duration</code> 64 bits is a lot. For most instances of Twizzler, this should not be a problem.</p>
+<h1 id="rationale-and-alternatives"><a class="header" href="#rationale-and-alternatives">Rationale and alternatives</a></h1>
+<p>This design offers flexibility and provides standard interfaces in the kernel. We can implement <code>ClockHardware</code> for any hardware. Having a standard interface also makes porting easier. Not doing things this way makes this part of the system harder to maintain.</p>
+<p>We have considered other legacy designs and some of them have their <a href="0003-time.html#prior-art">downfalls</a>.</p>
+<h1 id="prior-art"><a class="header" href="#prior-art">Prior art</a></h1>
+<p>It is pretty standard in Rust to use traits to abstract hardware. Such is the case for many <a href="https://github.com/rust-embedded/embedded-hal">projects</a> in the Embedded Rust community. </p>
+<p>As far as time is concerned, the <a href="https://github.com/FluenTech/embedded-time">Embedded Time</a> crate and <a href="https://github.com/tock/tock/blob/master/doc/reference/trd105-time.md">Tock Time HIL</a> are related. Both abstract over hardware used as time sources, have tick and frequency abstractions, and Tock provides a notion of a clock. However, they are not general purpose. </p>
+<p>They do not provide interfaces for programming hardware used for timekeeping. We may use aspects of their design in our work, but we cannot directly use these crates as presented. Another downfall is that they do not describe the time source, which is necessary if applications want to consider the accuracy of their time measurements. Our goals are to provide something general purpose and high level.</p>
+<p>Linux provides system calls for accessing monotonic and real-time clocks with <a href="https://linux.die.net/man/3/clock_gettime"><code>clock_gettime</code></a>. The way we read time is similar, except that we provide more useful metadata to users with <code>ClockInfo</code> instead of <code>timespec</code>. Other researchers in the community have noted the importance of time as a tool and the shortcomings of <code>timespec</code>. Having additional information available, such as accuracy or clock error, is critical to science. Not knowing the properties of clocks can lead to errors in experiments and hurt reproducibility <a href="0003-time.html#1">[1]</a>.</p>
+<h2 id="resources-on-time"><a class="header" href="#resources-on-time">Resources On Time</a></h2>
+<p>Other than the paper mentioned above on the importance of time as a tool, George Neville-Neil gives a good overview of the importance of time and why we need an interface to adjust time <a href="0003-time.html#2">[2]</a>. Not only that, but synchronized clocks are important in many distributed systems. The FAQ page on NTP is also a good resource.</p>
+<p><a id="1">[1]</a> Najafi, Ali, Amy Tai, and Michael Wei. &quot;Systems research is running out of time.&quot; Proceedings of the Workshop on Hot Topics in Operating Systems. 2021. https://dl.acm.org/doi/pdf/10.1145/3458336.3465293.</p>
+<p><a id="2">[2]</a>
+George Neville-Neil. 2015. Time is an Illusion., ACM Queue 13, 9 (November-December 2015), 57–72. https://doi.org/10.1145/2857274.2878574</p>
+<p><a id="3">[3]</a>
+Ulrich Windl, et al. 2006. The NTP FAQ and HOWTO:
+Understanding and using the Network Time Protocol. https://www.ntp.org/ntpfaq</p>
+<h1 id="unresolved-questions"><a class="header" href="#unresolved-questions">Unresolved questions</a></h1>
+<p><strong>Resolved Through RFC</strong></p>
+<p>Currently, there is no guide on how to implement system calls. It is unclear where specific abstractions for user space should go, such as <code>ClockInfo</code>. However, after looking at the <a href="https://github.com/twizzler-operating-system/twizzler/pull/77">changes</a> to the <code>twizzler-abi</code> crate, it makes sense that the user space clock abstractions belong there.</p>
+<p><strong>Resolved Through Implementation</strong></p>
+<ul>
+<li>
+<p>We expect that the necessary interfaces for managing time will be revealed as we implement <code>ClockHardware</code> for different hardware timers. When integrating this with existing code, such as the stat clock, we may add more methods to <code>ClockHardware</code>. </p>
+</li>
+<li>
+<p>We may want an additional <code>ClockHardwareInfo</code> that describes not the logical clock but the hardware clock source. It could answer questions such as <em>&quot;is this monotonic?&quot;</em> It does not seem necessary at this point and could probably be integrated somewhere else. </p>
+</li>
+<li>
+<p>We also don't know the overall performance of the <code>Clock</code> APIs over calls through <code>std::time</code>. </p>
+</li>
+</ul>
+<p><strong>Related Issues</strong></p>
+<p>These are issues out of scope for this RFC, and could be addressed later, possibly in a future RFC.</p>
+<ul>
+<li>This RFC does not introduce a system to allow users to set timers/alarms. This feature could be useful for sleeping or setting a callback but is out of scope. </li>
+<li>We need an algorithm for adjusting sources of time. Standard protocols for this exist, such as NTP/PTP. Support for this requires an interface for adjusting the time that makes sense. Related to this is a definition for accuracy of a clock which is meaningful to the programmer.</li>
+<li>Selecting the appropriate source of time for a particular clock use case. Some hardware timers are unfit for one reason or another. Maybe the resolution is low, the cost of reading the timer is high, or the timer measurements are unstable.</li>
+<li>This design does not consider heterogeneous hardware or even differences in hardware among homogenous processors. This may or may not be an issue.</li>
+</ul>
+<h1 id="future-possibilities"><a class="header" href="#future-possibilities">Future possibilities</a></h1>
+<p>These APIs and abstractions are necessary to support user space applications. This feature is marked on the Twizzler roadmap as a milestone.</p>
+<p>Some additional features or optimizations are listed below that might be explored in the future if deemed necessary.</p>
+<ul>
+<li><code>ClockGroup</code> expanded to expose more logical clock types</li>
+<li>A system call to register hardware as a new clock source</li>
+<li>By design, we do not implicitly serialize operations that read timers. We could provide some flag that makes calls using arch-specific instruction barriers.</li>
+<li>Faster reads of clocks can be achieved through read-only shared memory with user space. </li>
+<li>We might want to be able to dynamically add a hardware source if, say, a CPU suddenly came online.</li>
+<li>We may explore designs that encapsulate the time sub-system within a microkernel-style user space service</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><ul>
+<li>Feature Name: low_level_device_model</li>
+<li>Start Date: 2022-07-14</li>
+<li>RFC PR: <a href="https://github.com/twizzler-operating-system/rfcs/pull/0004">twizzler-rfcs/rfcs#0004</a></li>
+<li>Twizzler Issue: <a href="https://github.com/twizzler-operating-system/twizzler/issues/82">twizzler-operating-system/twizzler#0082</a></li>
+</ul>
+<h1 id="summary-2"><a class="header" href="#summary-2">Summary</a></h1>
+<p>This RFC defines the interface that the kernel provides for userspace device management and driver
+implementation. It provides a generic interface that allows for userspace access to
+device memory and features through Twizzler objects, including memory-mapped IO (MMIO) registers,
+interrupt handling, device event messages, and structured device trees.</p>
+<blockquote>
+<p>This low-level interface is not intended to be used by application programmers, and even driver
+programmers are expected to use higher-level abstractions for some aspects of their work (coming in
+a future RFC), though many aspects of the interface presented here will be used directly.</p>
+</blockquote>
+<h1 id="motivation-2"><a class="header" href="#motivation-2">Motivation</a></h1>
+<p>Devices and drivers are, by and large, very complicated and (along with the surrounding
+infrastructure) make up large parts of modern OS kernels. In a more microkernel fashion, we would
+like to support userspace taking as much responsibility for device management and drivers as
+possible. However, due to the aforementioned complexity, providing a generic interface that allows
+for programming all possible devices is tricky -- we need to provide an interface that allows
+generic access to device memory (and/or IO ports), interrupt progamming services, etc., all while
+trying to minimize the responsibility of in-kernel code to handle these cases.</p>
+<p>This RFC does not attempt to describe a higher-level, more convenient driver-programming API set;
+that is planned for a future RFC. Instead, we will cover only the basic user-kernel interface for
+device abstractions.</p>
+<h1 id="guide-level-explanation-1"><a class="header" href="#guide-level-explanation-1">Guide-level explanation</a></h1>
+<p>Twizzler organizes devices and busses into a tree structure, where devices are children of busses,
+which are children of some root node (devices can have children too). These devices are each an
+object that contains information about the device as well as a mechanism of programming device
+interrupts. Each of these devices can also have a number of additional objects attached to it
+(called sub-objects) that provide access to device MMIO registers and bus-specific device
+information.</p>
+<p>This low-level interface is not intended to be used by application programmers, and even driver
+programmers are expected to use higher-level abstractions for some aspects of their work (coming in
+a future RFC), though many aspects of the interface presented here will be used directly.</p>
+<p>The meaning of &quot;device&quot; here is a little fluid, as it depends on the semantics of the hardware of
+the system. The following are &quot;devices&quot; according to this model:</p>
+<ul>
+<li>Any &quot;pseudo-devices&quot; that the kernel might create as an abstraction atop some internal mechanism.</li>
+<li>Any busses that the kernel identifies (e.g. a PCIe segment).</li>
+<li>Devices that sit on a bus that would be programmed as a device on a bus (e.g. present devices on
+a given bus:device.function on a PCIe segment, including bridges etc.).</li>
+</ul>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>As an example, lets consider a PCIe segment with several devices on it, say a NIC at <code>0:1.0</code>
+and an NVMe device at <code>0:2.0</code>. The resulting tree would be:</p>
+<pre><code>[Bus Root]
+  [PCIe Segment 0]
+    [0:1.0 (NIC)]
+    [0:2.0 (NVMe)]
+  [...additional PCIe segments...]
+  [...additional busses...]
+</code></pre>
+<p>Say the NVMe device has a region of device memory for programming the controller's MMIO registers, a
+region for the interrupt table,
+and the PCIe bus provides an info sub-object that contains PCIe information. The device would have
+sub-objects that describe the device, and sub-objects that map all the device's memory for access.</p>
+<p><strong>Why is the PCIe <em>bus</em> considered a <em>device</em>?</strong> The philosophy here is that the PCIe bus is
+programmed by accessing memory-mapped IO registers in device configuration space (including bridges,
+etc.). Thus we can allow userspace to program it like it's a device that has sub-devices.</p>
+<h1 id="reference-level-explanation-1"><a class="header" href="#reference-level-explanation-1">Reference-level explanation</a></h1>
+<p>The core of the device model centers around the <em>device object</em>, a Twizzler object whose base is of
+type <code>DeviceRepr</code>. Internally, these device objects are organized into a <em>Device Tree</em>, where each
+device object may have up to 65Ki children. The root of this tree is special object called the Bus
+Root, which has no data and only acts as the root of the device tree. Operations on a device object
+are abstracted by the Device type defined in the twizzler-driver crate.</p>
+<h2 id="tree-access"><a class="header" href="#tree-access">Tree access</a></h2>
+<p>The <code>Device</code> type exposes a function, <code>children(&amp;self)</code>, which returns an iterator that iterates
+over all this device's children. This is a wrapper around a kaction (see: sys_kaction) request to the kernel on the
+device object with the command <code>KactionCmd::Generic(KactionGenericCmd::GetChild(n))</code> where <code>n</code> is
+the nth child of the device in the tree. The kernel returns either the object ID of the child
+device, or <code>KactionError::NotFound</code> if <code>n</code> is larger than the number of children.</p>
+<p>The tree is manipulated via bus-specific APIs. For example, the PCIe bus uses userspace to perform
+device initialization, and thus exposes a kaction command for initializing a device on a given entry
+of the PCIe segment. Busses that support device removal can also expose functions to remove devices
+from the tree.</p>
+<h2 id="the-devicerepr-type"><a class="header" href="#the-devicerepr-type">The DeviceRepr type</a></h2>
+<p>The device object's base type is a DeviceRepr, which has the following layout:</p>
+<pre><code class="language-{rust}">#[repr(C)]
+pub struct DeviceRepr {
+    kso_hdr: KsoHdr,
+    device_type: DeviceType,
+    bus_type: BusType,
+    device_id: DeviceId,
+    interrupts: [DeviceInterrupt; NUM_DEVICE_INTERRUPTS],
+    mailboxes: [AtomicU64; MailboxPriority::Num as usize],
+}
+</code></pre>
+<p>The <code>DeviceType</code> enum can be either <code>Unknown</code> (and should be ignored), <code>Bus</code>, or <code>Device</code>. The
+<code>BusType</code> enum specifies which bus this device is attached to (or, it it's a bus, what type of bus
+this is). Finally, the last identifier is the <code>DeviceId</code>, which is a newtype wrapping a <code>u32</code> whose
+meaning is bus specific.</p>
+<p>In the example from earlier, the NIC would have a device ID that encodes 0:1.0 as a 32-bit integer,
+bus type PCIe, and device type Device.</p>
+<h3 id="interrupts"><a class="header" href="#interrupts">Interrupts</a></h3>
+<p>Each device supports up to <code>NUM_DEVICE_INTERRUPTS</code> interrupt entries. The actual mechanism for
+setting up interrupts with the kernel is bus-specific and relies on a small amount of in-kernel
+bus-driver code. The <code>DeviceInterrupt</code> struct is as follows:</p>
+<pre><code class="language-{rust}">#[repr(C)]
+pub struct DeviceInterrupt {
+    sync: AtomicU64,
+    vec: InterruptVector,
+    flags: DeviceInterruptFlags,
+    taken: AtomicU16,
+}
+</code></pre>
+<p>When a registered interrupt fires, the kernel's interrupt handler writes a non-zero value to <code>sync</code>
+and executes a thread_sync wake up on that word of memory, causing any user threads sleeping on that
+variable to wake up. The <code>DeviceInterruptFlags</code> field a bitflags of size u16 and is currently
+unused. The <code>vec</code> field refers to the actual vector number allocated by the kernel, and can be used
+to program device interrupt funcionality (e.g. MSI or MSI-X in PCIe). Finally, the <code>taken</code> field is
+used to indicate that a given entry is used or free.</p>
+<h3 id="mailboxes"><a class="header" href="#mailboxes">Mailboxes</a></h3>
+<p>A device has several mailbox entries. These are distinct from interrupts in that they are raised by
+software (either in the kernel or not) and are statically initialized. Messages sent to device
+mailboxes are not specified in this RFC.</p>
+<p>The <code>DeviceRepr</code> has <code>MailboxPriority::Num</code> mailboxes, each a different priority level: High, Low,
+and Idle. Each mailbox is a single <code>AtomicU64</code>. Submitting a message to the mailbox involves
+performing a compare-and-swap (CAS) operation, writing a non-zero value if the value is zero. Should
+the CAS fail, the submitter may perform a thread_sync sleep operation on the mailbox word. Should
+the CAS succeed, the submitter must perform a thread_sync wake operation on the mailbox word.
+Mailbox communication is not intended to be efficient.</p>
+<p>When checking the mailbox, driver software performs an atomic swap with 0, reading the value. A
+non-zero value means that the mailbox had a message. On swap returning non-zero, software must
+perform a thread_sync wake up on the mailbox. Software may sleep on this word when receiving.</p>
+<p>Driver software should prioritize the High priority mailbox above that of device interrupts, should
+prioritize the low
+priority mailbox below interrupts and High priority mailbox messages (but still ensure that the
+mailbox gets checked even if the device is constantly sending interrupts), and should prioritize the
+Idle mailbox lowest of all (and is allowed to ignore messages in this mailbox as it sees fit).</p>
+<h2 id="sub-objects"><a class="header" href="#sub-objects">Sub-objects</a></h2>
+<p>Each device has some number of sub-objects. Each sub-object can be one of the types specified by
+<code>SubObjectType</code>: <code>Info</code> or <code>Mmio</code>. An info sub-object is an object whose base data is bus- or
+device-specific. An mmio sub-object contains a header that describes the mapping, followed by mapped
+MMIO space in the object space for accessing device memory. The Device type provides functions for accessing these sub-objects:</p>
+<ul>
+<li><code>fn get_mmio(&amp;self, idx: u8) -&gt; Option&lt;MmioObject&gt;</code></li>
+<li><code>unsafe fn get_info&lt;T&gt;(&amp;self, idx: u8) -&gt; Option&lt;InfoObject&gt;</code></li>
+</ul>
+<p>The get_info function is unsafe because there is no checking that <code>T</code> is the correct type for the
+stored data. The fact that the index is a u8 means that there can be up to 256 sub objects per type.</p>
+<h3 id="mmio-sub-objects"><a class="header" href="#mmio-sub-objects">MMIO Sub-Objects</a></h3>
+<p>The <code>MmioObject</code> type wraps the mmio sub object and allows for accessing the information about this
+mapping and the mapping itself:</p>
+<ul>
+<li><code>fn get_info(&amp;self) -&gt; &amp;MmioInfo</code></li>
+<li><code>unsafe fn get_mmio_offset&lt;T&gt;(&amp;self, offset: usize) -&gt; &amp;T</code></li>
+</ul>
+<p>The MmioInfo struct describes information about this mapping, including its length, a
+device-specific <code>info</code> field, and the caching type of the mapping (uncachable, write-back, etc.).
+The <code>get_mmio_offset</code> function returns a reference to a location within this mmio memory mapping.</p>
+<h2 id="example-pcie"><a class="header" href="#example-pcie">Example: PCIe</a></h2>
+<p>PCIe is a common bus mechanism. It provides access to devices via a series of segments, each of
+which have a region of physical memory comprising its <em>configuration space</em>. Each device on the PCIe
+segment is assigned a <em>bus</em>, <em>device</em>, and <em>function</em> value that, together, indicate which page of
+the configuration space is associated with this particular device (the device's PCIe configuration
+registers). Each device on a PCIe bus has a set of six Base Address Registers (BARs) that describe the location
+and length of mappings to the device's memory (e.g. MMIO registers, interrupt tables, etc.).
+Finally, PCIe requires devices to support message-signaled interrupts (either via MSI or MSI-X).</p>
+<p>On startup, the kernel enumerates the PCIe segments (e.g. via the ACPI tables) and creates a
+bus-type device per segment. The segment's device has one info sub-object that specifies the
+information the kernel knows about the segment (start and end bus numbers). The device also has an
+mmio sub-object that maps the entire configuration space for the segment as Uncachable. Thus
+userspace can get to all configuration memory for this segment.</p>
+<p>The userspace device manager enumerates over all the PCIe segments, and for each one performs a
+standard PCIe probing algorithm by reading the configuration memory. For each device that it finds,
+it executes a kaction on the bus device object:
+<code>KactionCmd::Specific(PcieKactionSpecific::RegisterDevice)</code> and passes as argument the bus, device
+and function number encoded into a 64-bit value. The kernel then creates a new device entry as a
+child of the bus with the following sub-objects:</p>
+<ul>
+<li>Info sub-object: <code>PcieDeviceInfo</code> (which contains identifying information about the device).</li>
+<li>Mmio sub-object: this device's portion of the PCIe configuration space. The <code>info</code> field in the
+<code>MmioInfo</code> struct is 0xff.</li>
+<li>Mmio sub-object: one for each mapped BAR. The <code>info</code> field in the
+<code>MmioInfo</code> struct is the BAR number.</li>
+</ul>
+<p>When allocating an interrupt, software is responsible for programming the MSI or MSI-X tables and
+the device to generate a proper interrupt. To register a device interrupt with the kernel's PCIe
+driver, the kaction-specific command <code>PcieKactionSpecific::AllocateInterrupt</code> can be used. The
+64-bit argument is an encoding of which <code>DeviceInterrupt</code> in the <code>DeviceRepr</code> to use, and additional
+flags about isolation.</p>
+<p>This provides sufficient support for userspace to implement drivers for devices that allows
+programming of:</p>
+<ul>
+<li>Device interrupts via message-signaled interrupts.</li>
+<li>Access to the MMIO registers for the device's PCIe configuration space.</li>
+<li>Access to the MMIO registers for the device's BARs.</li>
+<li>Access to any other device memory exposed via PCIe.</li>
+</ul>
+<h3 id="the-nvme-device-from-the-example-at-the-start"><a class="header" href="#the-nvme-device-from-the-example-at-the-start">The NVMe device from the example at the start</a></h3>
+<p>The NVMe device I have maps the controller MMIO registers at BAR0 and the MSI-X table at BAR4. Thus
+its MMIO sub-objects would be:</p>
+<ul>
+<li>0: The PCIe configuration space, info = 0xff, uncachable.</li>
+<li>1: BAR0, info = 0, uncachable.</li>
+<li>2: BAR4, info = 4, uncachable.</li>
+</ul>
+<h1 id="drawbacks-1"><a class="header" href="#drawbacks-1">Drawbacks</a></h1>
+<p>One major drawback is some additional complexity over in-kernel device management. Since we now need
+to coordinate between userspace and the kernel for device management, it complicates the user-kernel
+interface. However, the vast majority of users can ignore this.</p>
+<p>By putting all driver software in userspace, we add overhead to interrupt handling, which now must
+(in the upper half anyway) schedule a thread and context switch in the worst-case. However, we
+expect driver software that is sensitive to this to implement at least partial polling for
+performance, and the additional overhead is minor anyway compared to monolithic kernel designs that
+still schedule threads to handle interrupts.</p>
+<h1 id="rationale-and-alternatives-1"><a class="header" href="#rationale-and-alternatives-1">Rationale and alternatives</a></h1>
+<p>A device model is a required part of the operating system. While the large-scale device model,
+mechanisms, driver APIs, and management are larger in scope than this RFC, here we lay out a base
+level of support for devices atop which we can build additional abstractions.</p>
+<p>This model is designed to provide a flexible model that requires little kernel support. The device
+tree model is a generic structuring of devices that can fit many different hardwares (they don't
+have to use the tree model and can just be flat). The interrupt model provides an abstraction that
+is based around how message-signaled interrupts are designed, which are commonly used. The
+sub-object abstraction is designed to allow for numerous memory mappings for devices that have a lot
+of them, and the info objects allow arbitrary information about devices to be encoded. Finally, the
+mailbox system is designed for software to communcate with drivers (or between drivers, or drivers
+and the bus) in a generic way.</p>
+<p>An alternative mechanism would be to implement it all in the kernel and run driver software via
+loadable modules. While this model doesn't preclude loadable modules, putting things in userspace
+dramatically simplifies the kernel.</p>
+<h1 id="prior-art-1"><a class="header" href="#prior-art-1">Prior art</a></h1>
+<ul>
+<li>Microkernel OSes often place driver responsibilities into userspace.</li>
+<li>Monolithic kernels instead have drivers in the kernel, either compiled in or loaded as modules.
+These drivers enjoy higher privilege, but must rely on kernel infrastructure for programming.</li>
+<li>The descriptions of PCIe were based on the latest official PCIe specifications.</li>
+</ul>
+<h1 id="unresolved-questions-1"><a class="header" href="#unresolved-questions-1">Unresolved questions</a></h1>
+<ul>
+<li>Is the interrupt mechanism sufficient (for now) to allow effective programming of devices?</li>
+<li>What is the correct security model to apply here? Probably a set a approved programs can access
+the device tree and that's it.</li>
+<li>Some PCIe devices should have their memory mapped as write-combinting (framebuffers, for example),
+but PCIe doesn't encode this information in the BARs. We need a way for userspace to perhaps remap
+a BAR as WC.</li>
+</ul>
+<h1 id="future-possibilities-1"><a class="header" href="#future-possibilities-1">Future possibilities</a></h1>
+<p>One major aspect that has been left out is some kind of generic &quot;reporting&quot; facility, where a driver
+could report device status back to the device manager (or the kernel) some generic status
+information. I have hesitated to design and include this, since I do not yet know what this would be
+used for or look like, and would prefer instead to save it for a future RFC.</p>
+<div style="break-before: page; page-break-before: always;"></div><ul>
+<li>Feature Name: driver_model</li>
+<li>Start Date: 2022-07-15</li>
+<li>RFC PR: <a href="https://github.com/twizzler-operating-system/rfcs/pull/5">twizzler-rfcs/rfcs#0005</a></li>
+<li>Twizzler Issue: <a href="https://github.com/twizzler-operating-system/twizzler/issues/83">twizzler-operating-system/twizzler#0083</a></li>
+</ul>
+<h1 id="summary-3"><a class="header" href="#summary-3">Summary</a></h1>
+<p>This RFC extends RFC0004 with a set of higher-level abstractions that drivers can use to program
+devices. It describes centralized abstractions surrounding event streams, request-response queues, asynchrony,
+and interrupts that will be provided by the twizzler-driver crate.</p>
+<h1 id="motivation-3"><a class="header" href="#motivation-3">Motivation</a></h1>
+<p>Writing device drivers is hard, in no small part due to complex models inherent to the asynchronous
+nature of interacting with the devices. Developers can make use of infrastructure surrounding device
+drivers in most operating systems to lessen this complexity. Devices can be (often, largely) modeled
+as separate computing devices that a) produce events for host software to consume, and b) receive
+and respond to commands sent by host software. Thus we want to provide a mechanism that allows these
+abstractions to be implemented by a majority of device drivers easily while providing a unified
+framework that higher-level aspects of a driver can use.</p>
+<h1 id="guide-level-explanation-2"><a class="header" href="#guide-level-explanation-2">Guide-level explanation</a></h1>
+<p>The twizzler-driver crate provides a high-level wrapper around a collection of abstractions designed
+to manage a single device (for definition of &quot;device&quot; and the <code>Device</code> type, see RFC0004), called a
+<code>DeviceController</code>. When taking control of a device, driver software can create a <code>DeviceController</code>
+(heretoafter referred to as &quot;the controller&quot;) from a <code>Device</code>. After this point, the controller
+manages the device and exposes several abstractions above the device:</p>
+<ul>
+<li>A <code>DeviceEventStream</code>, which provides a way to get a stream of events, including mailbox events
+and device interrupts (see RFC0004).</li>
+<li>A <code>DmaAllocator</code> (details for which will appear in a future RFC).</li>
+<li>A <code>RequestEngineManager</code>, which provides a way to submit requests to the device and
+asynchronously await responses.</li>
+</ul>
+<h2 id="device-event-stream"><a class="header" href="#device-event-stream">Device Event Stream</a></h2>
+<p>The device event stream provides an async interface for handling (upper-half) interrupts and
+mailbox messages. This means that some async executor is required; if this is too much overhead for
+the application, direct access to the underlying Device allows for lower-level interrupt handling
+without the async overhead.</p>
+<p>The event stream allows driver software to handle incoming events from the device. For example, a NIC that
+receives a packet transfers the packet data to a receive buffer and then submits an interrupt.
+Driver software will then see this interrupt via the event stream and can handle it appropriately.</p>
+<p>The <code>DeviceEventStream</code> provides an interface for allocating an interrupt, which return an
+<code>InterruptInfo</code>. Internally, the twizzler-driver crate handles the allocation of the interrupt
+according to the transport mechanism (e.g. PCIe MSI/MSI-X) and registration with the kernel. The
+<code>InterruptInfo</code> type exposes an async function <code>next</code> which returns the non-zero u64 value of the
+next interrupt that fires or None if the interrupt is removed. Thus driver software can handle a
+stream of interrupts as follows:</p>
+<pre><code class="language-{rust}">let int = controller.events().allocate_interrupt(...).unwrap();
+while let Some(x) = int.next().await {
+    while still_work_to_do() {
+        // handle interrupt
+    }
+}
+</code></pre>
+<p>The <code>DeviceEventStream</code> also provides a method for accessing mailboxes, which can be used as
+follows:</p>
+<pre><code class="language-{rust}">loop {
+    handle_mailbox_message(controller.events().next_msg(MailboxPriority::High).await);
+}
+</code></pre>
+<p>As in RFC0004, it is up to driver software to ensure correct prioritization of mailbox receivers.</p>
+<h2 id="request-engine-manager"><a class="header" href="#request-engine-manager">Request Engine Manager</a></h2>
+<p>The other main abstraction is to model the device such that it receives requests and asynchronously
+responds. For example, submitting a packet for transmit to a NIC happens by the driver software
+constructing an entry in a transmit queue and then notifying the device that the queue has been
+appended to. After the device submits the packet, it responds by indicating that that queue entry
+has been consumed and sends an interrupt. Note that since this often requires interrupt, this
+abstraction sits logically above the event stream abstraction.</p>
+<p>Driver software can create a new <code>Requester</code> through the controller, which acts as a manager for
+inflight requests. The requester has a generic type that implements <code>RequestDriver</code>, which is a
+trait that implements device-specific logic for submitting a request. </p>
+<ul>
+<li><code>fn shutdown(&amp;self)</code> -- shuts down this requester, notifying the driver, and cancels any
+in-flight requests.</li>
+<li><code>fn is_shutdown(&amp;self) -&gt; bool</code> -- returns true if the requester is shutdown.</li>
+<li><code>async fn submit(&amp;self, requests: &amp;mut [SubmitRequest&lt;Driver::Request&gt;]) -&gt;</code>
+<code>Result&lt;InFlightFuture&lt;Driver::Response&gt;, SubmitError&lt;Driver::SubmitError&gt;&gt;</code> -- submits a
+number of requests to the device via the driver, and return a future for when the requests
+are completed.</li>
+<li><code>async fn submit_for_response(&amp;self, requests: &amp;mut [SubmitRequest&lt;Driver::Request&gt;]) -&gt;</code>
+<code>Result&lt;InFlightFutureWithResponses&lt;Driver::Response&gt;, SubmitError&lt;Driver::SubmitError&gt;&gt;</code> --
+same as submit but the output of the future contains a vector of responses (one for each
+request).</li>
+<li><code>fn finish(&amp;self, responses: &amp;[ResponseInfo&lt;Driver::Response&gt;])</code> -- called by the driver to
+indicate which requests have completed.</li>
+</ul>
+<p>The <code>Driver</code> in the API above is the generic in <code>Requester&lt;Driver: RequestDriver&gt;</code>. This trait is as
+follows:</p>
+<pre><code class="language-{rust}">#[async_trait::async_trait]
+pub trait RequestDriver {
+    type Request: Copy + Send;
+    type Response: Copy + Send;
+    type SubmitError;
+    async fn submit(&amp;self, reqs: &amp;[SubmitRequest&lt;Self::Request&gt;]) -&gt; Result&lt;(), Self::SubmitError&gt;;
+    fn flush(&amp;self);
+    const NUM_IDS: usize;
+}
+</code></pre>
+<p>Note: async functions in traits is unsupported by Rust at time of writing, so we use the async_trait
+crate here to make it possible to write this.</p>
+<p>The associated types <code>Request</code>, <code>Response</code>, and <code>SubmitError</code> refer to the types of objects that this requester
+will submit to the device, responses the device sends back, and errors that the request driver can
+generate when submitting requests.</p>
+<p>The <code>SubmitRequest</code> type is a wrapper around the driver's Request associated type that includes an ID
+of type u64. The number of inflight requests will not exceed <code>NUM_IDS</code>, and all IDs will be less
+than that value (this allows the driver to specify backpressure and queue limits). Similarly, the
+<code>ResponseInfo</code> type is a wrapper around the <code>Response</code> type that also includes the ID of the request
+that is associated with this response, and a boolean indicating if this response is considered an
+error or not.</p>
+<h3 id="example-1"><a class="header" href="#example-1">Example</a></h3>
+<p>Driver software is responsible for implementing the RequestDriver. As an example, say we have a NIC
+that has a transmit queue for packets. We submit to the transmit queue by writing entries starting at the
+head and then writing an MMIO register to indicate that the head has moved. Say the queue is 128
+entries long. When a queue entry has been handled, the NIC writes back to the queue entry a status
+word and sends an interrupt to indicate a new tail position. The implementation of the RequestDriver would:</p>
+<ul>
+<li>Set NUM_IDS to 128.</li>
+<li>Define Request to be whatever a transmit queue entry looks like.</li>
+<li>Define Response to be the status word.</li>
+<li>Define SubmitError to be an enum of possible submit errors.</li>
+<li>Implement submit such that it:
+<ul>
+<li>Keeps a map of queue position to <code>SubmitRequest</code> ID.</li>
+<li>Submits the requests. If it cannot submit them all, it internally
+asynchronously awaits until it can.</li>
+<li>Optionally writes the new head to the head MMIO register.</li>
+</ul>
+</li>
+<li>Implement flush to write the head register to the MMIO register.</li>
+<li>Implement an interrupt handler that runs when this queue's interrupt handling routine should be
+signaled. This routine goes through the queue starting from the old tail to the new tail and
+reads all the status words for those entries, constructing an array of <code>ResponseInfo</code> types,
+eventually calling <code>finish</code> on the requester. This routine may need to wake up the submit
+function after it reads out the status words and records the new queue tail.</li>
+</ul>
+<p>Another example we can consider is an NVMe driver, which differs from the NIC driver above by having
+a separate completion queue. This possibility is the reason behind the abstracted request IDs --
+this lets the driver and requester handle out-of-order responses.</p>
+<h3 id="usage"><a class="header" href="#usage">Usage</a></h3>
+<p>The requester uses this implementation to expose the interface above that lets higher-level driver
+software interact with the device via this async request-response API. For example, a caller could
+do the following:</p>
+<pre><code class="language-{rust}">let req = create_packet_tx_req();
+let mut sreq = SubmitRequest::new(req);
+
+let fut = requester.submit(&amp;mut [sreq]);
+let res = fut.await.unwrap(); // awaits until the requests are submitted (may be a SubmitError).
+let res2 = res.await; // awaits until the device responds to the requests.
+match res2 {
+    Done =&gt; {...} // all requests were handled, none error'd.
+    Shutdown =&gt; {...} // the requester shutdown while requests were in-flight.
+    Errors(x: usize) =&gt; {...} // all requests were handled, at least one error'd, all error occur after position x.
+}
+</code></pre>
+<p>Use of the <code>submit_for_response</code> function looks similar to the above, except <code>res2</code> could also be
+matched to <code>Responses(Vec&lt;Driver::Response&gt;)</code>. The order of responses matches the order of requests.
+The reason that you have to issue two <code>await</code>s is that one is for having submitted all requests, and
+the second is for all requests being responded to.</p>
+<h1 id="reference-level-explanation-2"><a class="header" href="#reference-level-explanation-2">Reference-level explanation</a></h1>
+<p>These abstractions will be implemented by the twizzler-driver crate, and will be optional features
+to allow for driver software that does not need them.</p>
+<h2 id="events"><a class="header" href="#events">Events</a></h2>
+<p>The device event stream is largely a straight-forward wrapper around the lower level device
+interrupt and mailbox mechanisms, presenting them as an asynchronous stream instead of something
+more akin to a condition variable. The future returned by <code>InterruptInfo</code>'s next function uses the
+twizzler-async crate along with the interrupt definitions discussed in RFC0004 to construct a
+blocking future that returns the next interrupt.</p>
+<p>The interrupt allocation routine operates with some bus-specific knowledge to properly allocate an
+interrupt for the device before constructing an <code>InterruptInfo</code>. On drop, the <code>InterruptInfo</code> calls
+back into the event stream manager to deallocate the interrupt, thus tying the lifetime of the
+interrupt to the <code>InterruptInfo</code> struct.</p>
+<p>The mailbox message system internally keeps a queue of messages that haven't been handled. This is
+so the event stream can receive the mailbox message and clear up the mailbox for reuse even if no
+thread has called <code>next_msg</code>. These queues should have a maximum size, causing old messages to be
+dropped if necessary. The <code>next_msg</code> function:</p>
+<ul>
+<li>Checks the mailboxes of all priorities, enqueuing any messages found there.</li>
+<li>Dequeues messages from the highest priority queue that has messages, if the queue is at least as
+high priority as <code>min</code>. Messages here are returned immediately.</li>
+<li>If no messages are present, blocks this async task on the arrival of new messages.</li>
+</ul>
+<p>Note: since High priority mailbox messages take priority over interrupts, interrupt next() functions
+will also check the High priority mailbox, enqueuing if a message is found.</p>
+<h2 id="requester"><a class="header" href="#requester">Requester</a></h2>
+<p>The requester internally keeps track of:</p>
+<ul>
+<li>Inflight requests.</li>
+<li>Available request IDs.</li>
+</ul>
+<h3 id="request-ids"><a class="header" href="#request-ids">Request IDs</a></h3>
+<p>Request IDs are a simple unique identifier for requests. When calling submit, the caller passes a
+slice of SubmitRequests, which internally contain an ID. The caller, however, is not responsible for
+assigning IDs -- that is handled internally (hence why it's a mutable slice).</p>
+<p>The available request IDs are managed by an AsyncIdAllocator, which exposes three functions (note:
+this is all completely invisible to the user):</p>
+<ul>
+<li><code>fn try_next(&amp;self) -&gt; Option&lt;u64&gt;</code></li>
+<li><code>async fn next(&amp;self) -&gt; u64</code></li>
+<li><code>fn release(&amp;self, id: u64)</code></li>
+</ul>
+<p>Both try_next and next get an available ID, but next asynchronously waits until one is available.
+Two adjacent calls to any next functions are not guaranteed to return adjacent ID numbers.</p>
+<h3 id="inflight-request-management"><a class="header" href="#inflight-request-management">Inflight Request Management</a></h3>
+<p>The submit function returns an InFlightFuture, and the submit_for_requests function returns an
+InFlightFutureWithResponses. These each output a SubmitSummary and a SubmitSummaryWithResponses when
+awaited. Each of these futures internally hold a reference to an InFlightInner that is shared with
+the requester, and manages the state for the inflight requests.</p>
+<p>The InFlightInner contains:</p>
+<ul>
+<li>A waker for the task that is awaiting the future.</li>
+<li>An <code>Option&lt;SubmitSummary&gt;</code> for returning to the awaiter when it's ready, and additional state to
+construct this value.
+<ul>
+<li>e.g. a map of request IDs to indexes in the submit slice (may be unused if not tracking
+responses).</li>
+<li>e.g. a vector of responses that gets filled out as responses come in (may be unused).</li>
+</ul>
+</li>
+<li>a count, counting how many requests have been responded to.</li>
+</ul>
+<p>The requester internally keeps a map of request IDs to InFlightInner so that it can match a response
+with an inflight that manages it.</p>
+<p>Finally, the requester's shutdown function shall ensure that, after internally recording the
+shutdown status so that future calls will fail, it drains all internal InFlightInners and fills out
+their ready values to indicate shutdown, after which it wakes any waiting tasks.</p>
+<h1 id="drawbacks-2"><a class="header" href="#drawbacks-2">Drawbacks</a></h1>
+<p>One major drawback to this design is overhead. Using these abstractions requires pulling in the
+twizzler-async runtime <em>and</em> tolerating the (small) overhead of async for interacting with the
+device. This may be hard to tolerate in embedded environments (async executor size may be too large)
+and extreme high performance environments (async overhead)<sup class="footnote-reference"><a href="#1">1</a></sup>.</p>
+<p>A counter argument here would be that these abstractions are optional, but the counter-counter
+argument could be that the convenience they offer may make them non-optional in practice, where most
+drivers use them, requiring their use even in embedded systems. However, in systems that are truly
+space-limited, one is often working within the confines of an exact hardware set, so manual
+implementation of small drivers is likely regardless, and the larger drivers used on server machines
+will not be applicable.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>This argument is less convincing to me. The interrupt handling routines, for example, only
+incur the async overhead when they are out of work. Polling or delaying calling the next()
+functions can nearly completely mitigate this overhead.</p>
+</div>
+<h1 id="rationale-and-alternatives-2"><a class="header" href="#rationale-and-alternatives-2">Rationale and alternatives</a></h1>
+<p>The main purpose here is to provide a common framework for common aspects of driver development,
+thus accelerating the creation of device driver software. By defining this RequestDriver trait, we
+allow driver software to be split into two parts: the lower half that submits requests on a queue,
+and the higher half, which submits requests via the Requester interface, simplifying driver software
+by handling the complexities of async and out-of-order responses. The use of async here is
+especially important, as it allows driver software to just submit requests and await responses.</p>
+<p>Several rationales:</p>
+<ul>
+<li>The request ID system is designed to allow the driver to internally manage its understanding of
+IDs and how they relate to the device queue(s). This makes it possible for the requester to
+internally manage in-flight state independent of the driver, and handle async and out of order
+responses.</li>
+<li>There is a separate flush function to allow for enqueuing a number of requests without incurring
+the overhead of actually notifying the device.</li>
+<li>The submit and submit_for_responses functions are async and both return another future, meaning
+one needs two awaits to get the SubmitSummary. This is because we separate the successful
+<em>submission</em> of requests from the completion. Imagine we want to submit 200 requests to a queue
+that has 128 entries. We'll have to wait at some point. Thus we allow the caller to await full
+submission and then later await responses if it likes (or it can drop the future and not get any
+responses or information).</li>
+<li>We separate submit and submit_for_response because collating the responses has additional
+overhead, and a given submit may not care about the actual responses. Thus we provide an option
+for just submitting and awaiting completion without recording responses.</li>
+</ul>
+<h1 id="unresolved-questions-2"><a class="header" href="#unresolved-questions-2">Unresolved questions</a></h1>
+<ul>
+<li>One unresolved question is in the ergonomics of building a driver that uses all these types that
+reference each other. I plan to dogfood this interface by way of an NVMe driver.</li>
+<li>The DmaAllocator is a major component of drivers, allowing the driver to talk about physical
+memory. That will be discussed in a future RFC.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><ul>
+<li>Feature Name: dma_and_device_mapping</li>
+<li>Start Date: 2022-08-12</li>
+<li>RFC PR: <a href="https://github.com/twizzler-operating-system/rfcs/pull/0006">twizzler-rfcs/rfcs#0006</a></li>
+<li>Twizzler Issue: <a href="https://github.com/twizzler-operating-system/twizzler/issues/0084">twizzler-operating-system/twizzler#0084</a></li>
+</ul>
+<h1 id="summary-4"><a class="header" href="#summary-4">Summary</a></h1>
+<p>This RFC introduces support for DMA (Direct Memory Access) and bus address mapping for device drivers by providing
+kernel support for setting up mappings for objects, kernel APIs for getting lists of physical or bus mappings for
+object pages, and twizzler-driver APIs for managing DMA objects and mappings in a memory safe manner.</p>
+<h1 id="motivation-4"><a class="header" href="#motivation-4">Motivation</a></h1>
+<p>DMA is a fundamental aspect of writing device drivers, as devices use DMA to transfer data to and
+from host memory. However, thinking of devices accessing host memory solely via single one-shot DMA
+transfers is an outdated and limited model. The goal of this RFC is to provide a unified mechanism
+for supplying devices with bus addresses that correspond to physical memory that backs object memory
+in such a way that drivers can program both &quot;streaming&quot; (e.g. buffers) and &quot;long-term-bidirectional&quot;
+(e.g. command rings) memory.</p>
+<h1 id="guide-level-explanation-3"><a class="header" href="#guide-level-explanation-3">Guide-level explanation</a></h1>
+<h2 id="considerations-for-dma"><a class="header" href="#considerations-for-dma">Considerations for DMA</a></h2>
+<p>When programs access memory in Twizzler they do so via accessing object memory, which involves an
+MMU translating some kind of object address to a physical address. On x86, for example, this
+involves a software translation to a virtual address followed by a translation via the Memory
+Management Unit (MMU) to a physical address. Similarly, when a device accesses memory, it emits a
+memory address (likely programmed by the driver) that may undergo no translation or some other
+translation on the bus before attempting to access host memory. There are two important
+considerations that are the result of this alternate (or no) translation:</p>
+<ul>
+<li><strong>Contiguous addresses</strong>. While object memory is contiguous (within an object), the physical
+memory that backs that object memory may not be. Thus devices and drivers need to be capable of
+handling access to memory in a scatter-gather manner.</li>
+<li><strong>Access Control</strong>. Access control can be applied differently between host-side driver software
+and devices. Thus driver software must be aware that it may have access to memory via the device
+that it should not directly. We can use devices like the IOMMU to limit this effect.</li>
+</ul>
+<p>In addition to the above, we need to consider the issue of coherence. While CPU caches are coherent
+across cores, devices accessing host memory do not necessarily invalidate caches. Thus we have to
+handle both flushing data to main-memory after writing before the device reads it and invalidating
+caches if a device writes to memory. Some systems automatically invalidate caches, but not all do.</p>
+<h3 id="memory-safety"><a class="header" href="#memory-safety">Memory Safety</a></h3>
+<p>Finally, we must consider memory safety, which is an issue because while we can control writes from
+host software to DMA buffers, we cannot necessarily control how <em>the device</em> will access that
+memory. To ensure memory safety of shared regions, we would need to ensure:</p>
+<ol>
+<li>The device and host software cannot both mutate shared state at the same time (thread safety).
+Note that this <em>may</em> be okay in some situations, such as atomic variables that are updated from
+the device without tearing possibility or touch neighboring memory, however encoding this at
+compile time to prove safety may be impossible in general.</li>
+<li>The device mutates data such that each mutation is valid for the ABI of the type of the memory
+region.</li>
+</ol>
+<p>Enforcing these at all times may cause overhead and increase API complexity. Another stance we could
+take is Rust's approach to &quot;external influences on memory&quot;, such as <a href="https://doc.rust-lang.org/std/os/unix/io/index.html#procselfmem-and-similar-os-features">accessing /proc/self/mem on
+UNIX</a>,
+which is basically to say that this is outside the scope of the compiler's ability to ensure safety.
+I think, though, that since programming shared access between driver software and the device is a
+fundamental part of driver software development, some middle ground that provides some safety is
+desireable, even if it means reaching for some unsafe here and there (possibly merely for efficiency).</p>
+<h2 id="using-dma-in-a-device-driver"><a class="header" href="#using-dma-in-a-device-driver">Using DMA in a Device Driver</a></h2>
+<p>Twizzler will provide an interface for making a single Twizzler object accessible to a device by way
+of the <code>DmaObject</code> type exposed by the twizzler-driver crate. The DmaObject can be created from any
+Twizzler object, and exposes APIs for ensuring coherence and memory safety. Let's take as example a
+device that has a command ring buffer that is used to submit commands and to indicate when a command
+has been completed. A command in the ring buffer can point to another DMA buffer that is used to
+transfer data, and may look like the following:</p>
+<pre><code class="language-{rust}">struct Command {
+    op: u32,
+    status: u32,
+    buffer: u64,
+}
+</code></pre>
+<p>The <code>op</code> field specifies some operation to perform (send packet, etc.), the <code>status</code> field specifies
+the result of the command (say, for example, is set to 1 when the command is completed and must be
+cleared to zero for a command to be processed). Finally, the <code>buffer</code> field points to the physical
+address of some buffer. Let's also imagine some mechanism for communicating to the device the head
+of the ring so that we might communicate to the device a collection of new commands to process via
+a write to some MMIO register. For the sake of simplicity, let's assume that the buffer is at most 1
+page long.</p>
+<p>Setting up some DMA regions may look like:</p>
+<pre><code class="language-{rust}">let object = create_new_object();
+let dma = DmaObject::new(object);
+
+let command_ring = dma.slice_region::&lt;Command&gt;(some_command_len, Access::BiDirectional, DmaOptions::default());
+let buffer = dma.slice_region::&lt;u8&gt;(some_buffer_len, Access::HostToDevice, DmaOptions::default());
+</code></pre>
+<p>At this point, both <code>command_ring</code> and <code>buffer</code> have types <code>DmaSliceRegion&lt;Command&gt;</code> and <code>DmaSliceRegion&lt;u8&gt;</code> 
+respectively. Note that we distinguish between <code>DmaRegion</code> and <code>DmaSliceRegion</code>. Both provide a
+similar purpose, but have slightly different signatures on some functions. For example, both provide
+a <code>with</code> function (see below), but the <code>DmaSliceRegion</code> allows specifying a sub-slice. The rest of
+this document will use <code>DmaRegion</code> to stand for both types to avoid duplication of specification.</p>
+<p>We can use <code>DmaRegion::pin()</code> to get a list of physical pages associated with the
+region so that we may program the device to operate on this command ring. Then, submitting a command
+would look like:</p>
+<pre><code class="language-{rust}">buffer.with_mut(0..0x1000, |buf| {
+    fill_out_buffer(buf);
+});
+// Grab a 'pin'of the buffer, which ensures that the associated physical addresses and IOMMU maps will remain
+// static until the dma object is dropped.
+let buffer_pin = buffer.pin().unwrap();
+// Get the physical address of the first page.
+let buffer_addr = buffer_pin[0].addr();
+// Fill out a new command.
+command_ring.with_mut(0..1, |ring| {
+    ring[0] = Command::new(buffer_addr);
+});
+increment_head();
+</code></pre>
+<p>A pin object can manually release the pages it refers to, but otherwise the lifetime of pinned
+physical memory is the same as the DmaObject itself. By tying pin lifetime to the DMA object and not
+the pin object reduces management complexity of
+avoiding accidentally programming a device with stale physical addresses.</p>
+<p>The <code>DmaRegion::with_mut</code> function runs a closure while ensuring coherence between host and device. Before the
+closure, it ensures any writes from the device are visible, and after running the closure, it
+ensures that any writes made by driver software are visible to the device. A similar function, <code>with</code>,
+allows driver software to read the DMA region and not write it, allowing the system to skip ensuring
+coherent writes from host to device.</p>
+<h2 id="simple-allocation"><a class="header" href="#simple-allocation">Simple Allocation</a></h2>
+<p>If a driver needs to allocate a large number of dynamically sized DMA regions, doing so with a
+single object may prove difficult as we can easily run out of space. Thus twizzler-driver also
+provides a type for managing a collection of DmaObjects all of a similar type: <code>DmaPool</code>. We can use
+it as follows:</p>
+<pre><code class="language-{rust}">let pool = DmaPool::new(DmaPool::default_spec(), Access::HostToDevice, DmaOptions::default());
+let region = pool.allocate::&lt;Foo&gt;(Foo::default()).unwrap();
+// Dropping region causes it to deallocate.
+</code></pre>
+<h2 id="coherence-models-and-memory-safety"><a class="header" href="#coherence-models-and-memory-safety">Coherence Models and Memory Safety</a></h2>
+<p>In the above example, we used default DMA options, which ensures the following:</p>
+<ol>
+<li>Writes by host software are readable by the device once the <code>with_mut</code> function returns.</li>
+<li>Coherence is synchronized at the start of the <code>with</code> or <code>with_mut</code> calls.</li>
+</ol>
+<p>More relaxed models are available that do not do any synchronization unless the driver explicitly
+calls <code>DmaRegion::sync</code>. Note that we are <em>not</em> ensuring that no memory access conflicts occur
+between the device and driver software, since that is not possible to do at compile time or
+runtime<sup class="footnote-reference"><a href="#1">1</a></sup>. We are further not ensuring that the device maintains the ABI of the <code>Command</code> type. In
+this example, this doesn't really matter, as all the constituents of this type are simple integers,
+but imagine instead that <code>status</code> was an enum with only a few defined values. The device could
+update the value of status to a non-defined value, which would cause problems.</p>
+<p>To avoid the type ABI problem, we require that a region be a type that implements the <code>DeviceSync</code>
+and <code>Copy</code> marker traits. The <code>DeviceSync</code> trait is a promise that the ABI for the type can handle
+any update to it that the device might make and that it can handle possible memory conflicts with writes
+from the device.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p><em>Efficiently</em>, anyway. We could use the IOMMU to ensure that physical addresses are only
+available for the device to access during certain windows. However, this would involve a LOT of
+system calls and IOMMU reprogramming, which is currently not terribly fast. Note, however, that
+as-written this API would allow for this kind of enforcement if we choose to do it in the
+future.</p>
+</div>
+<h2 id="shared-objects"><a class="header" href="#shared-objects">Shared Objects</a></h2>
+<p>One final consideration is for drivers that want to point devices towards object memory that exists
+within an object that is shared across different programs. The twizzler-driver library cannot (at
+this level of the system) enforce mutability rules for these objects. Thus driver software should
+use the manual sync operations to ensure coherence (of course, parts of the object modified via the
+<code>with</code> functions will still have coherence rules applied as normal, see above).</p>
+<h2 id="dmaoptions-and-access"><a class="header" href="#dmaoptions-and-access"><code>DmaOptions</code> and <code>Access</code></a></h2>
+<p>DmaOptions modify how a region (or pool, see below) of DMA memory is treated by the host. The
+options are a bitwise-or'd collection, with the following defined:</p>
+<ul>
+<li><code>UNSAFE_MANUAL_COHERENCE</code>. Default: No. If set, the <code>with</code> functions do not perform any coherence
+operations. </li>
+</ul>
+<p>The Access enum specified the direction of the DmaTransfers that will be made with this region, and
+can be used to optimize coherence and inform access controll for IOMMU mappings. The options are:</p>
+<ul>
+<li>HostToDevice -- for transfers in which the device reads.</li>
+<li>DeviceToHost -- for transfers in which the device writes.</li>
+<li>BiDirectional -- for transfers in which the device reads and writes.</li>
+</ul>
+<h1 id="reference-level-explanation-3"><a class="header" href="#reference-level-explanation-3">Reference-level explanation</a></h1>
+<h2 id="kernel-api"><a class="header" href="#kernel-api">Kernel API</a></h2>
+<p>Accessing physical mappings information is done, from consumers of the twizzler-driver API, via the
+<code>pin</code> function on a <code>DmaObject</code>. The pin function learns about physical mappings from the kernel by
+calling a KAction command on the underlying object for pinning pages, which returns a token along
+with information about physical addresses. That token is tied, in the kernel, to the list of
+physical mapping information that that call returns. After this call returns, the kernel ensures
+that the mappings information that it has returned stays correct (&quot;active&quot;) until the pin is manually released
+via another KAction call.</p>
+<p>Internally, the kernel will manage per-object information on which pages are pinned so as to not
+evict or change such pages. Ensuring that these active pins remain correct requires some interaction
+with the copy-on-write (COW) mechanism in the object copy functionality. In particular, pins do not get
+copied into new objects that source data from an existing object, however if a pin applies to a
+source object, that object is copied (via COW) to a new object, and the range that is copied
+intersects with the pin, <em>and</em> a write is performed to the pinned region in the source object <em>while
+the underlying pages are still shared for COW</em>, the kernel will need to copy the page for <em>all other
+objects</em> instead of just the source object. For this reason, we will break the kernel-side
+implementation into two feature gates:</p>
+<ol>
+<li>Basic pin support, but not supporting COW-intersecting-with-pins.</li>
+<li>Full support as described above.</li>
+</ol>
+<h2 id="userspace-implementation"><a class="header" href="#userspace-implementation">Userspace Implementation</a></h2>
+<p>Let's consider the examples in the previous section and discuss implementation.</p>
+<h3 id="dmaobjectslice_region-and-dmaobjectregion"><a class="header" href="#dmaobjectslice_region-and-dmaobjectregion"><code>DmaObject::slice_region</code> and <code>DmaObject::region</code></a></h3>
+<p>These provide simple ways to just return some object memory as a <code>[T; N]</code> or a <code>T</code>. They return a
+struct (DmaRegion) that just manages a typed region of memory of a size determined by T (and N), and expose the
+pin function.</p>
+<h3 id="pin"><a class="header" href="#pin"><code>pin</code></a></h3>
+<p>The pin function calls the kernel to setup a pin and then manages the pin information in memory,
+allowing it to be called multiple times without having to negotiate with the kernel each time. Note
+that pins are not released to the kernel when the DmaRegion is dropped; instead all pins on an
+object are released when the DmaObject is dropped.</p>
+<h3 id="with-and-with_mut"><a class="header" href="#with-and-with_mut"><code>with</code> and <code>with_mut</code></a></h3>
+<p>These functions provide access to the internal memory managed by a DmaRegion to a closure. Before
+the closure is run, it ensures coherence for the host reading the memory, and after the closure is
+run it ensures coherence for the device to read memory. The <code>with</code> variant may skip the second step.</p>
+<h3 id="pools-and-allocation"><a class="header" href="#pools-and-allocation">Pools and Allocation</a></h3>
+<p>Regions can also be gotten from a DmaPool, which internally manages a collection of DmaObjects
+(derived from objects that it creates as needed). All regions created this way share the DmaOptions
+with which the pool is created. Allocation is managed internally via a memory allocation algorithm,
+however all regions must be aligned on page size.</p>
+<h1 id="drawbacks-3"><a class="header" href="#drawbacks-3">Drawbacks</a></h1>
+<p>DMA is vital to any driver written for the vast majority of devices that we care about. However, the
+particular design choices herein do have some drawbacks:</p>
+<ol>
+<li>Pinning memory adds complexity to the eviction algorithms in the kernel and the pager, as they
+need to be made aware of pinned memory.</li>
+<li>There is currently no attempt to limit the amount of pinned memory an application can request,
+thus opening an easy door to denial of service attacks. We can mitigate this somewhat via access
+control.</li>
+<li>Currently we don't define a way to request that all physical addresses fit within 32 (or fewer)
+bits, as the kernel is not currently setup to do manage memory in a way that would make this
+easy. Ensuring physical addresses stay under the 4G mark is useful (mostly) for older hardware
+that cannot work with 64-bit addresses. Currently, we don't have any immediate need to support
+such hardware. If the need arises, however, we can extend the DmaOptions enum to include
+specifications for physical memory address limitations.</li>
+</ol>
+<h1 id="rationale-and-alternatives-3"><a class="header" href="#rationale-and-alternatives-3">Rationale and alternatives</a></h1>
+<h2 id="pinned-memory"><a class="header" href="#pinned-memory">Pinned Memory</a></h2>
+<p>The overall goal is to make it possible for userspace code to program devices to access physical
+memory. We want to stay within the overall Twizzler object model to do this, thus the API herein is
+focused around making it possible to create objects that we can then use for DMA transfers.</p>
+<h2 id="pin-leaks"><a class="header" href="#pin-leaks">Pin Leaks</a></h2>
+<p>One immediate concern is pin leaks. Since the pins must be manually released to the kernel by the
+library (not the user), we can imagine a device driver crashing and causing a section of object
+memory to be pinned forever (at least, until the kernel restarts). The decision to allow this,
+however, is intentional.</p>
+<p>Should a device driver crash, we have no guarantee on the state of the device that it was
+programming. It's entirely possible that the device be programmed with physical addresses that it
+may make use of after the device driver crashes, thus blindly writing to memory that, in the case
+that pins get removed if the program creating them crashes, may no longer refer to the object memory
+that was originally intended by the (now crashed) driver.</p>
+<p>Thus the choice of allowing leaks in the face of a driver malfunction is there to mitigate the
+possibility of corrupted memory. Of course, use of an IOMMU may be able to mitigate this, however I
+do not wish to rely on it, and this would also introduce many inefficiencies. If we prove to be able
+to efficiently make use of IOMMU hardware in the future, this design may change.</p>
+<h1 id="prior-art-2"><a class="header" href="#prior-art-2">Prior art</a></h1>
+<p>Basically every major operating system provides some API for setting up DMA transfers. Most of them
+are quite similar, largely relying on the driver to manually synchronize for coherence and/or
+specify directionality of transfers. Some (e.g. Linux) additionally classify a region of
+memory-to-be-DMA'd as fully coherent or streaming, usually using this information to specify caching
+type for memory mappings.</p>
+<p>Fuchsia uses a similar mechanism to what is outlined herein, also supporting pinned memory regions.
+There are a number of differences, however, that largely stem from our desire to (at least somewhat)
+follow Rust memory safety requirements. Fuchsia, in addition, does allow a limited ability to
+control contiguity of physical memory, which we do not (yet). </p>
+<p>FreeBSD and Linux both have a significantly different style of interface, stemming from the fact
+that they implement their device drivers in-kernel, and so their DMA interfaces can be tightly
+coupled with their virtual memory subsystem. The two systems differ in the details of how they
+control coherence and synchronization (single-versus-all-cpus, streaming-versus-coherent, and
+FreeBSD allowing finer control over sync operations) and how they control contiguity and maximum
+address size. Otherwise, the differences are largely down to API specifics and not really
+functionality, with the exception of FreeBSD supporting a recursive-like pattern of region
+configuration inheritance, which is kinda cool.</p>
+<p>Windows offers little additional insight into DMA operation and design tradeoffs, except
+as a case study of how not to name functions or other aspects of an API.</p>
+<h1 id="future-possibilities-2"><a class="header" href="#future-possibilities-2">Future possibilities</a></h1>
+<p>This RFC is only intended to cover &quot;dumb&quot; devices -- that is, devices that are fully programmed by
+the host software and, while they may interact with memory via DMA, do not really &quot;go off on their
+own&quot;. Essentially, most devices on the market that do things like NVMe, networking, etc. Such
+devices are fully controlled by the host and all memory access is either initiated by the same or
+initiated by the device to a pre-programmed section of memory, and the device can be thought of as a
+simple state machine.</p>
+<p>In future it may be better to model devices a fully separate machines that access
+physical memory cooperatively with the host CPU and run their own programs. Should we reach that
+future, we will probably need a new model for programming such devices that will exceed in needed
+richness the model presented here.</p>
+<div style="break-before: page; page-break-before: always;"></div><ul>
+<li>Feature Name: twizzler_monitor</li>
+<li>Start Date: 2023-08-30</li>
+<li>RFC PR: <a href="https://github.com/twizzler-operating-system/rfcs/pull/0008">twizzler-rfcs/rfcs#0008</a></li>
+<li>Twizzler Issue: <a href="https://github.com/twizzler-operating-system/twizzler/issues/0000">twizzler-operating-system/twizzler#0000</a></li>
+</ul>
+<h1 id="summary-5"><a class="header" href="#summary-5">Summary</a></h1>
+<p>This RFC describes the core functionality of what may be described as the &quot;core Twizzler monitor&quot; program. It proposes a formalized definition
+of:
+0. How we can have a flexible runtime system that enables users to run &quot;bare-metal&quot; against twizzler-abi, against a more complete runtime, and even swap out the runtime system if they like.</p>
+<ol>
+<li>How programs (including libraries which may expose &quot;nando&quot;s, either secure or not) are <strong>linked</strong> and formed into objects.</li>
+<li>How programs are <strong>loaded</strong>, including how they are isolated from each other.</li>
+<li>What a program's <strong>runtime</strong> looks like, including the execution environment, threading, etc, and how the monitor supports programs.</li>
+<li>How we achieve (optional) <strong>isolation</strong> between the loaded components of a running execution. </li>
+<li>How users might <strong>interact</strong> with this runtime at a high level.</li>
+</ol>
+<p>A huge portion of this program is, essentially, a dynamic linker, or will have to be. However, it's a dynamic linker that is supported by
+kernel-supported security contexts and gates, and a language (with runtime) that assists with both portability and abstraction.</p>
+<h1 id="motivation-5"><a class="header" href="#motivation-5">Motivation</a></h1>
+<p>As we are working towards an environment that enables programmers to write software for Twizzler, we need to set ourselves up
+now for an extensible and well-defined runtime system and execution environment. In particular, this work will dramatically
+improve the extensibility of the userspace parts of Twizzler and provide a core foundation upon which we can build higher-level
+and secure software. In fact, a number of items in our respective roadmaps depend heavily on the functionality described by this RFC.</p>
+<p>Additionally, this work will enable us to more easily use and demonstrate the usefulness of several core parts of the planned Twizzler programming
+model, namely Nandos and Secure Gates. We also plan, as part of this work, to reach a semi-stable version of twizzler-abi, engineering this crate so
+that the runtime can hook into core aspects of what Rust's standard library depend on and swap them out, allowing us more flexibility without having
+to recompile programs for different runtimes.</p>
+<p>Now, you may be asking, &quot;why do we need a monitor&quot;. Well, lets consider the <em>minimum</em> required secure environment that some sensitive software is running in.
+In particular, notice that, in a traditional system, we must trust the kernel, the toolchain, the standard library (and all linked-to libraries), and the dynamic linker.
+The issue of a trusted toolchain is out of scope of this RFC. We will focus instead on how we can ensure that the kernel, library, and dynamic linker can work together
+to provide isolation. As a result, the dynamic linker for Twizzler will be Twizzler specific. This isn't particularly weird -- most dynamic linkers have a bunch of OS specific 
+and arch specific code. Note that a traditional dynamic linker is already, kinda, a monitor, loading programs and libraries as required, etc.</p>
+<h1 id="guide-level-explanation-4"><a class="header" href="#guide-level-explanation-4">Guide-level explanation</a></h1>
+<p>The runtime is a program that acts as a security monitor and dynamic linker. It loads programs and libraries into memory and executes them. Any program
+or library that is loaded by the runtime is then under the control of that runtime. The runtime organizes programs and libraries that are loaded into
+<em>compartments</em>, each one providing a configurable level of isolation from the others for the programs and libraries residing within.</p>
+<h2 id="the-execution-environment"><a class="header" href="#the-execution-environment">The execution environment</a></h2>
+<p>The basic environment of a Twizzler program can be supported either by twizzler-abi directly or by a runtime which provides
+some additional support on top of the basic twizzler-abi functionality. This may, for example, include access to a more useful
+naming service, logging, debugging, networking, etc. Each piece of the system is defined as follows:</p>
+<ol>
+<li>The twizzler-kernel provides the basic kernel services. It should only be accessed through twizzler-abi.</li>
+<li>The twizzler-abi crate defines the interaction with the kernel, including syscall ABI, API, etc. It also defines the <em>Runtime</em> trait.</li>
+<li>The runtime trait provides an implementation of a twizzler runtime. It exposes the interface that Rust's standard library uses to interact with the runtime. A given implementation of runtime is selectable both at compile time <em>and</em> at load time.</li>
+<li>Twizzler ships with two runtimes: a default one provided by twizzler-abi that implements a bare minimum set of features to start up a program running against twizzler-abi. The second is the standard runtime that acts as a security monitor, dynamic linker, and program loader. It also facilitates secure gate calls between components.</li>
+</ol>
+<pre><code>+------------------------+   +-------------------+
+|&quot;Bare Metal&quot; environment|   |Runtime Environment|
++---------+-+------------+   +-------+-+---------+
+          | ^                        | ^
+          | |                        | |
+          v |                        v |
+     +----+-+-------+         +------+-+---------+
+     |              +--------&gt;+                  |
+     | twizzler-abi |         | twizzler-runtime |
+     |              +&lt;--------+                  |
+     +------+-+-----+         +------------------+
+            ^ |
+            | |
+            | v
+  +---------+-+-----+
+  |                 |
+  | twizzler-kernel |
+  |                 |
+  +-----------------+
+</code></pre>
+<p>Here are two examples of how a runtime may offer functionality over that of the twizzler-abi runtime:</p>
+<p><strong>Naming</strong>: The runtime provides a default service for resolving names into object IDs. This requires a fair bit of runtime to work, as it needs a service running to
+manage naming, persistence of naming, etc. However, we want Rust's std to be able to use this for paths too, so twizzler-abi needs to expose a hook for the more featureful
+runtime to provide that functionality. What, then, does the &quot;bare-metal&quot; environment get? Well, those programmers could still implement their own naming system or hook into
+one, but by default we'll have the twizzler-abi crate expose a read-only mapping of &quot;initrd&quot; names.</p>
+<p><strong>stdout/stderr</strong>: These, too, require a bit of runtime to make them as flexible as programmers generally expect them to be. The basic twizzler-abi runtime implements these by
+writing to the kernel log. What else could it do? The more featureful runtime could collect output, stream it to different programs, log it, etc.</p>
+<p>As a result, you can write a program for twizzler-abi and it is loadable into the more featureful runtime as well. The reverse may be true as well, though of course a program dependent
+upon a specific runtime may not function correctly elsewhere.</p>
+<h2 id="the-standard-runtime-loading-programs"><a class="header" href="#the-standard-runtime-loading-programs">The Standard Runtime: loading programs</a></h2>
+<p>A core piece of the runtime is a dynamic linker. In particular, the runtime monitor loads and links programs and libraries both at load and run times. This means that 
+the runtime needs to be able to load executable objects, map them, and (depending on the executable format) relocate them. Now, I'm not so crazy as to suggest we implement
+our own executable format. ELF is a sufficiently weird machine that we'll probably get all the functionality we need out of it.</p>
+<h3 id="so-whats-a-program"><a class="header" href="#so-whats-a-program">So, what's a program?</a></h3>
+<p>The runtime supports both statically linked executables (or, dynamically linked traditional executables) and libraries (dynamic linked objects).
+Executable programs have a defined entry point, libraries expose a set of symbols that are linked when the library is loaded. A program or library is contained within a single
+object that contains an ELF file. This file is parsed and mapped into memory via Twizzler object APIs (notably, the copy-from primitive is used heavily along with direct mapping).
+Note that not every ELF file will work. It does need to target Twizzler and link using the Twizzler linker script built into the Rust compiler's Twizzler support.</p>
+<h3 id="the-loading-process-and-example-in-a-virtual-address-space"><a class="header" href="#the-loading-process-and-example-in-a-virtual-address-space">The Loading Process: and example in a virtual address space</a></h3>
+<p>The monitor, when loading an executable program, does all the normal things a dynamic linker does, with the addition of a few things. First, it allows subcomponents of the
+program and libraries to isolate from each other even within the same address space (this uses security contexts and secure gates). Let's imagine we have the following setup:</p>
+<p>Program A links to libstd (S), libruntime (R), and a helper library, L. The resulting address space in Twizzler looks like:</p>
+<pre><code>+-----------------+
+|                 |
+| A.text   A.data |
+|                 |
+| R.text   R.data |
+|                 |
+| L.text   L.data |
+|                 |
+| S.text   S.data |
+|                 |
+| stack    A.heap |
+|                 |
+| M.text   M.data |
+|                 |
+| thread          |
++-----------------+
+</code></pre>
+<p>This is a bit of a simplification. Also note that I didn't really try to order these, as with Twizzler's invariant pointers + position-independent code, it doesn't matter. Well.
+Okay, A.text and A.data, as the potentially statically-linked executable, may be forced into slots 0 and 1 respectively, but that's a small detail.</p>
+<p>Each loaded executable object is split into two parts, text (executable code) and data (read-write data). We may add a third rodata object in the future. We also have a heap (A.heap, we'll see why it's named as such later), a stack, a thread repr object (see the thread model documentation). We've loaded A and its dependencies (R, L, and S). We also have ourselves, the monitor / loader, as M, loaded.</p>
+<p>Once everything is loaded and relocated (linked symbols, etc), we can start executing at A's entry point. During execution, A may decide to load more executable objects, or perform an
+operation that causes the runtime to do so automatically. The result is the familiar programming environment we are all used to, in that we can construct statically-linked executables
+or dynamically linked ones. We can load libraries at load or runtime, and use their exported symbols.</p>
+<h2 id="the-standard-runtime-secure-gates"><a class="header" href="#the-standard-runtime-secure-gates">The Standard Runtime: secure gates</a></h2>
+<p>One major functionality addition to the dynamic linker is compartmentalization. A given library may be called by a program, and that library
+may be fully isolated from the caller. This is useful for building secure OS services, for example, a network library may manipulate configuration
+data directly if it has write permission on that data. But your average program that <em>calls</em> that library shouldn't be given write permission to that
+data, as it could then trash it. Thus a key primitive that the runtime enables is for some insecure software to call a secure function in a library
+that has some additional permissions not to be granted to the caller: a secure gated API.</p>
+<p>Lets use the same example program and dependencies as from above with the following addition: The library L has additional permissions to update some
+system state that the caller (A) doesn't have permission to do. Library L defines a function as follows:</p>
+<pre><code class="language-{rust}">#[secure_gate]
+fn update_some_state(args...) -&gt; ... {...}
+</code></pre>
+<p>The caller can then just call <code>L::update_some_state(...)</code>. The runtime, during load, will ensure the following security properties:</p>
+<ol>
+<li>The library L is protected from <em>arbitrary code execution</em> by secure gates support in security contexts.</li>
+<li>The &quot;irreducible Rust Runtime&quot; (discussed below) remains isolated within this library (we'll discuss what this means below).</li>
+<li>The caller's stack cannot be corrupted (optional, adds overhead)</li>
+<li>The callee's stack frames cannot be leaked to the caller (optional, adds overhead)</li>
+<li>The caller's stack is not accessible at all by the callee (optional, limits API)</li>
+</ol>
+<p>Once loaded, the virtual address space will contain:</p>
+<pre><code>+--------------------------------------------+
+| thread(r--)                                |
+| +--------------------------+               |
+| |A.text(r-x)   A.data(rw-) |               |
+| |                          |               |
+| |A.heap(rw-)   stack(rw-)  |               |
+| |                          |               |
+| |S.text(r-x)   S.data(rw-) |               |
+| |                          |               |
+| |R.text(r-x)   R.data(rw-) |               |
+| +--------------------------+               |
+|                                            |
+|                                            |
+| +---------------------------+              |
+| |L.text(r-x)   L.data(rw-)  |              |
+| |                           |              |
+| |L.heap(rw-)   L.stack(rw-) |              |
+| |                           |              |
+| |S.text(r-x)   S.data(rw-)  |              |
+| |                           |              |
+| |R.text(r-x)   R.data(rw-)  |              |
+| +---------------------------+              |
+|                                            |
++--------------------------------------------+
+</code></pre>
+<p>Note how there are multiple &quot;compartments&quot; of objects, here. This has not actual bearing on virtual address space layout, they are compartments for
+ensuring isolation. The specified permissions only apply to within a given compartment. The resulting, high-level view of the runtime monitor is then:</p>
+<pre><code>  +-----------------------------------------------+
+  |                                               |
+  |C_A: A's data, text, and non-isolated libraries|
+  |                                               |
+  +-----------------------------------------------+    +-----------+
+                                       ^               |           |
+                                       |               |  Monitor  |
+                                       +&lt;--------------+           |
+                                       |               +-----------+
+                                       v
+  +-----------------------------------------------+
+  |                                               |
+  |C_B: B's data, text, and non-isolated libraries|
+  |                                               |
+  +-----------------------------------------------+
+</code></pre>
+<p>Wherein the monitor controls isolation between compartments, and within a compartment, it adds no overhead to control transfer between components. The resulting programming
+model is one where a programmer can easily call functions exposed by system libraries that operate securely on protected data. These functions can go on to call other non-isolated
+<em>or</em> isolated functions, and the runtime will handle it.</p>
+<p>The anatomy of a compartment is as follows:</p>
+<pre><code>           +---------+
+           | program |
+           +--------++
+                    ^
+                    |
+                    |
+                    v
++------------+     ++-------+
+| libruntime +&lt;---&gt;+ libstd |
++----+-------+     +--------+
+     |
+     v
++----+--+     +------+     +-------+
+| state +----&gt;+ heap |     | stack |
++-------+     +------+     +-------+
+</code></pre>
+<p>A program (which may be a library) links against libstd, which links against twizzler-abi (not shown) and libruntime. The runtime library then uses the state object (one per compartment) to locate the heap
+and handle allocation requests from the standard library.</p>
+<h3 id="isolation-options"><a class="header" href="#isolation-options">Isolation options</a></h3>
+<p>The minimum isolation required by a library can be set by the library at compile time, or by the caller of the library at load time. Once a library is
+loaded, there is no way to change isolation levels without spinning up another compartmentalization of the same library.</p>
+<p>There are, broadly, two major isolation directions to consider: does the caller trust the callee, does the callee trust the caller, or does neither party trust the other. The resulting table
+shows the different options:</p>
+<table><thead><tr><th>Trust relationship</th><th>Model</th></tr></thead><tbody>
+<tr><td>Both trust each other</td><td>No isolation -- simple dynamic library call</td></tr>
+<tr><td>Callee doesn't trust caller</td><td>Isolated callee (e.g. library to safely update system state)</td></tr>
+<tr><td>Caller doesn't trust callee</td><td>Isolated caller (e.g. program that operates on protected data calls an untrusted library)</td></tr>
+<tr><td>Neither trust the other</td><td>Full isolation</td></tr>
+</tbody></table>
+<p>Whether or not the callee trusts the caller is set by a flag in the secure gate itself, so the caller can never bypass the isolation by setting a different policy. Similarly, the
+caller can specify its trust level at load or runtime.</p>
+<p>Selection of higher isolation levels may come with a tradeoff. In particular, performance and restrictions on what APIs are possible. They are as follows:</p>
+<ol>
+<li>No isolation: no overhead above a standard dynamic library call</li>
+<li>Any amount of isolation requires security context switches and shadow stack construction.</li>
+</ol>
+<h2 id="notes-on-thread-state-and-secure-gates"><a class="header" href="#notes-on-thread-state-and-secure-gates">Notes on &quot;thread state&quot; and secure gates</a></h2>
+<p>When switching between compartments, we must be careful to avoid 1) improper transfer of control flow to a compartment, 2) isolation of sensitive information within a compartment, and 3) prevention of the isolated compartment getting &quot;tricked&quot; into writing somewhere it didn't intend. The details of <em>how</em> we'll deal with these will be described by the reference level explanation below, but here we'll quickly discuss some basic concepts. </p>
+<h3 id="the-stack"><a class="header" href="#the-stack">The stack</a></h3>
+<p>One key aspect of thread runtime state that we don't have direct control over normally is the stack. Instructions generated by the compiler interact with the stack frequently and in automatic ways relative to our level of abstraction in programming Rust. Thus we, as programmers, have little control over when and how the stack is accessed, and cannot ensure that we get to &quot;check&quot; that the stack pointer is &quot;okay&quot; before its used -- after all, a checking function will still use the stack!</p>
+<p>Why do we care? Well, imagine an attack where an untrusted program calls a sensitive, isolated library to modify data in object O. Normally, the untrusted program cannot access object O, but imagine if we pointed our stack pointer into O and then called the secure gate! The isolated library will then corrupt O with stack frame data before it even gets a chance to do anything else.</p>
+<p>Thus the runtime will ensure that the isolated library cannot accidentally corrupt some object using its stack pointer (details later).</p>
+<p>Another concern is privacy -- any stack frames pushed to the stack by the isolated library could be visible to the untrusted program if they shared stacks. For this reason, the runtime
+sets up a shadow stack so that pushed stack frames by the isolated library stay within that library, and any stack arguments are still accessible. Note, however, that this now restricts using the stack for return values. We'll need to figure this one out.</p>
+<h3 id="the-heap"><a class="header" href="#the-heap">The heap</a></h3>
+<p>The heap is another big issue. See, Rust follows the common programming model of a global heap, one per process. If we were to continue with this model, we'd need to put the APIs for accessing the global heap behind secure gates into the runtime, and even then we'd need <em>hardware</em> capabilities to prevent isolated compartments from corrupting heap data. Instead,
+we'll change the model to one heap per compartment, that way allocation can happen without huge overhead.</p>
+<p>One thing this means is that heap data may, sometimes, not be sharable across compartments. We propose to default to a private-heap-per-compartment, so normal allocations are contained,
+however we can use Rust's allocator API to allocate from heaps that can be shared across compartments.</p>
+<h3 id="tls"><a class="header" href="#tls">TLS</a></h3>
+<p>Thread-local storage is another major concern, as it involves the use of an architectural thread-pointer that we need to ensure has similar restrictions as the stack.</p>
+<h3 id="unwinding"><a class="header" href="#unwinding">Unwinding</a></h3>
+<p>Unwinding across a foreign function interface is undefined behavior in Rust. While we're not <em>exactly</em> crossing an FFI boundary, we kinda are, since the heap and stack pointer change
+dramatically between compartments. On top of that, as we'll see later, the way we return from a compartment requires a bit of extra work. Thus we must always catch an unwind before going
+back across the compartment boundary. The runtime will allow the unwind to be caught, and resumed, across the boundary.</p>
+<h3 id="global-variables"><a class="header" href="#global-variables">Global variables</a></h3>
+<p>Look, if you make a global variable, and then try to share it across a compartment boundary, it'll be restricted (either read-only or inaccessible), so I guess just plan for that.
+Or just don't use global, shared variables.</p>
+<h1 id="reference-level-explanation-4"><a class="header" href="#reference-level-explanation-4">Reference-level explanation</a></h1>
+<p>Phew, okay. Let's start in on how we can make this happen.</p>
+<p>The runtime is a combination security monitor and dynamic linker, managing the loading and linking of programs and libraries within and across
+isolation domains called <em>compartments</em>. It is, explicitly, part of the trusted computing base.</p>
+<h2 id="security-contexts"><a class="header" href="#security-contexts">Security Contexts</a></h2>
+<p>Twizzler offers an abstraction of a security context with the following properties:</p>
+<ol>
+<li>A context contains capabilities that define the access rights of a thread that has this context as active.</li>
+<li>A thread can be <em>attached</em> to multiple contexts, though only one may be active at one time.</li>
+<li>A thread switches contexts automatically if a security fault occurs, and the thread is attached to a context in which the instruction would not cause a security fault.</li>
+<li>Transfer of control between contexts is limited by an object's <em>secure gates</em>, a set of allowed entry points into this object. If a security context switch occurs, and the instruction pointer is not pointing to a valid gate, that context is not considered a valid context to switch to.</li>
+</ol>
+<p>The runtime uses this feature via a 1-1 mapping of compartment to security context. All programs and libraries within a given compartment all run within the same security context (if possible), or others with control flow transfer managed by the runtime if necessary. Note that the runtime itself is contained within a compartment and isolated from all other compartments, allowing only approved operations to be invoked (via security gates) should a loaded program wish to interact with the runtime monitor directly.</p>
+<h2 id="how-to-isolate-a-library"><a class="header" href="#how-to-isolate-a-library">How to isolate a library</a></h2>
+<p>Let's go back to that running example: untrusted program A wishes to call isolated library L's function foo, which is a security gate. First, library L (and its associated runtime state) are contained within compartment CL, while A is contained within CA. Upon call to CL, via the call instruction, the processor pushes the return address to the stack and then jumps. The
+instruction pointer is now in L, pointing at the start of foo. But we are still within context CA! This triggers a page fault, since, because it is isolated, L is not executable in CA.
+The kernel finds CL, where the execution is valid, and then continues with the first instruction. Let's say it's <code>push rbp</code>, which it probably is. This triggers a security fault. Why?</p>
+<p>See, we must protect against the callee (foo) corrupting some data that A didn't have write access to but L does. The caller could have pointed the stack pointer at some sensitive data and then called foo. To protect against this, the stack that A is using is not writable in CL. The security fault is handled by the runtime monitor, as it's registered itself as the fault handler with the kernel during setup. The runtime monitor then constructs a shadow stack for L, using the object copy-from primitive. Execution is then allowed to proceed normally.</p>
+<p>Upon return, we have to do another thing -- we have to check to see if the return address is safe. The caller <em>could</em> have pushed a location within L and then <em>jumped</em> to foo, instead of calling it. This would re-enable arbitrary code execution in L! So the runtime, when constructing the shadow stack, checks the return address. Finally, what if foo just instantly and blindly executes ret? While unlikely, we still have to deal with this. By default, the stack is made not readable from CL, however the runtime still constructs the shadow stack. This option doesn't prevent L from reading A's stack frames, it just prevents L from doing anything with A's stack data before the runtime can interpose.</p>
+<p>Finally, we can optionally refuse to create a shadow stack and instead require that the callee has a new stack. This results in the construction of a new stack with a fake frame that returns to the call site, but contains no other data from A's frames.</p>
+<h3 id="so-how-do-we-enforce-that-the-stack-isnt-writable-on-context-switch"><a class="header" href="#so-how-do-we-enforce-that-the-stack-isnt-writable-on-context-switch">So, how do we enforce that the stack isn't writable on context switch?</a></h3>
+<p>Yeah, we do need to do this! See, the &quot;prevent corruption&quot; motivation above does still require the runtime to interpose always, which means that the stack pointer <em>cannot</em> be writable (or, even readable sometimes!) when a gate is used. Thus we propose to extend the Twizzler gate model to include the ability to check the validity of <em>architectural pointers</em>:</p>
+<ul>
+<li>Stack and base pointer: at least -w- in source and at most r-- in target</li>
+<li>Thread pointer: at most r-- in both contexts. This covers TLS -- the thread pointer points to a region of memory that is used as the TLS block locator for dynamic memory objects. That index should not be writable by either context, as it is under the control of the runtime. Further, the thread pointer should not be <em>changeable</em> in the source context (denoted by the capability to write the thread repr object).</li>
+<li>Upcall pointer (not really architectural, but): at most r-- in both contexts. The runtime needs to be the handler for upcalls, so we ensure that it cannot be executable in the target, nor do we want the source compartment to handle (e.g.) security violations for the target compartment. Same as thread pointer: not changeable in the source context.</li>
+</ul>
+<p>For flexibility, these permissions should not be hardcoded, but instead will allow the gate's creator to specify both required and disallowed masks. However, the above may be the default.</p>
+<h3 id="what-about-the-heap"><a class="header" href="#what-about-the-heap">What about the heap?</a></h3>
+<p>Each compartment has a heap, which means each compartment has an independent allocator and libstd. We can achieve this by linking to a compartment-local libruntime that is configured with enough information to manage its own heap independent of the other compartments. This is a different linking algorithm than is standard for dynamic libraries. We are first explicitly linking against a library that has &quot;first dibs&quot; on symbols, and falling back to global symbol resolution only after that (ok -- I suppose this is kinda like LD_PRELOAD).</p>
+<p>This trick, of allowing heap allocation without the runtime, is necessary for correctness (isolation of heap data) but <em>also</em> for performance, since a context switch on every allocation would be a hard pill to swallow. Fortunately, we can make heap allocation just as cheap as it is now with this per-compartment heap trick, at the cost of some additional complexity to share heap data across compartments. Heaps are private by default, but we can always create additional heaps with different permissions and then use Rust's allocator API to allocate data from those heaps instead of the default.</p>
+<h2 id="how-are-executable-objects-linked-and-loaded"><a class="header" href="#how-are-executable-objects-linked-and-loaded">How are executable objects linked and loaded?</a></h2>
+<p>We use the linker provided by LLVM to link executables and libraries, however we provide a custom linker script that ensures that the memory layout of the program fits with the runtime.
+For example, a typical program might look like this:</p>
+<pre><code>| Section | vaddr  | len   | offset | perms |
+|---------|--------|-------|-------:|:-----:|
+| .text   | 0x1000 | 0x800 |      0 |  r-x  |
+| .rodata | 0x1800 | 0x100 |  0x800 |  r--  |
+| .data   | 0x2000 | 0x100 | 0x1000 |  rw-  |
+| .bss    | 0x2100 | 0x130 |    N/A |  rw-  |
+</code></pre>
+<p>As you can see, the program's sections are loaded into specific memory addresses, with data taken from the offset of the file (this is a simplified table compared to ELF). However, on Twizzler, this is more likely:</p>
+<pre><code>| Section | vaddr      | len   | offset | perms |
+|---------|------------|-------|-------:|:-----:|
+| .text   | 0x1000     | 0x800 |      0 |  r-x  |
+| .rodata | 0x1800     | 0x100 |  0x800 |  r--  |
+| .data   | 0x40001000 | 0x100 | 0x1000 |  rw-  |
+| .bss    | 0x40001100 | 0x130 |    N/A |  rw-  |
+</code></pre>
+<p>Note the major change is just in the vaddr field, where we've bumped the data and bss sections to be loaded into the second object slot of the address space (object size 0x40000000). This is already how Twizzler operates. We just need to extend it to be a little more general for loading position-independent libraries. The above example loads data into object slots 0 and 1, respectively. It does this by first directly mapping the executable object to slot 0 (the linker script ensures this direct mapping is correct), and then creates a new data object and copies
+the initial image of the data section from the executable (this is done via the copy-from primitive to leverage copy-on-write), which is then loaded into slot 1. For a position independent library, we'll allocate two consecutive slots and map the executable and read-only data into the first, and the writable data and bss into the second.</p>
+<p>At this point, we need to run the standard dynamic linking algorithm, with some small exceptions, to relocate and link any loaded programs and libraries. Intra-compartment symbol resolution
+results in standard dynamic library function calls, whereas inter-compartment results in the limitation of communication to secure gates. The main exceptions to the standard linking process are to ensure that allocations are performed intra-compartment by default, and to ensure that all calls stay within a compartment unless using a secure gate.</p>
+<h2 id="more-details-about-the-irreducable-rust-runtime"><a class="header" href="#more-details-about-the-irreducable-rust-runtime">More Details about the Irreducable Rust Runtime</a></h2>
+<p>Above we talked a bit about the stack and the heap, two of the most important parts of the runtime. But there is more.</p>
+<h3 id="thread-local-storage"><a class="header" href="#thread-local-storage">Thread Local Storage</a></h3>
+<p>The thread pointer, mentioned above, points to a per-thread data structure. The complication here is that we'll need to isolate compartments' TLS data from other compartments.
+We can do this by using the higher-overhead TLS implementation that dynamic libraries use, where the thread pointer points to a vector of TLS regions, and we call a helper function
+to actually load a reference to a TLS variable.</p>
+<p>This vector then must be protected appropriately: read-only, except for the runtime. The runtime sets up the TLS vector, and then other libraries can use that to find their regions. On compartment switch, the runtime could change the thread pointer to a limited vector. This means that we'll need to protect updates to the thread pointer, which we will do by saying that
+the thread pointer can be updated in contexts that have write access to the thread's repr object. A thread doesn't <em>need</em> write access to its own repr, so we can prevent compartments from
+changing the thread pointer. Finally, the kernel can verify properties of the thread pointer (not writable in source or target context) on compartment switch.</p>
+<h3 id="upcall-pointer"><a class="header" href="#upcall-pointer">Upcall pointer</a></h3>
+<p>This isn't an architectural pointer, but it is necessary for the kernel to deliver synchronous events to a thread. We can play the same trick: disallow updates to the upcall pointer, and have it set so that it enters the runtime on upcall.</p>
+<h3 id="unwinding-1"><a class="header" href="#unwinding-1">Unwinding</a></h3>
+<p>Since it's undefined behavior to unwind across an FFI boundary, there's a good chance we'll need to catch unwinding panics in a trampoline for a security gate. So if you write something like this:</p>
+<pre><code class="language-{rust}">#[security_gate]
+pub fn foo(x: u32) -&gt; u32 {...}
+</code></pre>
+<p>Under the hood, it'll get rewritten to something like:</p>
+<pre><code class="language-{rust}">pub fn foo(x: u32) -&gt; core::thread::Result&lt;u32&gt; {
+    core::panic::catch_unwind(|| __do_foo(x))
+}
+
+fn __do_foo(x: u32) -&gt; u32 {...}
+</code></pre>
+<h1 id="drawbacks-4"><a class="header" href="#drawbacks-4">Drawbacks</a></h1>
+<p>The security limitations do add overhead on a security context switch. However, the comparison should not be to library calls, but to <em>invoking an entire new process</em> on unix.</p>
+<p>It is a huge undertaking. We could instead skip this, port a dynamic linker, etc. But I think that would miss out on an opportunity to leverage Twizzler's features to build a better
+programming and system model.</p>
+<h1 id="rationale-and-alternatives-4"><a class="header" href="#rationale-and-alternatives-4">Rationale and alternatives</a></h1>
+<p>This design builds directly off the Twizzler security model and implements, as far as I know, the simplest way to expose a secure programming interface to programmers such that
+the secure programming is easy to do.</p>
+<p>This RFC is careful to walk a line between being opinionated about how programming should be done on Twizzler and remaining sufficiently flexible (as would be expected by an OS).
+However, it does essentially propose a <em>reference runtime</em>, which brings up worries about locking us into a particular ecosystem. However, the alternative is essentially <em>no</em> standard
+programming environment for Twizzler, which is unacceptable.</p>
+<h1 id="prior-art-3"><a class="header" href="#prior-art-3">Prior art</a></h1>
+<p>Some useful papers and concepts:</p>
+<ul>
+<li>Lightweight Contexts (OSDI)</li>
+<li>Jails</li>
+<li>Solaris Doors</li>
+<li>Dynamic linking</li>
+<li>Compartmentalization</li>
+</ul>
+<h1 id="unresolved-questions-3"><a class="header" href="#unresolved-questions-3">Unresolved questions</a></h1>
+<p>None for this RFC.</p>
+<h1 id="future-possibilities-3"><a class="header" href="#future-possibilities-3">Future possibilities</a></h1>
+<h2 id="the-reference-repl"><a class="header" href="#the-reference-repl">The Reference REPL</a></h2>
+<p>As one example of something you could build atop this, let's consider an interactivity model for Twizzler. Instead of a &quot;shell&quot;, we'll think of the interaction point as a REPL, broadly
+defined, to be defined concretely in a different RFC. We'll consider some example, shell-like syntax here as a placeholder to avoid bikeshedding. Consider that, in a system where libraries explicitly expose calling points (Nandos, Secure Gates), we could expose these <em>typed</em> interaction points to the command line interface itself. For example, imagine a library exposes an interface for updating the password as follows:</p>
+<pre><code class="language-{rust}">#[secure_gate]
+pub fn update_password(user: &amp;User, password: String) -&gt; Result&lt;(), UpdatePasswordError&gt;;
+pub fn lookup_user(name: &amp;str) -&gt; Result&lt;User, LookupUserError&gt;;
+</code></pre>
+<p>Not saying this is a <em>good</em> interface, just roll with it. Let's imagine that the <code>User</code> type implements <code>TryFrom&lt;String&gt;</code>, and the <code>UpdatePasswordError</code> and <code>LookupUserError</code> types are enums with variants listing possible failures. Further, these error types implement the Error trait. Now, let's say these functions are in a library that gets compiled to an object named <code>libpasswd</code>. We can then expose this library to the REPL. The REPL can enumerate the interface for the library. If the source is provided (or, maybe if we look at rust metadata??? or debug data??? or we generate type info in the nando struct???), the REPL <em>knows</em> the interface <em>and</em> all the types for the functions, so it can extrapolate an interface for the command line automatically:</p>
+<p>Long form (the <code>X ?= Y</code> syntax is sugar for <code>X = Result::unwrap (Y)</code>):</p>
+<pre><code>twz&gt; user ?= passwd::lookup_user bob
+twz&gt; passwd::update_passwd user changeme
+Ok(())
+twz&gt;
+</code></pre>
+<p>Wrong username:</p>
+<pre><code>twz&gt; user ?= passwd::lookup_user bobby
+Error: No such user
+</code></pre>
+<p>If we hadn't implemented <code>TryFrom&lt;String&gt;</code> for <code>User</code></p>
+<pre><code>twz&gt; passwd::update_passwd bob changeme
+Type Error: Expected 'User' got 'String'
+</code></pre>
+<p>But, since we did, we get a shortcut:</p>
+<pre><code>twz&gt; passwd::update_passwd bob changeme
+Ok(())
+</code></pre>
+<p>Or, with the wrong username:</p>
+<pre><code>twz&gt; passwd::update_passwd bobby changeme
+Error: No such user
+</code></pre>
+<p>Or, if you don't have permission:</p>
+<pre><code>twz&gt; passwd::update_passwd bob changeme
+Security Error: Failed to call update_password in passwd: Permission denied
+</code></pre>
+<p>The basic REPL here has special handling for String, Into/From/TryInto/TryFrom String, impl Error, Result, Option, etc, but otherwise builds this command line interface, including arguments and error reporting, automatically from the types.</p>
+<p>Another example would be some library, <code>foo</code>, that wants to update some object by ID. So it exposes some function <code>bar(id: ObjID) -&gt; ...</code>. Now, typing an object ID is annoying, but doable
+if necessary, so we do allow that. But the REPL can see this type and automatically try to resolve that positional argument with a (default, but configurable) name resolution mechanism. So the user can still type a name, even if the actual programming interface takes an object by ID. And this can be extended to object <em>handles</em>, too. Those can even be typed:</p>
+<pre><code>#[nando]
+pub fn baz&lt;T: SomeKindaObject&gt;(obj: Object&lt;T&gt;) -&gt; ...;
+</code></pre>
+<p>If &quot;name&quot; resolves to an object that implements <code>SomeKindaObject</code>:</p>
+<pre><code>twz&gt; foo::baz name
+...
+</code></pre>
+<p>If &quot;name&quot; resolves to an object that does NOT implement <code>SomeKindaObject</code>:</p>
+<pre><code>twz&gt; foo::baz name
+Type Error: Object 'name' does not implement SomeKindaObject.
+</code></pre>
+<p>If &quot;name&quot; does not resolve:</p>
+<pre><code>twz&gt; foo::baz name
+Name Error: Object 'name' failed to resolve: ...
+</code></pre>
+<p>This means that system software <em>is</em> the libraries written to operate or interact with the system. The command line interface is just a translation from command-line interface interaction to library calls, for which the Type info is sufficient to automatically generate.</p>
+<p>And of course a more powerful REPL can just expose library calls that interact with the system and the data model directly in its programming language.</p>
+<p>Note that you can recover the semantics of a standard unix-like program via <code>fn cli_main(args: &amp;[&amp;str]) -&gt; i32</code>, and in fact, this would be an effective wrapper around such programs as a way to invoke them (via just loading it, and passing args via ELF aux data, or whatever).</p>
+<p>Also note that I'm just using this above syntax as an example -- one powerful feature of this is not just making scripting the OS even easier than shell scripts, as you get typed library calls instead of invocation of an executable, but doing so without coupling deeply to the <em>language</em>.</p>
+<h1 id="drawbacks-5"><a class="header" href="#drawbacks-5">Drawbacks</a></h1>
+<p>The security limitation do add overhead on a security context switch. However, the comparison should not be to library calls, but to <em>invoking an entire new process</em> on unix.</p>
+<p>It is a huge undertaking. We could instead skip this, port a dynamic linker, etc. But I think that would miss out on an opportunity to leverage Twizzler's features to build a better
+programming and system model.</p>
+<h1 id="rationale-and-alternatives-5"><a class="header" href="#rationale-and-alternatives-5">Rationale and alternatives</a></h1>
+<p>This design builds directly off the Twizzler security model and implements, as far as I know, the simplest way to expose a secure programming interface to programmers such that
+the secure programming is easy to do.</p>
+<p>This RFC is careful to walk a line between being opinionated about how programming should be done on Twizzler and remaining sufficiently flexible (as would be expected by an OS).
+However, it does essentially propose a <em>reference runtime</em>, which brings up worries about locking us into a particular ecosystem. However, the alternative is essentially <em>no</em> standard
+programming environment for Twizzler, which is unacceptable.</p>
+<h1 id="prior-art-4"><a class="header" href="#prior-art-4">Prior art</a></h1>
+<p>Some useful papers and concepts:</p>
+<ul>
+<li>Lightweight Contexts (OSDI)</li>
+<li>Jails</li>
+<li>Solaris Doors</li>
+<li>Dynamic linking</li>
+<li>Compartmentalization</li>
+</ul>
+<h1 id="unresolved-questions-4"><a class="header" href="#unresolved-questions-4">Unresolved questions</a></h1>
+<ul>
+<li>What does the runtime trait look like?</li>
+<li>How do we hot-plug that runtime?</li>
+<li>What does the unix compatibility story look like?</li>
+<li>More syntax bikeshedding about the cli stuff.</li>
+<li>Key management...</li>
+<li>Can we return things using the stack in the shadow stack setup?</li>
+<li>Should the runtime be async by default?</li>
+<li>What does it look like to write a command line interface nando? Should it be a <code>#[cli_interface]</code> macro that we can use to auto-gen a CliCall struct that contains type info, etc?</li>
+<li>Can we implement this with ASLR?</li>
+</ul>
+<h1 id="future-possibilities-4"><a class="header" href="#future-possibilities-4">Future possibilities</a></h1>
+<p>We can imagine the runtime providing deep introspection on the libraries and executables it loads and isolates. For example, imagine a debugger (controlled by the runtime) that can seamlessly transition from debugging a &quot;script&quot; in the REPL to debugging a loaded library (via step-in).</p>
+<p>If all system software is written this way, and maintains OS configuration data and runtime telemetry data in objects, the REPL can expose a query-like interface for interacting with the OS, and can seamlessly be extended via nandos and secure gates.</p>
+<div style="break-before: page; page-break-before: always;"></div><ul>
+<li>Feature Name: Source of Entropy</li>
+<li>Start Date: 2024-07-15</li>
+<li>RFC PR: <a href="https://github.com/twizzler-operating-system/rfcs/pull/0011">twizzler-rfcs/rfcs#0012</a></li>
+</ul>
+<h1 id="summary-6"><a class="header" href="#summary-6">Summary</a></h1>
+<p>Adds a secure source of entropy to the kernel, similar to /dev/random on Twizzler. It should seed itself at startup with several true random number generators (TRNG) and then use a Cryptographically secure Pseudo Random Number Generator (CSPRNG) to generate following requests for randomness.</p>
+<h1 id="motivation-6"><a class="header" href="#motivation-6">Motivation</a></h1>
+<p>The kernel requires cryptographic operations such as private/public key generation and UUID generation for the twizzler security model. These sort of cryptographic operations require a cryptographically secure source of randomness to ensure their security. It is also very likely userspace programs will also require entropy for userspace cryptographic operations (or games or other programs which require randomness).</p>
+<h1 id="guide-level-explanation-5"><a class="header" href="#guide-level-explanation-5">Guide-level explanation</a></h1>
+<h2 id="syscall-api"><a class="header" href="#syscall-api">Syscall API</a></h2>
+<p>The module should expose a <code>getrandom(dest: &amp;mut [u8], flags: GetRandomFlags) -&gt; usize</code> function (and syscall) which will entirely fill the <code>dest</code> buffer with bytes and returns the number of bytes written into the destination buffer. It might block while doing so during the initial seeding of the CSPRNG. <code>GetRandomFlags</code> for now will only consist of a single flag, NONBLOCKING, which will ensure <code>getrandom</code> does not block. Note that before the CSPRNG is seeded <code>getrandom</code> might write 0 bytes into dest and accordingly return a 0.</p>
+<h3 id="example-1-getrandom"><a class="header" href="#example-1-getrandom">Example 1 (getrandom)</a></h3>
+<pre><code class="language-rs">let mut buf = [u8; 32] // 256 bytes total
+let bytes_written = getrandom(&amp;mut buf, 0); // should fully overwrite random bytes into buf
+assert!(256 == bytes_written)
+</code></pre>
+<h3 id="example-2-nonblocking"><a class="header" href="#example-2-nonblocking">Example 2 (nonblocking)</a></h3>
+<pre><code class="language-rs">let mut buf = [u8; 32] // 256 bytes total
+// should write `bytes_overwritten` number of bytes into the buf. Might be 0 bytes
+let bytes_written = getrandom(&amp;mut buf, GetRandomFlags::NONBLOCKING);
+</code></pre>
+<h2 id="inner-kernel-api"><a class="header" href="#inner-kernel-api">Inner-Kernel API</a></h2>
+<p>The module should have a public function called <code>contribute_entropy(entropy: &amp;[u8])</code> which will allow sporatic entropy contributions from sources which are not consistently able to provide entropy upon requrest. The module should also describe an <code>EntropySource</code> trait for sources which can consistently provide entropy upon demand:</p>
+<pre><code class="language-rs">trait EntropySource {
+  fn try_fill_entropy(&amp;mut self, dest: &amp;mut [u8]) -&gt; Result&lt;(), rand_core::Error&gt;;
+}
+</code></pre>
+<p>There will also be a public registering function <code>register_entropy_source(source: dyn EntropySource)</code>. Registered entropy sources will be called during a reseeding of the CSPRNG.</p>
+<h3 id="example-1"><a class="header" href="#example-1">Example 1</a></h3>
+<pre><code class="language-rs">let t1 = now()
+// do something that takes a variable amount of time, preferably involving hardware
+let t2 = now()
+let timingDiff = t2 - t1
+// only the first LSB because we mainly care about microsecond jitter
+// as upper bits are typically 0 since the hardware action doesn't take that long
+contribute_entropy([timingDiff as u8])
+</code></pre>
+<h3 id="example-2"><a class="header" href="#example-2">Example 2</a></h3>
+<pre><code class="language-rs">struct CpuEntropy;
+
+impl EntropySource for CpuEntropy {
+    fn try_fill_entropy(&amp;mut self, dest: &amp;mut [u8]) -&gt; Result&lt;(), rand_core::Error&gt; {
+        let mut dest_iter = dest.iter_mut();
+        let mut rndrs_iter = self.try_iter()?;
+        for (d, r) in dest_iter.zip(rndrs_iter) {
+            *d = r?
+        }
+        Ok(())
+    }
+}
+
+pub fn maybe_add_cpu_entropy_source() {
+    if let Some(cpu_entropy) = CpuEntropy::new() {
+        register_entropy_source(cpu_entropy)
+    }
+}
+
+</code></pre>
+<h3 id=""><a class="header" href="#"></a></h3>
+<h1 id="reference-level-explanation-5"><a class="header" href="#reference-level-explanation-5">Reference-level explanation</a></h1>
+<p>My current plan is to use the current kernel's <code>time</code> interface to measure CPU jitter (see <a href="https://docs.rs/rand_jitter/latest/rand_jitter/struct.JitterRng.html">JitterRng</a>) to seed an entropy pool.</p>
+<p>I intend to design an &quot;EntropyPool&quot; struct which is responsible for XORing an array of hashed bytes on top of the pool's current state once there is enough entropy gathered in the pool to warrant a reseed. See the following quote from <a href="https://www.schneier.com/wp-content/uploads/2015/12/fortuna.pdf"><em>Cryptography Engineering</em></a> for justificationßß:</p>
+<blockquote>
+<p>making any kind of estimate of the amount of entropy is extremely difficult, if not impossible. It depends heavily on how much the attacker knows or can know [...]. It tries to measure the entropy of a source using an entropy estimator, and such an estimator is impossible to get right for all situations.</p>
+</blockquote>
+<p>Rather than keeping track of entropy estimates, Fortuna, Yarrow's successor used by MacOS and FreeBSD, simply requires a seed of a certain total length rather than trying to estimate entropy amounts of each source since these entropy estimates are usually innacurate. It also saves previous entropy into a persistent file to be the startup seed for the next boot cycle to avoid blocking at boot time. For our implementation we will simply always block at boot to gather entropy, falling back to JitterRng if there is not enough entropy gathered within the time alotted.</p>
+<p>It should then periodically seed and reseed a CSPRNG (probably ChaCha12) once there is enough entropy gathered within the entropy buffer.</p>
+<p>The CSPRNG should be the final source of entropy which will be returned via the above system calls. Before the CSPRNG is seeded calls <code>getrandom()</code> should block until it is seeded (or return 0 if the NONBLOCKING flag is set).</p>
+<h1 id="drawbacks-6"><a class="header" href="#drawbacks-6">Drawbacks</a></h1>
+<p>Why should we <em>not</em> do this?</p>
+<p>Maintaining a pool of entropy (and a CSPRNG) requires some additional memory and CPU footprint. In addition, users might end up running their own CSPRNG seeded off of our pool, which might make the kernel's CSPRNG redundant. That said, since the kernel itself requires cryptographically secure RNG for object management and permissions. I think it's more than worth exposing the same source of randomness into userspace, just so that userspace doesn't have to reimplement a source of entropy. Also all other common modern OS's have a source of cryptographically secure randomness available to userspace.</p>
+<h1 id="rationale-and-alternatives-6"><a class="header" href="#rationale-and-alternatives-6">Rationale and alternatives</a></h1>
+<ul>
+<li>Why is this design the best in the space of possible designs?</li>
+<li>What other designs have been considered and what is the rationale for not choosing them?</li>
+<li>What is the impact of not doing this?</li>
+</ul>
+<h1 id="prior-art-5"><a class="header" href="#prior-art-5">Prior art</a></h1>
+<h3 id="firsthand-os-documentation-and-source-code"><a class="header" href="#firsthand-os-documentation-and-source-code">Firsthand OS Documentation and Source Code:</a></h3>
+<ul>
+<li>Linux tends to restore an entropy buffer via various sources of hardware randomness throughout the runtime of the device. Linux uses ChaCha20 for their CSRNG sourceas of version 4.8 <a href="https://words.filippo.io/dispatches/linux-csprng/">source</a>, which as of 4.8, makes /dev/random non-blocking except for at boot, bringing Linux's /dev/random implementation in line with FreeBSD's.</li>
+<li>FreeBSD (and variants) block at boot while gathering entropy to seed their CSRNG (FreeBSD has used Fortuna since 2014) and then reseed the CSRNG over time as more entropy is collected.</li>
+<li>MacOS and iOS uses the Fortuna algorithm as well (since 2019) for their CSRNG and seeds both at boot time and during runtime as well.</li>
+<li>Windows 10+ uses a pretty complex system, which is written about in detail <a href="https://download.microsoft.com/download/1/c/9/1c9813b8-089c-4fef-b2ad-ad80e79403ba/Whitepaper%20-%20The%20Windows%2010%20random%20number%20generation%20infrastructure.pdf">here</a>. In my opinion it's overkill to have a per-process CSPRNG (especially when most performance-critical applications which require a lot of randomness will bundle their own CSPRNG). However, it is interesting that they primarily use interrupt timing to append into their entropy pools which could be a good source for us to use as well.</li>
+<li>Android just uses the linux implementation and therefore also uses ChaCha20 for their random number generation.</li>
+<li>All OS's listed above use various means of gathering real-world randomness, and for future reference see <a href="https://github.com/torvalds/linux/tree/master/drivers/char/hw_random">Linux's random</a>, <a href="https://github.com/CTSRD-CHERI/cheribsd/tree/main/sys/dev/random">CheriBSD's random</a> (which is based on <a href="https://github.com/freebsd/freebsd-src/tree/main/sys/dev/random">FreeBSD's random</a>), and <a href="https://support.apple.com/guide/security/random-number-generation-seca0c73a75b/web">MacOS's docs on their random number generation</a> (which is also based on FreeBSD's implementation).</li>
+<li><a href="https://crates.io/crates/rand_jitter">JitterRng</a> is a random number generator based on measuring timing of operations on the cpu, inspired by <a href="https://www.irisa.fr/caps/projects/hipsor/publications/havege-tomacs.pdf">HAVEGE</a>.</li>
+<li>OsRng depends on <a href="https://crates.io/crates/getrandom">getrandom</a></li>
+</ul>
+<h3 id="secondary-analyses"><a class="header" href="#secondary-analyses">Secondary Analyses</a></h3>
+<ul>
+<li><a href="https://words.filippo.io/dispatches/linux-csprng/">Blog post</a> explaining the changes made to Linux's random.</li>
+<li><a href="https://github.com/rust-random/rand/issues/699">GitHub issue</a> discussing the quality of randomness of JitterRNG, a TRNG which is based on <a href="https://www.irisa.fr/caps/projects/hipsor/publications/havege-tomacs.pdf">HAVEGE</a>. Conclusion seems to be that JitterRng is mostly a last-resort.</li>
+<li><a href="https://stackoverflow.com/a/74484189">Stack overflow</a> answer on using RAM as a source of entropy. The other answers might be of use as well.</li>
+<li>Cryptoanalysis papers on ChaCha:
+<ul>
+<li><a href="https://ieeexplore.ieee.org/document/9766147">Tertiary Review of ChaCha Exploits</a> - concludes that <a href="https://link.springer.com/chapter/10.1007/978-3-030-56877-1_12">this paper</a> is the best currently known key-recovery attack with time complexity $2^{230.86}$ for 7 round ChaCha. As ChaCha12 uses 12 rounds, it seems the 12 round version is secure (at least for now).</li>
+</ul>
+</li>
+</ul>
+<h1 id="unresolved-questions-5"><a class="header" href="#unresolved-questions-5">Unresolved questions</a></h1>
+<h3 id="to-be-resolved-during-the-rfc-process"><a class="header" href="#to-be-resolved-during-the-rfc-process">To be resolved during the RFC process:</a></h3>
+<ul>
+<li>I hope to also research the security difference between ChaCha12, ChaCha20, and Fortuna, although I suspect ChaCha12 is the better choice for us given that it is faster when there is no sha256 hardware implementation (which is the case on ARM), Linux chose ChaCha20 in 2016, and <a href="https://github.com/rust-random/rand/issues/932">this GitHub discussion</a> as to why ChaCha20 is overkill. Edit: turns out FreeBSD also uses ChaCha20 as the hashing mechanism within Fortuna (<a href="https://github.com/freebsd/freebsd-src/blob/main/sys/dev/random/fortuna.c#L525-L668">source</a>). So with all of that evidence, I think using ChaCha12 will be plenty okay for our purposes.</li>
+</ul>
+<h3 id="during-implementation"><a class="header" href="#during-implementation">During Implementation</a></h3>
+<ul>
+<li>I hope to look into how many bits of entropy are considered to be &quot;enough&quot; to seed the CSPRNG as defined by the other operating systems.</li>
+<li>I hope to look into how many bits of entropy various sources provide.</li>
+</ul>
+<h3 id="out-of-scope"><a class="header" href="#out-of-scope">Out of Scope</a></h3>
+<ul>
+<li>Eventually we should support more sources of randomness. At this point however we can start with an imperfect cpu jitter timing based approach with the possible addition of timing OS interrupts.</li>
+</ul>
+<h1 id="future-possibilities-5"><a class="header" href="#future-possibilities-5">Future possibilities</a></h1>
+<h3 id="more-entropy-sources-and-userspace-entropy-contributions"><a class="header" href="#more-entropy-sources-and-userspace-entropy-contributions">More Entropy Sources and Userspace Entropy Contributions</a></h3>
+<p>In the future we should add more sources of randomness as we add support for peripheral devices. Additionally we should support some standard and secure way to provide entropy to the kernel from userspace.</p>
+<p>In FreeBSD this can only be provided by super-users due to security concerns of intentionally reducing entropy within the generator's internal state.</p>
+<p>In Linux anyone can contribute additional entropy to the entropy pool, but the entropy count will stay the same.</p>
+<p>The random module should eventually have a Twizzler entropy object with a write capability which the kernel is able to grant to various other userspace processes (such as the pager). Then those processes can pull entropy from the various drivers it relies upon (such as the NVMe driver in the pager's case).</p>
+<h3 id="kernelspace-entropy-contributions"><a class="header" href="#kernelspace-entropy-contributions">Kernelspace Entropy Contributions</a></h3>
+<p>The kernel might also be able to contribute entropy directly from interrupt timing.</p>
+<h3 id="other-csprngs"><a class="header" href="#other-csprngs">Other CSPRNGs</a></h3>
+<p>Generally speaking it is a good idea to keep track of the security of whichever underlying CSPRNG we are using just in case it ends up getting broken. For example FreeBSD (and along with it MacOS) previously used Yarrow before upgrading to Fortuna.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>0005-driver-model - Twizzler RFCs</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rfc-process.html"><strong aria-hidden="true">1.</strong> 0001-rfc-process</a></li><li class="chapter-item expanded "><a href="0002-object.html"><strong aria-hidden="true">2.</strong> 0002-object</a></li><li class="chapter-item expanded "><a href="0003-time.html"><strong aria-hidden="true">3.</strong> 0003-time</a></li><li class="chapter-item expanded "><a href="0004-low-level-device-model.html"><strong aria-hidden="true">4.</strong> 0004-low-level-device-model</a></li><li class="chapter-item expanded "><a href="0005-driver-model.html" class="active"><strong aria-hidden="true">5.</strong> 0005-driver-model</a></li><li class="chapter-item expanded "><a href="0006-dma.html"><strong aria-hidden="true">6.</strong> 0006-dma</a></li><li class="chapter-item expanded "><a href="0008-twizzler-monitor.html"><strong aria-hidden="true">7.</strong> 0008-twizzler-monitor</a></li><li class="chapter-item expanded "><a href="0011-random.html"><strong aria-hidden="true">8.</strong> 0011-random</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Twizzler RFCs</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <ul>
+<li>Feature Name: driver_model</li>
+<li>Start Date: 2022-07-15</li>
+<li>RFC PR: <a href="https://github.com/twizzler-operating-system/rfcs/pull/5">twizzler-rfcs/rfcs#0005</a></li>
+<li>Twizzler Issue: <a href="https://github.com/twizzler-operating-system/twizzler/issues/83">twizzler-operating-system/twizzler#0083</a></li>
+</ul>
+<h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
+<p>This RFC extends RFC0004 with a set of higher-level abstractions that drivers can use to program
+devices. It describes centralized abstractions surrounding event streams, request-response queues, asynchrony,
+and interrupts that will be provided by the twizzler-driver crate.</p>
+<h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
+<p>Writing device drivers is hard, in no small part due to complex models inherent to the asynchronous
+nature of interacting with the devices. Developers can make use of infrastructure surrounding device
+drivers in most operating systems to lessen this complexity. Devices can be (often, largely) modeled
+as separate computing devices that a) produce events for host software to consume, and b) receive
+and respond to commands sent by host software. Thus we want to provide a mechanism that allows these
+abstractions to be implemented by a majority of device drivers easily while providing a unified
+framework that higher-level aspects of a driver can use.</p>
+<h1 id="guide-level-explanation"><a class="header" href="#guide-level-explanation">Guide-level explanation</a></h1>
+<p>The twizzler-driver crate provides a high-level wrapper around a collection of abstractions designed
+to manage a single device (for definition of &quot;device&quot; and the <code>Device</code> type, see RFC0004), called a
+<code>DeviceController</code>. When taking control of a device, driver software can create a <code>DeviceController</code>
+(heretoafter referred to as &quot;the controller&quot;) from a <code>Device</code>. After this point, the controller
+manages the device and exposes several abstractions above the device:</p>
+<ul>
+<li>A <code>DeviceEventStream</code>, which provides a way to get a stream of events, including mailbox events
+and device interrupts (see RFC0004).</li>
+<li>A <code>DmaAllocator</code> (details for which will appear in a future RFC).</li>
+<li>A <code>RequestEngineManager</code>, which provides a way to submit requests to the device and
+asynchronously await responses.</li>
+</ul>
+<h2 id="device-event-stream"><a class="header" href="#device-event-stream">Device Event Stream</a></h2>
+<p>The device event stream provides an async interface for handling (upper-half) interrupts and
+mailbox messages. This means that some async executor is required; if this is too much overhead for
+the application, direct access to the underlying Device allows for lower-level interrupt handling
+without the async overhead.</p>
+<p>The event stream allows driver software to handle incoming events from the device. For example, a NIC that
+receives a packet transfers the packet data to a receive buffer and then submits an interrupt.
+Driver software will then see this interrupt via the event stream and can handle it appropriately.</p>
+<p>The <code>DeviceEventStream</code> provides an interface for allocating an interrupt, which return an
+<code>InterruptInfo</code>. Internally, the twizzler-driver crate handles the allocation of the interrupt
+according to the transport mechanism (e.g. PCIe MSI/MSI-X) and registration with the kernel. The
+<code>InterruptInfo</code> type exposes an async function <code>next</code> which returns the non-zero u64 value of the
+next interrupt that fires or None if the interrupt is removed. Thus driver software can handle a
+stream of interrupts as follows:</p>
+<pre><code class="language-{rust}">let int = controller.events().allocate_interrupt(...).unwrap();
+while let Some(x) = int.next().await {
+    while still_work_to_do() {
+        // handle interrupt
+    }
+}
+</code></pre>
+<p>The <code>DeviceEventStream</code> also provides a method for accessing mailboxes, which can be used as
+follows:</p>
+<pre><code class="language-{rust}">loop {
+    handle_mailbox_message(controller.events().next_msg(MailboxPriority::High).await);
+}
+</code></pre>
+<p>As in RFC0004, it is up to driver software to ensure correct prioritization of mailbox receivers.</p>
+<h2 id="request-engine-manager"><a class="header" href="#request-engine-manager">Request Engine Manager</a></h2>
+<p>The other main abstraction is to model the device such that it receives requests and asynchronously
+responds. For example, submitting a packet for transmit to a NIC happens by the driver software
+constructing an entry in a transmit queue and then notifying the device that the queue has been
+appended to. After the device submits the packet, it responds by indicating that that queue entry
+has been consumed and sends an interrupt. Note that since this often requires interrupt, this
+abstraction sits logically above the event stream abstraction.</p>
+<p>Driver software can create a new <code>Requester</code> through the controller, which acts as a manager for
+inflight requests. The requester has a generic type that implements <code>RequestDriver</code>, which is a
+trait that implements device-specific logic for submitting a request. </p>
+<ul>
+<li><code>fn shutdown(&amp;self)</code> -- shuts down this requester, notifying the driver, and cancels any
+in-flight requests.</li>
+<li><code>fn is_shutdown(&amp;self) -&gt; bool</code> -- returns true if the requester is shutdown.</li>
+<li><code>async fn submit(&amp;self, requests: &amp;mut [SubmitRequest&lt;Driver::Request&gt;]) -&gt;</code>
+<code>Result&lt;InFlightFuture&lt;Driver::Response&gt;, SubmitError&lt;Driver::SubmitError&gt;&gt;</code> -- submits a
+number of requests to the device via the driver, and return a future for when the requests
+are completed.</li>
+<li><code>async fn submit_for_response(&amp;self, requests: &amp;mut [SubmitRequest&lt;Driver::Request&gt;]) -&gt;</code>
+<code>Result&lt;InFlightFutureWithResponses&lt;Driver::Response&gt;, SubmitError&lt;Driver::SubmitError&gt;&gt;</code> --
+same as submit but the output of the future contains a vector of responses (one for each
+request).</li>
+<li><code>fn finish(&amp;self, responses: &amp;[ResponseInfo&lt;Driver::Response&gt;])</code> -- called by the driver to
+indicate which requests have completed.</li>
+</ul>
+<p>The <code>Driver</code> in the API above is the generic in <code>Requester&lt;Driver: RequestDriver&gt;</code>. This trait is as
+follows:</p>
+<pre><code class="language-{rust}">#[async_trait::async_trait]
+pub trait RequestDriver {
+    type Request: Copy + Send;
+    type Response: Copy + Send;
+    type SubmitError;
+    async fn submit(&amp;self, reqs: &amp;[SubmitRequest&lt;Self::Request&gt;]) -&gt; Result&lt;(), Self::SubmitError&gt;;
+    fn flush(&amp;self);
+    const NUM_IDS: usize;
+}
+</code></pre>
+<p>Note: async functions in traits is unsupported by Rust at time of writing, so we use the async_trait
+crate here to make it possible to write this.</p>
+<p>The associated types <code>Request</code>, <code>Response</code>, and <code>SubmitError</code> refer to the types of objects that this requester
+will submit to the device, responses the device sends back, and errors that the request driver can
+generate when submitting requests.</p>
+<p>The <code>SubmitRequest</code> type is a wrapper around the driver's Request associated type that includes an ID
+of type u64. The number of inflight requests will not exceed <code>NUM_IDS</code>, and all IDs will be less
+than that value (this allows the driver to specify backpressure and queue limits). Similarly, the
+<code>ResponseInfo</code> type is a wrapper around the <code>Response</code> type that also includes the ID of the request
+that is associated with this response, and a boolean indicating if this response is considered an
+error or not.</p>
+<h3 id="example"><a class="header" href="#example">Example</a></h3>
+<p>Driver software is responsible for implementing the RequestDriver. As an example, say we have a NIC
+that has a transmit queue for packets. We submit to the transmit queue by writing entries starting at the
+head and then writing an MMIO register to indicate that the head has moved. Say the queue is 128
+entries long. When a queue entry has been handled, the NIC writes back to the queue entry a status
+word and sends an interrupt to indicate a new tail position. The implementation of the RequestDriver would:</p>
+<ul>
+<li>Set NUM_IDS to 128.</li>
+<li>Define Request to be whatever a transmit queue entry looks like.</li>
+<li>Define Response to be the status word.</li>
+<li>Define SubmitError to be an enum of possible submit errors.</li>
+<li>Implement submit such that it:
+<ul>
+<li>Keeps a map of queue position to <code>SubmitRequest</code> ID.</li>
+<li>Submits the requests. If it cannot submit them all, it internally
+asynchronously awaits until it can.</li>
+<li>Optionally writes the new head to the head MMIO register.</li>
+</ul>
+</li>
+<li>Implement flush to write the head register to the MMIO register.</li>
+<li>Implement an interrupt handler that runs when this queue's interrupt handling routine should be
+signaled. This routine goes through the queue starting from the old tail to the new tail and
+reads all the status words for those entries, constructing an array of <code>ResponseInfo</code> types,
+eventually calling <code>finish</code> on the requester. This routine may need to wake up the submit
+function after it reads out the status words and records the new queue tail.</li>
+</ul>
+<p>Another example we can consider is an NVMe driver, which differs from the NIC driver above by having
+a separate completion queue. This possibility is the reason behind the abstracted request IDs --
+this lets the driver and requester handle out-of-order responses.</p>
+<h3 id="usage"><a class="header" href="#usage">Usage</a></h3>
+<p>The requester uses this implementation to expose the interface above that lets higher-level driver
+software interact with the device via this async request-response API. For example, a caller could
+do the following:</p>
+<pre><code class="language-{rust}">let req = create_packet_tx_req();
+let mut sreq = SubmitRequest::new(req);
+
+let fut = requester.submit(&amp;mut [sreq]);
+let res = fut.await.unwrap(); // awaits until the requests are submitted (may be a SubmitError).
+let res2 = res.await; // awaits until the device responds to the requests.
+match res2 {
+    Done =&gt; {...} // all requests were handled, none error'd.
+    Shutdown =&gt; {...} // the requester shutdown while requests were in-flight.
+    Errors(x: usize) =&gt; {...} // all requests were handled, at least one error'd, all error occur after position x.
+}
+</code></pre>
+<p>Use of the <code>submit_for_response</code> function looks similar to the above, except <code>res2</code> could also be
+matched to <code>Responses(Vec&lt;Driver::Response&gt;)</code>. The order of responses matches the order of requests.
+The reason that you have to issue two <code>await</code>s is that one is for having submitted all requests, and
+the second is for all requests being responded to.</p>
+<h1 id="reference-level-explanation"><a class="header" href="#reference-level-explanation">Reference-level explanation</a></h1>
+<p>These abstractions will be implemented by the twizzler-driver crate, and will be optional features
+to allow for driver software that does not need them.</p>
+<h2 id="events"><a class="header" href="#events">Events</a></h2>
+<p>The device event stream is largely a straight-forward wrapper around the lower level device
+interrupt and mailbox mechanisms, presenting them as an asynchronous stream instead of something
+more akin to a condition variable. The future returned by <code>InterruptInfo</code>'s next function uses the
+twizzler-async crate along with the interrupt definitions discussed in RFC0004 to construct a
+blocking future that returns the next interrupt.</p>
+<p>The interrupt allocation routine operates with some bus-specific knowledge to properly allocate an
+interrupt for the device before constructing an <code>InterruptInfo</code>. On drop, the <code>InterruptInfo</code> calls
+back into the event stream manager to deallocate the interrupt, thus tying the lifetime of the
+interrupt to the <code>InterruptInfo</code> struct.</p>
+<p>The mailbox message system internally keeps a queue of messages that haven't been handled. This is
+so the event stream can receive the mailbox message and clear up the mailbox for reuse even if no
+thread has called <code>next_msg</code>. These queues should have a maximum size, causing old messages to be
+dropped if necessary. The <code>next_msg</code> function:</p>
+<ul>
+<li>Checks the mailboxes of all priorities, enqueuing any messages found there.</li>
+<li>Dequeues messages from the highest priority queue that has messages, if the queue is at least as
+high priority as <code>min</code>. Messages here are returned immediately.</li>
+<li>If no messages are present, blocks this async task on the arrival of new messages.</li>
+</ul>
+<p>Note: since High priority mailbox messages take priority over interrupts, interrupt next() functions
+will also check the High priority mailbox, enqueuing if a message is found.</p>
+<h2 id="requester"><a class="header" href="#requester">Requester</a></h2>
+<p>The requester internally keeps track of:</p>
+<ul>
+<li>Inflight requests.</li>
+<li>Available request IDs.</li>
+</ul>
+<h3 id="request-ids"><a class="header" href="#request-ids">Request IDs</a></h3>
+<p>Request IDs are a simple unique identifier for requests. When calling submit, the caller passes a
+slice of SubmitRequests, which internally contain an ID. The caller, however, is not responsible for
+assigning IDs -- that is handled internally (hence why it's a mutable slice).</p>
+<p>The available request IDs are managed by an AsyncIdAllocator, which exposes three functions (note:
+this is all completely invisible to the user):</p>
+<ul>
+<li><code>fn try_next(&amp;self) -&gt; Option&lt;u64&gt;</code></li>
+<li><code>async fn next(&amp;self) -&gt; u64</code></li>
+<li><code>fn release(&amp;self, id: u64)</code></li>
+</ul>
+<p>Both try_next and next get an available ID, but next asynchronously waits until one is available.
+Two adjacent calls to any next functions are not guaranteed to return adjacent ID numbers.</p>
+<h3 id="inflight-request-management"><a class="header" href="#inflight-request-management">Inflight Request Management</a></h3>
+<p>The submit function returns an InFlightFuture, and the submit_for_requests function returns an
+InFlightFutureWithResponses. These each output a SubmitSummary and a SubmitSummaryWithResponses when
+awaited. Each of these futures internally hold a reference to an InFlightInner that is shared with
+the requester, and manages the state for the inflight requests.</p>
+<p>The InFlightInner contains:</p>
+<ul>
+<li>A waker for the task that is awaiting the future.</li>
+<li>An <code>Option&lt;SubmitSummary&gt;</code> for returning to the awaiter when it's ready, and additional state to
+construct this value.
+<ul>
+<li>e.g. a map of request IDs to indexes in the submit slice (may be unused if not tracking
+responses).</li>
+<li>e.g. a vector of responses that gets filled out as responses come in (may be unused).</li>
+</ul>
+</li>
+<li>a count, counting how many requests have been responded to.</li>
+</ul>
+<p>The requester internally keeps a map of request IDs to InFlightInner so that it can match a response
+with an inflight that manages it.</p>
+<p>Finally, the requester's shutdown function shall ensure that, after internally recording the
+shutdown status so that future calls will fail, it drains all internal InFlightInners and fills out
+their ready values to indicate shutdown, after which it wakes any waiting tasks.</p>
+<h1 id="drawbacks"><a class="header" href="#drawbacks">Drawbacks</a></h1>
+<p>One major drawback to this design is overhead. Using these abstractions requires pulling in the
+twizzler-async runtime <em>and</em> tolerating the (small) overhead of async for interacting with the
+device. This may be hard to tolerate in embedded environments (async executor size may be too large)
+and extreme high performance environments (async overhead)<sup class="footnote-reference"><a href="#1">1</a></sup>.</p>
+<p>A counter argument here would be that these abstractions are optional, but the counter-counter
+argument could be that the convenience they offer may make them non-optional in practice, where most
+drivers use them, requiring their use even in embedded systems. However, in systems that are truly
+space-limited, one is often working within the confines of an exact hardware set, so manual
+implementation of small drivers is likely regardless, and the larger drivers used on server machines
+will not be applicable.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>This argument is less convincing to me. The interrupt handling routines, for example, only
+incur the async overhead when they are out of work. Polling or delaying calling the next()
+functions can nearly completely mitigate this overhead.</p>
+</div>
+<h1 id="rationale-and-alternatives"><a class="header" href="#rationale-and-alternatives">Rationale and alternatives</a></h1>
+<p>The main purpose here is to provide a common framework for common aspects of driver development,
+thus accelerating the creation of device driver software. By defining this RequestDriver trait, we
+allow driver software to be split into two parts: the lower half that submits requests on a queue,
+and the higher half, which submits requests via the Requester interface, simplifying driver software
+by handling the complexities of async and out-of-order responses. The use of async here is
+especially important, as it allows driver software to just submit requests and await responses.</p>
+<p>Several rationales:</p>
+<ul>
+<li>The request ID system is designed to allow the driver to internally manage its understanding of
+IDs and how they relate to the device queue(s). This makes it possible for the requester to
+internally manage in-flight state independent of the driver, and handle async and out of order
+responses.</li>
+<li>There is a separate flush function to allow for enqueuing a number of requests without incurring
+the overhead of actually notifying the device.</li>
+<li>The submit and submit_for_responses functions are async and both return another future, meaning
+one needs two awaits to get the SubmitSummary. This is because we separate the successful
+<em>submission</em> of requests from the completion. Imagine we want to submit 200 requests to a queue
+that has 128 entries. We'll have to wait at some point. Thus we allow the caller to await full
+submission and then later await responses if it likes (or it can drop the future and not get any
+responses or information).</li>
+<li>We separate submit and submit_for_response because collating the responses has additional
+overhead, and a given submit may not care about the actual responses. Thus we provide an option
+for just submitting and awaiting completion without recording responses.</li>
+</ul>
+<h1 id="unresolved-questions"><a class="header" href="#unresolved-questions">Unresolved questions</a></h1>
+<ul>
+<li>One unresolved question is in the ergonomics of building a driver that uses all these types that
+reference each other. I plan to dogfood this interface by way of an NVMe driver.</li>
+<li>The DmaAllocator is a major component of drivers, allowing the driver to talk about physical
+memory. That will be discussed in a future RFC.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="0004-low-level-device-model.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="0006-dma.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="0004-low-level-device-model.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="0006-dma.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

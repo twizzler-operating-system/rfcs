@@ -1,0 +1,295 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>0011-random - Twizzler RFCs</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rfc-process.html"><strong aria-hidden="true">1.</strong> 0001-rfc-process</a></li><li class="chapter-item expanded "><a href="0002-object.html"><strong aria-hidden="true">2.</strong> 0002-object</a></li><li class="chapter-item expanded "><a href="0003-time.html"><strong aria-hidden="true">3.</strong> 0003-time</a></li><li class="chapter-item expanded "><a href="0004-low-level-device-model.html"><strong aria-hidden="true">4.</strong> 0004-low-level-device-model</a></li><li class="chapter-item expanded "><a href="0005-driver-model.html"><strong aria-hidden="true">5.</strong> 0005-driver-model</a></li><li class="chapter-item expanded "><a href="0006-dma.html"><strong aria-hidden="true">6.</strong> 0006-dma</a></li><li class="chapter-item expanded "><a href="0008-twizzler-monitor.html"><strong aria-hidden="true">7.</strong> 0008-twizzler-monitor</a></li><li class="chapter-item expanded "><a href="0011-random.html" class="active"><strong aria-hidden="true">8.</strong> 0011-random</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Twizzler RFCs</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <ul>
+<li>Feature Name: Source of Entropy</li>
+<li>Start Date: 2024-07-15</li>
+<li>RFC PR: <a href="https://github.com/twizzler-operating-system/rfcs/pull/0011">twizzler-rfcs/rfcs#0012</a></li>
+</ul>
+<h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
+<p>Adds a secure source of entropy to the kernel, similar to /dev/random on Twizzler. It should seed itself at startup with several true random number generators (TRNG) and then use a Cryptographically secure Pseudo Random Number Generator (CSPRNG) to generate following requests for randomness.</p>
+<h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
+<p>The kernel requires cryptographic operations such as private/public key generation and UUID generation for the twizzler security model. These sort of cryptographic operations require a cryptographically secure source of randomness to ensure their security. It is also very likely userspace programs will also require entropy for userspace cryptographic operations (or games or other programs which require randomness).</p>
+<h1 id="guide-level-explanation"><a class="header" href="#guide-level-explanation">Guide-level explanation</a></h1>
+<h2 id="syscall-api"><a class="header" href="#syscall-api">Syscall API</a></h2>
+<p>The module should expose a <code>getrandom(dest: &amp;mut [u8], flags: GetRandomFlags) -&gt; usize</code> function (and syscall) which will entirely fill the <code>dest</code> buffer with bytes and returns the number of bytes written into the destination buffer. It might block while doing so during the initial seeding of the CSPRNG. <code>GetRandomFlags</code> for now will only consist of a single flag, NONBLOCKING, which will ensure <code>getrandom</code> does not block. Note that before the CSPRNG is seeded <code>getrandom</code> might write 0 bytes into dest and accordingly return a 0.</p>
+<h3 id="example-1-getrandom"><a class="header" href="#example-1-getrandom">Example 1 (getrandom)</a></h3>
+<pre><code class="language-rs">let mut buf = [u8; 32] // 256 bytes total
+let bytes_written = getrandom(&amp;mut buf, 0); // should fully overwrite random bytes into buf
+assert!(256 == bytes_written)
+</code></pre>
+<h3 id="example-2-nonblocking"><a class="header" href="#example-2-nonblocking">Example 2 (nonblocking)</a></h3>
+<pre><code class="language-rs">let mut buf = [u8; 32] // 256 bytes total
+// should write `bytes_overwritten` number of bytes into the buf. Might be 0 bytes
+let bytes_written = getrandom(&amp;mut buf, GetRandomFlags::NONBLOCKING);
+</code></pre>
+<h2 id="inner-kernel-api"><a class="header" href="#inner-kernel-api">Inner-Kernel API</a></h2>
+<p>The module should have a public function called <code>contribute_entropy(entropy: &amp;[u8])</code> which will allow sporatic entropy contributions from sources which are not consistently able to provide entropy upon requrest. The module should also describe an <code>EntropySource</code> trait for sources which can consistently provide entropy upon demand:</p>
+<pre><code class="language-rs">trait EntropySource {
+  fn try_fill_entropy(&amp;mut self, dest: &amp;mut [u8]) -&gt; Result&lt;(), rand_core::Error&gt;;
+}
+</code></pre>
+<p>There will also be a public registering function <code>register_entropy_source(source: dyn EntropySource)</code>. Registered entropy sources will be called during a reseeding of the CSPRNG.</p>
+<h3 id="example-1"><a class="header" href="#example-1">Example 1</a></h3>
+<pre><code class="language-rs">let t1 = now()
+// do something that takes a variable amount of time, preferably involving hardware
+let t2 = now()
+let timingDiff = t2 - t1
+// only the first LSB because we mainly care about microsecond jitter
+// as upper bits are typically 0 since the hardware action doesn't take that long
+contribute_entropy([timingDiff as u8])
+</code></pre>
+<h3 id="example-2"><a class="header" href="#example-2">Example 2</a></h3>
+<pre><code class="language-rs">struct CpuEntropy;
+
+impl EntropySource for CpuEntropy {
+    fn try_fill_entropy(&amp;mut self, dest: &amp;mut [u8]) -&gt; Result&lt;(), rand_core::Error&gt; {
+        let mut dest_iter = dest.iter_mut();
+        let mut rndrs_iter = self.try_iter()?;
+        for (d, r) in dest_iter.zip(rndrs_iter) {
+            *d = r?
+        }
+        Ok(())
+    }
+}
+
+pub fn maybe_add_cpu_entropy_source() {
+    if let Some(cpu_entropy) = CpuEntropy::new() {
+        register_entropy_source(cpu_entropy)
+    }
+}
+
+</code></pre>
+<h3 id=""><a class="header" href="#"></a></h3>
+<h1 id="reference-level-explanation"><a class="header" href="#reference-level-explanation">Reference-level explanation</a></h1>
+<p>My current plan is to use the current kernel's <code>time</code> interface to measure CPU jitter (see <a href="https://docs.rs/rand_jitter/latest/rand_jitter/struct.JitterRng.html">JitterRng</a>) to seed an entropy pool.</p>
+<p>I intend to design an &quot;EntropyPool&quot; struct which is responsible for XORing an array of hashed bytes on top of the pool's current state once there is enough entropy gathered in the pool to warrant a reseed. See the following quote from <a href="https://www.schneier.com/wp-content/uploads/2015/12/fortuna.pdf"><em>Cryptography Engineering</em></a> for justificationßß:</p>
+<blockquote>
+<p>making any kind of estimate of the amount of entropy is extremely difficult, if not impossible. It depends heavily on how much the attacker knows or can know [...]. It tries to measure the entropy of a source using an entropy estimator, and such an estimator is impossible to get right for all situations.</p>
+</blockquote>
+<p>Rather than keeping track of entropy estimates, Fortuna, Yarrow's successor used by MacOS and FreeBSD, simply requires a seed of a certain total length rather than trying to estimate entropy amounts of each source since these entropy estimates are usually innacurate. It also saves previous entropy into a persistent file to be the startup seed for the next boot cycle to avoid blocking at boot time. For our implementation we will simply always block at boot to gather entropy, falling back to JitterRng if there is not enough entropy gathered within the time alotted.</p>
+<p>It should then periodically seed and reseed a CSPRNG (probably ChaCha12) once there is enough entropy gathered within the entropy buffer.</p>
+<p>The CSPRNG should be the final source of entropy which will be returned via the above system calls. Before the CSPRNG is seeded calls <code>getrandom()</code> should block until it is seeded (or return 0 if the NONBLOCKING flag is set).</p>
+<h1 id="drawbacks"><a class="header" href="#drawbacks">Drawbacks</a></h1>
+<p>Why should we <em>not</em> do this?</p>
+<p>Maintaining a pool of entropy (and a CSPRNG) requires some additional memory and CPU footprint. In addition, users might end up running their own CSPRNG seeded off of our pool, which might make the kernel's CSPRNG redundant. That said, since the kernel itself requires cryptographically secure RNG for object management and permissions. I think it's more than worth exposing the same source of randomness into userspace, just so that userspace doesn't have to reimplement a source of entropy. Also all other common modern OS's have a source of cryptographically secure randomness available to userspace.</p>
+<h1 id="rationale-and-alternatives"><a class="header" href="#rationale-and-alternatives">Rationale and alternatives</a></h1>
+<ul>
+<li>Why is this design the best in the space of possible designs?</li>
+<li>What other designs have been considered and what is the rationale for not choosing them?</li>
+<li>What is the impact of not doing this?</li>
+</ul>
+<h1 id="prior-art"><a class="header" href="#prior-art">Prior art</a></h1>
+<h3 id="firsthand-os-documentation-and-source-code"><a class="header" href="#firsthand-os-documentation-and-source-code">Firsthand OS Documentation and Source Code:</a></h3>
+<ul>
+<li>Linux tends to restore an entropy buffer via various sources of hardware randomness throughout the runtime of the device. Linux uses ChaCha20 for their CSRNG sourceas of version 4.8 <a href="https://words.filippo.io/dispatches/linux-csprng/">source</a>, which as of 4.8, makes /dev/random non-blocking except for at boot, bringing Linux's /dev/random implementation in line with FreeBSD's.</li>
+<li>FreeBSD (and variants) block at boot while gathering entropy to seed their CSRNG (FreeBSD has used Fortuna since 2014) and then reseed the CSRNG over time as more entropy is collected.</li>
+<li>MacOS and iOS uses the Fortuna algorithm as well (since 2019) for their CSRNG and seeds both at boot time and during runtime as well.</li>
+<li>Windows 10+ uses a pretty complex system, which is written about in detail <a href="https://download.microsoft.com/download/1/c/9/1c9813b8-089c-4fef-b2ad-ad80e79403ba/Whitepaper%20-%20The%20Windows%2010%20random%20number%20generation%20infrastructure.pdf">here</a>. In my opinion it's overkill to have a per-process CSPRNG (especially when most performance-critical applications which require a lot of randomness will bundle their own CSPRNG). However, it is interesting that they primarily use interrupt timing to append into their entropy pools which could be a good source for us to use as well.</li>
+<li>Android just uses the linux implementation and therefore also uses ChaCha20 for their random number generation.</li>
+<li>All OS's listed above use various means of gathering real-world randomness, and for future reference see <a href="https://github.com/torvalds/linux/tree/master/drivers/char/hw_random">Linux's random</a>, <a href="https://github.com/CTSRD-CHERI/cheribsd/tree/main/sys/dev/random">CheriBSD's random</a> (which is based on <a href="https://github.com/freebsd/freebsd-src/tree/main/sys/dev/random">FreeBSD's random</a>), and <a href="https://support.apple.com/guide/security/random-number-generation-seca0c73a75b/web">MacOS's docs on their random number generation</a> (which is also based on FreeBSD's implementation).</li>
+<li><a href="https://crates.io/crates/rand_jitter">JitterRng</a> is a random number generator based on measuring timing of operations on the cpu, inspired by <a href="https://www.irisa.fr/caps/projects/hipsor/publications/havege-tomacs.pdf">HAVEGE</a>.</li>
+<li>OsRng depends on <a href="https://crates.io/crates/getrandom">getrandom</a></li>
+</ul>
+<h3 id="secondary-analyses"><a class="header" href="#secondary-analyses">Secondary Analyses</a></h3>
+<ul>
+<li><a href="https://words.filippo.io/dispatches/linux-csprng/">Blog post</a> explaining the changes made to Linux's random.</li>
+<li><a href="https://github.com/rust-random/rand/issues/699">GitHub issue</a> discussing the quality of randomness of JitterRNG, a TRNG which is based on <a href="https://www.irisa.fr/caps/projects/hipsor/publications/havege-tomacs.pdf">HAVEGE</a>. Conclusion seems to be that JitterRng is mostly a last-resort.</li>
+<li><a href="https://stackoverflow.com/a/74484189">Stack overflow</a> answer on using RAM as a source of entropy. The other answers might be of use as well.</li>
+<li>Cryptoanalysis papers on ChaCha:
+<ul>
+<li><a href="https://ieeexplore.ieee.org/document/9766147">Tertiary Review of ChaCha Exploits</a> - concludes that <a href="https://link.springer.com/chapter/10.1007/978-3-030-56877-1_12">this paper</a> is the best currently known key-recovery attack with time complexity $2^{230.86}$ for 7 round ChaCha. As ChaCha12 uses 12 rounds, it seems the 12 round version is secure (at least for now).</li>
+</ul>
+</li>
+</ul>
+<h1 id="unresolved-questions"><a class="header" href="#unresolved-questions">Unresolved questions</a></h1>
+<h3 id="to-be-resolved-during-the-rfc-process"><a class="header" href="#to-be-resolved-during-the-rfc-process">To be resolved during the RFC process:</a></h3>
+<ul>
+<li>I hope to also research the security difference between ChaCha12, ChaCha20, and Fortuna, although I suspect ChaCha12 is the better choice for us given that it is faster when there is no sha256 hardware implementation (which is the case on ARM), Linux chose ChaCha20 in 2016, and <a href="https://github.com/rust-random/rand/issues/932">this GitHub discussion</a> as to why ChaCha20 is overkill. Edit: turns out FreeBSD also uses ChaCha20 as the hashing mechanism within Fortuna (<a href="https://github.com/freebsd/freebsd-src/blob/main/sys/dev/random/fortuna.c#L525-L668">source</a>). So with all of that evidence, I think using ChaCha12 will be plenty okay for our purposes.</li>
+</ul>
+<h3 id="during-implementation"><a class="header" href="#during-implementation">During Implementation</a></h3>
+<ul>
+<li>I hope to look into how many bits of entropy are considered to be &quot;enough&quot; to seed the CSPRNG as defined by the other operating systems.</li>
+<li>I hope to look into how many bits of entropy various sources provide.</li>
+</ul>
+<h3 id="out-of-scope"><a class="header" href="#out-of-scope">Out of Scope</a></h3>
+<ul>
+<li>Eventually we should support more sources of randomness. At this point however we can start with an imperfect cpu jitter timing based approach with the possible addition of timing OS interrupts.</li>
+</ul>
+<h1 id="future-possibilities"><a class="header" href="#future-possibilities">Future possibilities</a></h1>
+<h3 id="more-entropy-sources-and-userspace-entropy-contributions"><a class="header" href="#more-entropy-sources-and-userspace-entropy-contributions">More Entropy Sources and Userspace Entropy Contributions</a></h3>
+<p>In the future we should add more sources of randomness as we add support for peripheral devices. Additionally we should support some standard and secure way to provide entropy to the kernel from userspace.</p>
+<p>In FreeBSD this can only be provided by super-users due to security concerns of intentionally reducing entropy within the generator's internal state.</p>
+<p>In Linux anyone can contribute additional entropy to the entropy pool, but the entropy count will stay the same.</p>
+<p>The random module should eventually have a Twizzler entropy object with a write capability which the kernel is able to grant to various other userspace processes (such as the pager). Then those processes can pull entropy from the various drivers it relies upon (such as the NVMe driver in the pager's case).</p>
+<h3 id="kernelspace-entropy-contributions"><a class="header" href="#kernelspace-entropy-contributions">Kernelspace Entropy Contributions</a></h3>
+<p>The kernel might also be able to contribute entropy directly from interrupt timing.</p>
+<h3 id="other-csprngs"><a class="header" href="#other-csprngs">Other CSPRNGs</a></h3>
+<p>Generally speaking it is a good idea to keep track of the security of whichever underlying CSPRNG we are using just in case it ends up getting broken. For example FreeBSD (and along with it MacOS) previously used Yarrow before upgrading to Fortuna.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="0008-twizzler-monitor.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="0008-twizzler-monitor.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
